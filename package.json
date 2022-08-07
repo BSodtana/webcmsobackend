@@ -1,0 +1,29 @@
+{
+  "name": "cmso-online",
+  "version": "1.0.0",
+  "description": "A backend node for CMSO online project -- integrated site for all CMSO activities",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/cmso-dn/cmso_backend.git"
+  },
+  "keywords": [
+    "CMSO",
+    "ONLINE"
+  ],
+  "author": "CHINAG MAI MEDICAL STUDENT ORGANIZATION",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/cmso-dn/cmso_backend/issues"
+  },
+  "homepage": "https://gitlab.com/cmso-dn/cmso_backend#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mariadb": "^3.0.1",
+    "morgan": "^1.10.0"
+  }
+}
