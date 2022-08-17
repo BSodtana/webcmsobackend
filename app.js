@@ -2,6 +2,14 @@ const express = require("express")
 const morgan = require("morgan")
 const app = express()
 require('dotenv').config()
+const cors = require("cors")
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors({
+    origin: ["http://127.0.0.1:5173","https://cmso.med.cmu.ac.th"]
+}))
 const port = process.env.port || 8080
 
 const logger = morgan("common")
