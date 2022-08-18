@@ -1,12 +1,12 @@
 const express = require("express")
 const morgan = require("morgan")
-const app = express()
+const bodyParser = require('body-parser')
 require('dotenv').config()
 const cors = require("cors")
-const bodyParser = require('body-parser')
-
+const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+
 app.use(cors({
     origin: ["http://127.0.0.1:5173","https://cmso.med.cmu.ac.th"]
 }))
