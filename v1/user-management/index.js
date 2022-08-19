@@ -4,11 +4,13 @@ const router = express.Router();
 const register = require("./register")
 const data = require("./register/data")
 const login = require("./login")
+const credential = require("./data")
 
 // path = /v1/user-management/
 router.use("/register", register)
 router.use("/data", data)
 router.use("/login", login)
+router.use("/credential", credential)
 
 
 router.get("/", (req,res)=>{

@@ -8,7 +8,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use(cors({
-    origin: ["http://127.0.0.1:5173","https://cmso.med.cmu.ac.th"]
+    origin: ["http://127.0.0.1:5173","https://cmso.med.cmu.ac.th", "http://localhost:5000"]
 }))
 const port = process.env.port || 8080
 
