@@ -11,7 +11,7 @@ router.get("/", async (req,res)=>{
         let verify = await verifyJwt(token)
         if(verify.isAuthenticated){
             try{
-                let query = await db.query("SELECT first_name, middle_name, last_name, student_id FROM users WHERE uuid = ? LIMIT 1", [verify.data.uuid])
+                let query = await db.query("SELECT first_name, middle_name, last_name, student_id, access_level FROM users WHERE uuid = ? LIMIT 1", [verify.data.uuid])
                 if(query.length===1) res.status(200).json({isAuthenticated: true, data: query[0], reason: null})
                 if(query.length===0) res.status(400).json({isAuthenticated: false, data: "", reason: "cannot find user based on uuid from token, suspect malfored token."})
             }catch(err){
