@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors({
     origin: ["http://127.0.0.1:5173","https://cmso.med.cmu.ac.th", "http://localhost:5000"]
 }))
-const port = process.env.port || 3421
+const port = 3421
 
 const logger = morgan("dev")
 // IMPORT API V1
