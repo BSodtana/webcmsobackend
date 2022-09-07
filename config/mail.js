@@ -1,4 +1,4 @@
-let MAIL_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NjA2Mzc5MjcsImp0aSI6ImNtc28tNjJmYjUyZTc1ZmY5MyIsImlzcyI6InczLm1lZC5jbXUuYWMudGgiLCJuYmYiOjE2NjA2Mzc5MjcsImV4cCI6MTc1NTI0NTkyNywiZGF0YSI6eyJ1aWQiOiJjbXNvIiwiYXBwIjoibWFpbCIsImdyb3VwX2lkIjo5OX19.9tadXrpH7enA43emfUout33x4ugpsgEhnjNc3LLSUaw"
+let MAIL_TOKEN = process.env.MAIL_TOKEN
 let MAIL_ENDPOINT = "https://w3.med.cmu.ac.th/api/v1/mail"
 
 module.exports = {MAIL_TOKEN, MAIL_ENDPOINT}
