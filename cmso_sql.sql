@@ -12,6 +12,82 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Dumping structure for table cmso.answers
+CREATE TABLE IF NOT EXISTS `answers` (
+  `question_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `student_id` int(9) DEFAULT NULL,
+  `project_id` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `answer` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table cmso.answers: ~0 rows (approximately)
+/*!40000 ALTER TABLE `answers` DISABLE KEYS */;
+/*!40000 ALTER TABLE `answers` ENABLE KEYS */;
+
+-- Dumping structure for table cmso.divisions
+CREATE TABLE IF NOT EXISTS `divisions` (
+  `id` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `vice_president` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table cmso.divisions: ~0 rows (approximately)
+/*!40000 ALTER TABLE `divisions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `divisions` ENABLE KEYS */;
+
+-- Dumping structure for table cmso.projects
+CREATE TABLE IF NOT EXISTS `projects` (
+  `project_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `owner_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `division_id` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Should associate with divisions.id',
+  `name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `info_brief` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `info_full` varchar(10000) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `allow_register` int(1) DEFAULT NULL,
+  `register_date_from` date DEFAULT NULL,
+  `register_date_until` date DEFAULT NULL,
+  `participant` int(3) DEFAULT NULL,
+  `updatedDateTime` datetime(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table cmso.projects: ~0 rows (approximately)
+/*!40000 ALTER TABLE `projects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `projects` ENABLE KEYS */;
+
+-- Dumping structure for table cmso.project_participants
+CREATE TABLE IF NOT EXISTS `project_participants` (
+  `project_id` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'should associate with projects.project_id',
+  `student_id` int(9) DEFAULT NULL,
+  `createdDateTime` datetime(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table cmso.project_participants: ~0 rows (approximately)
+/*!40000 ALTER TABLE `project_participants` DISABLE KEYS */;
+/*!40000 ALTER TABLE `project_participants` ENABLE KEYS */;
+
+-- Dumping structure for table cmso.project_responsible_persons
+CREATE TABLE IF NOT EXISTS `project_responsible_persons` (
+  `project_id` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `student_id` int(9) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table cmso.project_responsible_persons: ~0 rows (approximately)
+/*!40000 ALTER TABLE `project_responsible_persons` DISABLE KEYS */;
+/*!40000 ALTER TABLE `project_responsible_persons` ENABLE KEYS */;
+
+-- Dumping structure for table cmso.question_list
+CREATE TABLE IF NOT EXISTS `question_list` (
+  `project_id` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `question_id` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `question_text` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `question_type` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table cmso.question_list: ~0 rows (approximately)
+/*!40000 ALTER TABLE `question_list` DISABLE KEYS */;
+/*!40000 ALTER TABLE `question_list` ENABLE KEYS */;
+
 -- Dumping structure for table cmso.users
 CREATE TABLE IF NOT EXISTS `users` (
   `student_id` int(10) DEFAULT NULL,
@@ -661,7 +737,7 @@ REPLACE INTO `users` (`student_id`, `title`, `first_name`, `middle_name`, `last_
 	(630710099, 'นาย', 'ภูบดี', NULL, 'กิตติวรรณ', NULL, 3, NULL, NULL, 'E', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(630710100, 'นาย', 'ภูพิงค์', NULL, 'มีอาษา', NULL, 3, NULL, NULL, 'Q', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(630710101, 'นางสาว', 'ภูริชญา', NULL, 'กิตติเจษฎา', NULL, 3, NULL, NULL, 'A', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
-	(630710102, 'นาย', 'ภูวมินทร์', '', 'วงค์เมาะ', 'ภูมิน', 3, 'phuwamin.wong@gmail.com', '$2b$10$4O2cV0UoL5wy.uKK5BzHlumqBlGcCrOQ23EXbAmGSUiqURyi3woHK', 'Q', '0633130089', 'phuwamin_555', 'Phuwamin Wongmor', '_.phuwamin._', 'G6PD Deficiency', 'ถั่วปากอ้า, ไม่กินเผ็ด', 0, 0, '57bf1544-74ba-4580-ba1b-785ba5c6a0af', 'admin', '2022-09-03 15:50:32', '2022-09-03 15:50:44'),
+	(630710102, 'นาย', 'ภูวมินทร์', '', 'วงค์เมาะ', 'ภูมิน', 3, 'phuwamin.wong@gmail.com', '$2b$10$vxbMQb.ZZPr4wbWPZ5JiFuIN2jiv8ZyrejFbB1H6xQo7RGdUHVaoq', 'Q', '0633130089', 'phuwamin_555', 'Phuwamin Wongmor', '_.phuwamin._', 'G6PD Deficiency', 'ถั่วปากอ้า, ไม่กินเผ็ด', 0, 0, '57bf1544-74ba-4580-ba1b-785ba5c6a0af', 'admin', '2022-10-02 16:17:16', '2022-09-03 15:50:44'),
 	(630710103, 'นางสาว', 'มุกตาภา', NULL, 'ชูชม', NULL, 3, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(630710104, 'นาย', 'เมธาวิทย์', NULL, 'เจียรประเสริฐ', NULL, 3, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(630710105, 'นางสาว', 'เมธาวี', NULL, 'อึ้งจิตรไพศาล', NULL, 3, NULL, NULL, 'Q', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
@@ -933,7 +1009,7 @@ REPLACE INTO `users` (`student_id`, `title`, `first_name`, `middle_name`, `last_
 	(620710099, 'นางสาว', 'วรยา', NULL, 'ฤทธิ์เรืองโรจน์', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(620710100, 'นางสาว', 'วรัญญา', NULL, 'ปานทั่งทอง', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(620710101, 'นาย', 'วศี', NULL, 'ธีปฏิมากร', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
-	(620710102, 'นาย', 'วิชญ์', NULL, 'ธรานนท์', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
+	(620710102, 'นาย', 'วิชญ์', NULL, 'ธรานนท์', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, '962d3a84-27ca-43fc-8c4c-0d51ee915a42', 'user', NULL, NULL),
 	(620710103, 'นางสาว', 'วิมลณัฐ', NULL, 'นนทศิริ', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(620710104, 'นางสาว', 'วิมลพรรณ', NULL, 'ตาแก้ว', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
 	(620710105, 'นาย', 'ศตคุณ', NULL, 'เลาหกุล', NULL, 4, NULL, NULL, 'D', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 'user', NULL, NULL),
@@ -1535,7 +1611,7 @@ CREATE TABLE IF NOT EXISTS `user_logout` (
   `killedDateTime` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table cmso.user_logout: ~0 rows (approximately)
+-- Dumping data for table cmso.user_logout: ~1 rows (approximately)
 /*!40000 ALTER TABLE `user_logout` DISABLE KEYS */;
 REPLACE INTO `user_logout` (`uuid`, `jwt`, `killedDateTime`) VALUES
 	('57bf1544-74ba-4580-ba1b-785ba5c6a0af', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiNTdiZjE1NDQtNzRiYS00NTgwLWJhMWItNzg1YmE1YzZhMGFmIiwic3R1ZGVudF9pZCI6NjMwNzEwMTAyLCJpYXQiOjE2NjA4MzExNTgsImV4cCI6MTY2MDgzNDc1OH0.BfDXiHMrQ9lcrdd8s3AtnJ-2fyamaituWMcUk_w92s0', '2022-08-18 21:36:46');
@@ -1550,7 +1626,7 @@ CREATE TABLE IF NOT EXISTS `user_vaccine` (
   `createdDateTime` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table cmso.user_vaccine: ~4 rows (approximately)
+-- Dumping data for table cmso.user_vaccine: ~1 rows (approximately)
 /*!40000 ALTER TABLE `user_vaccine` DISABLE KEYS */;
 REPLACE INTO `user_vaccine` (`owner_uuid`, `dose`, `type`, `date`, `createdDateTime`) VALUES
 	('57bf1544-74ba-4580-ba1b-785ba5c6a0af', 1, 'Sinovac', '2022-08-25', '2022-08-19 21:21:21');
