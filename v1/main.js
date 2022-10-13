@@ -3,10 +3,10 @@ const app = express()
 const router = express.Router();
 
 // IMPORTS
-const activities = require("./activities/activities")
+const projects = require("./projects")
 const user_management = require("./user-management/")
 
-router.use("/activities", activities)
+router.use("/projects", projects)
 router.use("/user-management", user_management)
 
 router.get("/", (req,res)=>{
