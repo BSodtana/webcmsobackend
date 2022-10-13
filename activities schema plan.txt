@@ -19,7 +19,8 @@ participant INT(3) จำนวนที่รับ
 updatedDateTime วันที่แก้ไขข้อมูล
 
 TABLE project_responsible_person
-uuid รหัสประจำตัว
+project_id รหัสโครงการ === ASSOCIATE WITH projects.project_id
+student_id รหัสนักศึกษา
 
 TABLE PARTICIPANT
 student_id รหัสประจำตัวนักศึกษา
