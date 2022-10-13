@@ -35,7 +35,7 @@ router.post("/userandpass", async (req,res)=>{
             res.status(500).json({success: false, error: err})
         }
     }else(
-        res.status(400).json({success: false, error: `Request body malformed, both username and password are required, you provided ${email?"email":password?"password":"none"}`})
+        res.status(400).json({success: false, error: `Request body malformed, both username and password are required, you provided only ${email?"email":password?"password":"none"}`})
     )
 })
 
