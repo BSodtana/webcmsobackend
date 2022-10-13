@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../../../config/db")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const JS_PRIVATE_KEY = require("../../../config/private")
+// const JS_PRIVATE_KEY = require("../../../config/private")
 
 // ____/v1/user-management/login/
 const jwtHandler = require("./jwt")
@@ -21,7 +21,7 @@ router.post("/userandpass", async (req,res)=>{
                let compare = await bcrypt.compare(password, credential[0].password)
                if(compare) {
                 try{
-                    let token = await jwt.sign({uuid: credential[0].uuid, student_id: credential[0].student_id}, JS_PRIVATE_KEY, {expiresIn: "1h"})
+                    let token = await jwt.sign({uuid: credential[0].uuid, student_id: credential[0].student_id}, process.env.PRIVATE_KEY, {expiresIn: "1h"})
                     res.status(200).json({success: true, jwt: token})
                 }catch(err){
                     console.log(err)
