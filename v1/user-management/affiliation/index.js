@@ -1,0 +1,68 @@
+const express = require("express");
+const router = express.Router();
+const db = require("../../../config/db")
+const verifyJwt = require("../../utils/jwtVerify");
+
+// ____/v1/user-management/permission/
+
+router.get("/", (req,res)=>{
+    res.status(418).json({status: "fail", error: "You are not giving me page number, I'm not brewing"})
+})
+
+router.get("/:page", async (req,res)=>{
+    let {page} = req.params || 1
+    try{
+        // let query = await db.query("SELECT users.student_id, first_name, middle_name, last_name, current_year, affiliated_club, affiliated_division FROM users JOIN user_affiliation ON users.uuid = user_affiliation.uuid")
+        let countQuery = await db.query("SELECT COUNT(DISTINCT(users.student_id)) AS COUNT FROM users")
+        page = parseInt(page)
+        let count = parseInt(countQuery[0].COUNT)
+        let offset = page !== 1 ? (page-1)*50 : 0
+        let mainQuery = await db.query(`SELECT student_id, uuid, CONCAT(first_name," ",  last_name) AS full_name, current_year, email FROM users ORDER BY student_id ASC LIMIT ? OFFSET ?`, [50,offset])
+        res.status(200).json({payload: {
+            current_page: page,
+            records: count,
+            number_of_pages: Math.ceil(count/50),
+            begin: offset = 0 ? 1 : offset+1,
+            end: offset+49,
+            list: mainQuery,
+        }})
+    }catch(err){
+        res.status(500).json(err)
+        console.log(err)
+    }
+})
+
+router.get("/id/:id", async (req,res)=>{
+    let {id} = req.params
+    try{
+        // let query = await db.query("SELECT users.student_id, first_name, middle_name, last_name, current_year, affiliated_club, affiliated_division FROM users JOIN user_affiliation ON users.uuid = user_affiliation.uuid")
+        let mainQuery = await db.query(`SELECT student_id, CONCAT(first_name," ",  last_name) AS full_name, current_year, email FROM users WHERE student_id LIKE ? ORDER BY student_id ASC`, [`%${id}%`])
+        console.log(mainQuery)
+        res.status(200).json({payload: {
+            list: mainQuery
+        }})
+    }catch(err){
+        res.status(500).json(err)
+        console.log(err)
+    }
+})
+
+router.put("/:uuid", async (req,res)=>{
+    let token = req.header("Authorization")
+    let {affiliation} = req.body
+    try{
+        let verify = await verifyJwt(token)
+        if(verify.isAuthenticated){
+            try{
+
+            }catch(err){
+                res.status(500).json(err)
+            }
+        }
+    }
+    catch(err){
+        res.status(500).json(err)
+    }
+})
+
+module.exports = router;
