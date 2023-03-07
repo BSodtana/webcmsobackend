@@ -3,11 +3,15 @@ const router = express.Router();
 const db = require("../../../config/db")
 const verifyJwt = require("../../utils/jwtVerify");
 
-// ____/v1/user-management/permission/
+// ____/v1/user-management/affiliation/
+
+const current = require("./current")
 
 router.get("/", (req,res)=>{
     res.status(418).json({status: "fail", error: "You are not giving me page number, I'm not brewing"})
 })
+
+router.use("/current", current)
 
 router.get("/:page", async (req,res)=>{
     let {page} = req.params || 1
