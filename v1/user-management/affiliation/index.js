@@ -41,7 +41,6 @@ router.get("/id/:id", async (req,res)=>{
     try{
         // let query = await db.query("SELECT users.student_id, first_name, middle_name, last_name, current_year, affiliated_club, affiliated_division FROM users JOIN user_affiliation ON users.uuid = user_affiliation.uuid")
         let mainQuery = await db.query(`SELECT student_id, CONCAT(first_name," ",  last_name) AS full_name, current_year, email FROM users WHERE student_id LIKE ? ORDER BY student_id ASC`, [`%${id}%`])
-        console.log(mainQuery)
         res.status(200).json({payload: {
             list: mainQuery
         }})

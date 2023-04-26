@@ -14,4 +14,14 @@ router.get("/", async (req,res)=>{
     }
 })
 
+router.get("/:id", async (req,res)=>{
+    let {id} = req.params
+    try{
+        let data = await db.query("SELECT clubs.name, divisions.name as division_name, clubs.type, clubs.id FROM clubs JOIN divisions ON divisions.id = clubs.owner_division WHERE clubs.id = ?", [id])
+        res.status(200).json({status: "success", payload: data})
+    }catch(err){
+        res.status(500).json({status: "error", reason: err})
+    }
+})
+
 module.exports = router;

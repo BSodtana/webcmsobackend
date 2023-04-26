@@ -5,14 +5,18 @@ const verifyJwt = require("../../utils/jwtVerify");
 
 // ____/v1/user-management/affiliation/current/
 
-router.get("/:id", async (req,res)=>{
-    let {id} = req.params
-    try{
-        let data = await db.query('SELECT users.student_id, CONCAT(first_name," ", last_name) AS full_name, user_affiliation.affiliated_club, clubs.name FROM user_affiliation JOIN users ON users.student_id = user_affiliation.student_id JOIN clubs ON clubs.id = user_affiliation.affiliated_club WHERE user_affiliation.student_id = ?', [id])
-        res.status(200).json({status: "success", payload: {list: data, affiliations: data.length}})
-    }catch(err){
-        console.log(err)
-        res.status(500).json({status: "fail", reason: "err"})
+router.get("/", async (req,res)=>{
+    let token = req.headers.authorization
+    if(!token) res.status(401).json({status: "401 UNAUTHORIZED"})
+    let user_data = await verifyJwt(token)
+    if(user_data){
+        try{
+            let id = user_data.data.student_id
+            let data = await db.query('SELECT users.student_id, CONCAT(first_name," ", last_name) AS full_name, user_affiliation.affiliated_organization, clubs.name, clubs.type FROM user_affiliation JOIN users ON users.student_id = user_affiliation.student_id JOIN clubs ON clubs.id = user_affiliation.affiliated_organization WHERE user_affiliation.student_id = ?', [id])
+            res.status(200).json({status: "success", payload: {list: data, affiliations: data.length}})
+        }catch(err){
+            res.status(500).json({status: "fail", reason: "err"})
+        }
     }
 })
 
