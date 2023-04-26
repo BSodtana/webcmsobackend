@@ -6,9 +6,8 @@ const db = require("../../config/db");
 
 router.get("/:page", async (req, res) => {
   let token = req.header("Authorization");
-  console.log(token);
   let { page } = req.params;
-  let query_from = (page - 1) * 20;
+  let query_from = page === 1 ? 1 * 20 : (page - 1) * 20;
   let query_until = 20;
   try {
     let count = await db.query(
@@ -20,7 +19,7 @@ router.get("/:page", async (req, res) => {
     );
     res.status(200).json({
       success: true,
-      page_no: 1,
+      page_no: page,
       number_of_project: parseInt(count[0].COUNT),
       number_of_page:
         Math.ceil(parseInt(count[0].COUNT) / 20) === 0
