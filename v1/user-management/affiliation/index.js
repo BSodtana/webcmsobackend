@@ -13,15 +13,15 @@ router.get("/", (req,res)=>{
 
 router.use("/current", current)
 
-router.get("/:page", async (req,res)=>{
-    let {page} = req.params || 1
+router.get("/:year-P:page", async (req,res)=>{
+    let {year, page} = req.params || 1
     try{
         // let query = await db.query("SELECT users.student_id, first_name, middle_name, last_name, current_year, affiliated_club, affiliated_division FROM users JOIN user_affiliation ON users.uuid = user_affiliation.uuid")
-        let countQuery = await db.query("SELECT COUNT(DISTINCT(users.student_id)) AS COUNT FROM users")
+        let countQuery = await db.query("SELECT COUNT(DISTINCT(users.student_id)) AS COUNT FROM users WHERE current_year = ?", [year])
         page = parseInt(page)
         let count = parseInt(countQuery[0].COUNT)
         let offset = page !== 1 ? (page-1)*50 : 0
-        let mainQuery = await db.query(`SELECT student_id, uuid, CONCAT(first_name," ",  last_name) AS full_name, current_year, email FROM users ORDER BY student_id ASC LIMIT ? OFFSET ?`, [50,offset])
+        let mainQuery = await db.query(`SELECT student_id, uuid, CONCAT(first_name," ",  last_name) AS full_name, current_year, email FROM users WHERE current_year = ? ORDER BY student_id ASC LIMIT ? OFFSET ?`, [year,50,offset])
         res.status(200).json({payload: {
             current_page: page,
             records: count,
