@@ -1,30 +1,37 @@
-const express = require("express");
-const router = express.Router();
-const db = require("../../../config/db")
-const verifyJwt = require("../../utils/jwtVerify");
+const express = require('express')
+const router = express.Router()
+const db = require('../../../config/db')
+const verifyJwt = require('../../utils/jwtVerify')
+const { UpdateUserPersonalData } = require('./Helpers/UpdateUserPersonalData')
 
 // ____/v1/user-management/credential/
 
-router.get("/", async (req,res)=>{
-    let token = req.header("Authorization")
-    try{
-        let verify = await verifyJwt(token)
-        if(verify.isAuthenticated){
-            try{
-                let query = await db.query("SELECT title, first_name, middle_name, last_name, student_id, nick_name, current_year, phone_number, email, line_id, facebook, instagram, medical_condition, allergy, verified, access_level, createdDateTime, uuid FROM users WHERE uuid = ? LIMIT 1", [verify.data.uuid])
-                let vaccine = await db.query("SELECT dose, type, date FROM user_vaccine WHERE owner_uuid = ?", [verify.data.uuid])
-                let infection = await db.query("SELECT dose, date FROM user_infection WHERE owner_uuid = ?", [verify.data.uuid])
-                if(query.length===1) res.status(200).json({isAuthenticated: true, data: {data: query[0], vaccine: vaccine, infection: infection}, reason: null})
-                if(query.length===0) res.status(400).json({isAuthenticated: false, data: "", reason: "cannot find user based on uuid from token, suspect malfored token."})
-            }catch(err){
-                console.log(err)
-                res.status(500).json(err)
-            }
-        }
-        if(!verify.isAuthenticated) res.status(401).json({isAuthenticated: false, data: "", reason: "Unauthorized access"})
-    }catch(err){
-        res.status(500).json(err)
+router.get('/', async (req, res) => {
+  const token = req.header('Authorization')?.split(' ')[1]
+  // console.log(token)
+  try {
+    const verify = await verifyJwt(token)
+    if (verify.isAuthenticated) {
+      try {
+        const query = await db.query('SELECT title, first_name, last_name, nick_name, student_id, current_year, phone_number, line_id, facebook, instagram, medical_condition, allergy, special_need, createdDateTime FROM users WHERE student_id = ? LIMIT 1', [verify.data.studentID])
+        const account = await db.query('SELECT email FROM users_credential WHERE student_id = ? LIMIT 1', [verify.data.studentID])
+        const vaccine = await db.query('SELECT dose, type, date FROM user_vaccine WHERE owner_uuid = ?', [verify.data.studentID])
+        const infection = await db.query('SELECT dose, date FROM user_infection WHERE owner_uuid = ?', [verify.data.studentID])
+        if (query.length === 1) res.status(200).json({ isAuthenticated: true, data: { basics: query[0], account: account[0], vaccine, infection }, reason: null })
+        if (query.length === 0) res.status(400).json({ isAuthenticated: false, data: '', reason: 'cannot find user based on uuid from token, suspect malfored token.', error_code: 'CRD01-2' })
+      } catch (err) {
+        console.log(err)
+        res.status(500).json({ status: 'error', detail: err, error_code: 'CRD01-3' })
+      }
     }
+    if (!verify.isAuthenticated) res.status(401).json({ isAuthenticated: false, data: '', reason: 'Unauthorized access', error_code: 'CRD01-1' })
+  } catch (err) {
+    res.status(500).json({ status: 'error', detail: err, error_code: 'CRD01-4' })
+  }
 })
 
-module.exports = router;
+router.put('/', async (req, res) => {
+  await UpdateUserPersonalData(req, res)
+})
+
+module.exports = router
