@@ -10,11 +10,11 @@ const jwt = require('jsonwebtoken')
 async function verifyJwt (token) {
   if (!token) return { isAuthenticated: false, data: null, reason: 'jwt must be provided' }
   try {
-    const findLogout = await db.query('SELECT uuid FROM user_logout WHERE jwt = ? LIMIT 1', [token])
+    const findLogout = await db.query('SELECT uuid FROM users_logout WHERE jwt = ? LIMIT 1', [token])
     if (findLogout.length === 1) return { isAuthenticated: false, data: null, reason: 'USER_LOGGED_OUT' }
     if (findLogout.length === 0) {
       try {
-        const verify = jwt.verify(token, JS_PRIVATE_KEY)
+        const verify = await jwt.verify(token, JS_PRIVATE_KEY)
         return { isAuthenticated: true, data: verify, reason: null }
       } catch (err) {
         throw new Error(err)

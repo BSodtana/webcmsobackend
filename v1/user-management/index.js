@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const register = require('./register')
-const data = require('./register/data')
+// const data = require('./register/data')
 const login = require('./login')
 const credential = require('./data')
 const permission = require('./affiliation')

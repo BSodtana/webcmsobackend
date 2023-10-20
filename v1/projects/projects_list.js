@@ -5,7 +5,6 @@ const db = require('../../config/db')
 // PATH: /projects/list
 
 router.get('/:page', async (req, res) => {
-  const token = req.header('Authorization')
   const { page } = req.params
   const query_from = page === 1 ? 1 * 20 : (page - 1) * 20
   const query_until = 20
@@ -14,7 +13,7 @@ router.get('/:page', async (req, res) => {
       'SELECT COUNT(project_id) AS COUNT FROM projects'
     )
     const list = await db.query(
-      'SELECT project_id, division_id, name, info_brief, allow_register, register_date_from, register_date_until, participant FROM projects ORDER BY register_date_until ASC LIMIT ? OFFSET ?',
+      'SELECT project_id, p.student_id, CONCAT(u.first_name," ",u.last_name," (",u.nick_name,")") AS ownerName, o.orgID, o.orgName, projectName, projectDescription, projectDetail, eventDateStart, eventDateFinish FROM projects p JOIN users u ON u.student_id = p.student_id JOIN organizations o ON o.orgID = p.orgID ORDER BY eventDateStart DESC LIMIT ? OFFSET ?',
       [query_until, query_from]
     )
     res.status(200).json({

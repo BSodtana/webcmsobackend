@@ -1,4 +1,4 @@
-const db = require('../../../../config/db')
+const db = require('../../../../../config/db')
 
 async function CheckVerificationCode (req, res) {
   const { studentID, referenceID, code } = req.body

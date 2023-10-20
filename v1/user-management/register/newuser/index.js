@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const newUser = require('./newuser')
-const SendMailToUserToGetEmailVerified = require('./verifyEmail')
-const CheckVerificationCode = require('./checkVerificationCode')
+const newUser = require('./helpers/newuser')
+const SendMailToUserToGetEmailVerified = require('./helpers/verifyEmail')
+const CheckVerificationCode = require('./helpers/checkVerificationCode')
 
 // ____/v1/user-management/register/newuser
 

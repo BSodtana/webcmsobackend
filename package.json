@@ -32,6 +32,7 @@
     "moment": "^2.29.4",
     "momentjs": "^2.0.0",
     "morgan": "^1.10.0",
+    "nodemon": "^3.0.1",
     "passport-jwt": "^4.0.0",
     "uuid": "^8.3.2"
   },
