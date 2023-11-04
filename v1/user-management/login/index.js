@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 
 // ____/v1/user-management/login/
 const jwtHandler = require('./jwt')
+const JS_PRIVATE_KEY = require('../../../config/private')
 
 router.use('/jwt', jwtHandler)
 
@@ -20,7 +21,7 @@ router.post('/userandpass', async (req, res) => {
         const compare = await bcrypt.compare(password, credential[0].password)
         if (compare) {
           try {
-            const token = await jwt.sign({ studentID: credential[0].student_id, role: credential[0].role }, process.env.PRIVATE_KEY, { expiresIn: '7d' })
+            const token = await jwt.sign({ studentID: credential[0].student_id, role: credential[0].role }, JS_PRIVATE_KEY, { expiresIn: '7d' })
             res.status(200).json({ success: true, jwt: token })
           } catch (err) {
             console.log(err)
