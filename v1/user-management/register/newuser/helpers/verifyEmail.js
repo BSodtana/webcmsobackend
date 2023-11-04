@@ -11,7 +11,6 @@ async function SendMailToUserToGetEmailVerified (req, res) {
     await db.query('REPLACE INTO users_credential (student_id, email) VALUES (?,?)', [student_id, email])
     //   ใส่โค้ดลงในฐานข้อมูล
     await db.query('INSERT INTO users_code_verification (student_id, code, referenceID) VALUES (?,?,?) ON DUPLICATE KEY UPDATE code = ?, referenceID = ?', [student_id, code, referenceID, code, referenceID])
-    ส่งอีเมล
     const sendmail = await axios.post(
         `${MAIL_ENDPOINT}`,
         {
