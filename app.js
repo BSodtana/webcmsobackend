@@ -6,9 +6,10 @@ const cors = require('cors')
 const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+const path = require('path')
 
 app.use(cors({
-  origin: ['http://127.0.0.1:5173', 'https://cmso.med.cmu.ac.th', 'http://localhost:5173', 'http://10.84.176.99:5173']
+  origin: ['http://127.0.0.1:5173', 'https://cmso.med.cmu.ac.th', 'http://localhost:5173', 'http://10.84.178.129:5173']
 }))
 const port = process.env.PORT || 8080
 
@@ -18,6 +19,7 @@ const v1 = require('./v1/main')
 
 app.use(logger)
 app.use('/v1', v1)
+app.use('/v1/static', express.static(path.join(__dirname, './assets')))
 
 app.get('/', (req, res) => {
   res.status(200).json({ status: `Server is Up and Running at port ${port}`, ENV_PORT: process.env.PORT })
