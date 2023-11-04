@@ -1,6 +1,6 @@
 const db = require('../../../../../config/db')
 const axios = require('axios')
-const { MAIL_TOKEN, MAIL_ENDPOINT } = require('../../../../../config/mail')
+const { MAIL_ENDPOINT } = require('../../../../../config/mail')
 const { MakeRandomStringCapitalAndNumber } = require('../../helper')
 async function SendMailToUserToGetEmailVerified (req, res) {
   const { email, student_id } = req.body
