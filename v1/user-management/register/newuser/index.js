@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const newUser = require('./helpers/newuser')
+const newUser = require('./helpers/newUser')
 const SendMailToUserToGetEmailVerified = require('./helpers/verifyEmail')
 const CheckVerificationCode = require('./helpers/checkVerificationCode')
 
