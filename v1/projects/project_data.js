@@ -9,7 +9,7 @@ const projects_list = require('./projects_list')
 router.get('/:project_id', async (req, res) => {
   const { project_id } = req.params
   try {
-    const data = await db.query('SELECT project_id, owner_id, division_id, name, info_brief, info_full, allow_register, register_date_from, register_date_until, participant FROM projects WHERE project_id = ? LIMIT 1', [project_id])
+    const data = await db.query('SELECT project_id, student_id, proj.orgID, projectName, projectDescription, projectDetail, eventDateStart, eventDateFinish FROM projects proj JOIN organizations org ON org.orgID = proj.orgID WHERE project_id = ? LIMIT 1', [project_id])
     res.status(200).json({ status: 'success', payload: data[0] })
   } catch (err) {
     res.status(500).json({ status: 'error', payload: err })

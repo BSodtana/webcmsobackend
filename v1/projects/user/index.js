@@ -20,4 +20,21 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.get('/status/:projectID', async (req, res) => {
+  const { projectID } = req.params
+  const jwt = req.header('Authorization')?.split(' ')[1]
+  if (!jwt) res.status(400).json({ status: 'error', payload: 'No JWT provided - Bad Request' })
+  if (jwt) {
+    const token = await verifyJwt(jwt)
+    if (token.isAuthenticated) {
+      const projects = await db.query('SELECT COUNT(student_id) AS count FROM project_participants WHERE student_id = ? AND recruitID LIKE ?', [token.data.studentID, `${projectID}%`])
+      if (parseInt(projects[0].count) === 0) { res.status(200).json({ registered: false, data: token.data }) }
+      if (parseInt(projects[0].count) === 1) { res.status(200).json({ registered: true, data: token.data }) }
+    }
+    if (!token.isAuthenticated) {
+      res.status(401).json({ status: 'error', payload: token.reason })
+    }
+  }
+})
+
 module.exports = router
