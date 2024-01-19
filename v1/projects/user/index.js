@@ -2,8 +2,11 @@ const express = require('express')
 const router = express.Router()
 const db = require('../../../config/db')
 const verifyJwt = require('../../utils/jwtVerify')
+const vacancy = require('./vacancy')
 
 // PATH: /projects/user
+
+router.use('/vacancy', vacancy)
 
 router.get('/', async (req, res) => {
   const jwt = req.header('Authorization')?.split(' ')[1]
