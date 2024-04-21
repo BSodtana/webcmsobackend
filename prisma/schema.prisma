@@ -1,0 +1,262 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model activity_characteristics_choices {
+  id   String  @id @db.VarChar(50)
+  type Int?
+  text String? @db.VarChar(150)
+}
+
+model organizations {
+  orgID     String        @id @default("") @db.VarChar(15)
+  orgName   String        @default("") @db.VarChar(100)
+  orgType   String        @default("") @db.VarChar(10)
+  parentOrg String?       @default("") @db.VarChar(15)
+  projects  projectData[]
+}
+
+model project_21st_skill_items {
+  skillItemID String @id @default("") @db.VarChar(50)
+  skillSetID  String @default("") @db.VarChar(50)
+  skillName   String @default("") @db.VarChar(100)
+}
+
+model project_21st_skill_set {
+  skillSetID   String @id @db.VarChar(50)
+  skillSetName String @default("0") @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model projectParticipants {
+  participantPositionID String    @id @db.VarChar(36)
+  recruitID             String    @default("") @db.VarChar(15)
+  student_id            Int       @default(0)
+  createdDateTime       DateTime?
+
+  @@index([recruitID], map: "recruitID")
+  @@index([student_id], map: "student_id")
+}
+
+model projectParticipantRecruit {
+  recruitID       String   @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
+  projectID       String   @db.VarChar(15)
+  registerFrom    DateTime @db.DateTime(0)
+  registerUntil   DateTime @db.DateTime(0)
+  maxNumber       Int      @default(0)
+  createdDateTime DateTime @default(now())
+  updatedDateTime DateTime @default(now())
+  isAllowed       Boolean  @default(false)
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectStaffRecruit {
+  recruitID       String   @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
+  projectID       String   @db.VarChar(15)
+  registerFrom    DateTime @db.DateTime(0)
+  registerUntil   DateTime @db.DateTime(0)
+  createdDateTime DateTime @default(now()) @db.DateTime(0)
+  updatedDateTime DateTime @default(now()) @db.DateTime(0)
+  isAllowed       Boolean  @default(false)
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectStaffRecruitPosition {
+  positionID      String   @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
+  recruitID       String   @db.VarChar(15)
+  positionName    String   @db.VarChar(15)
+  maxNumber       Int      @default(0)
+  registerFrom    DateTime @db.DateTime(0)
+  registerUntil   DateTime @db.DateTime(0)
+  createdDateTime DateTime @default(now()) @db.DateTime(0)
+  updatedDateTime DateTime @default(now()) @db.DateTime(0)
+  isAllowed       Boolean  @default(false)
+
+  @@index([recruitID], map: "recruitID")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model projectStaffs {
+  staffPositionID String    @id @db.VarChar(36)
+  recruitID       String    @default("") @db.VarChar(15)
+  student_id      Int       @default(0)
+  createdDateTime DateTime?
+
+  @@index([recruitID], map: "recruitID")
+  @@index([student_id], map: "student_id")
+}
+
+model project_year_allow {
+  allowID     String  @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(10)
+  recruitID   String? @db.VarChar(15)
+  yearAllowed Int?
+
+  @@index([recruitID], map: "recruitID")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model projects {
+  project_id         String       @id @unique @db.VarChar(50)
+  student_id         Int
+  orgID              String?      @db.VarChar(50)
+  projectName        String?      @db.VarChar(500)
+  projectDescription String?      @db.VarChar(280)
+  projectDetail      String?      @db.VarChar(10000)
+  eventDateStart     DateTime?
+  eventDateFinish    DateTime?
+  createdDateTime    DateTime?    @default(now())
+  updatedDateTime    DateTime?    @default(now())
+  projectData        projectData?
+  ownerData          users?       @relation(fields: [student_id], references: [student_id])
+
+  @@index([orgID], map: "orgID")
+  @@index([student_id], map: "student_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model projectData {
+  project_id                String        @id @db.VarChar(50)
+  project_name              String?       @db.VarChar(500)
+  place_in_cmu              String?       @db.MediumText
+  place_outside_cmu         String?       @db.MediumText
+  date_prepare_start        DateTime?     @db.Date
+  date_prepare_end          DateTime?     @db.Date
+  date_event_start          DateTime?     @db.Date
+  date_event_end            DateTime?     @db.Date
+  date_summation_start      DateTime?     @db.Date
+  date_summation_end        DateTime?     @db.Date
+  owner_org                 String        @db.VarChar(9)
+  owner_student             Int
+  prof                      String?       @db.VarChar(100)
+  prof_aff                  String?       @db.VarChar(100)
+  other_org                 String?       @db.MediumText
+  cmso_proj_type            String?       @db.VarChar(10)
+  cmu_proj_type             String?       @db.VarChar(10)
+  cmu_med_grad              String?       @db.VarChar(10)
+  cmso_mission_type         String?       @db.VarChar(10)
+  cmu_med_org               String?       @db.VarChar(10)
+  background                String?       @db.VarChar(3000)
+  aims                      String?       @db.MediumText
+  participant_student       Int?
+  participant_prof          Int?
+  participant_student_staff Int?
+  participant_fac_staff     Int?
+  participant_outside       Int?
+  goal_qualitative          String?       @db.MediumText
+  indicator_participant     String?       @db.MediumText
+  indicator_satisfactory    String?       @db.MediumText
+  indicator_aims            String?       @db.MediumText
+  output                    String?       @db.MediumText
+  plan                      String?       @db.MediumText
+  stageDo                   String?       @db.MediumText
+  stageCheck                String?       @db.MediumText
+  act                       String?       @db.MediumText
+  fund_fac                  String?       @db.MediumText
+  fund_extracir             String?       @db.MediumText
+  fund_sport                String?       @db.MediumText
+  fund_other                String?       @db.MediumText
+  fund_name                 String?       @db.VarChar(200)
+  createdDateTime           DateTime?     @default(now())
+  project                   projects?     @relation(fields: [project_id], references: [project_id])
+  ownerOrg                  organizations @relation(fields: [owner_org], references: [orgID])
+}
+
+model userAffiliation {
+  student_id      Int
+  affiliatedOrg   String    @db.VarChar(50)
+  affiliationType String?   @db.VarChar(50)
+  createdDateTime DateTime? @default(now())
+  affiliationID   Int       @id @default(autoincrement())
+
+  @@index([affiliatedOrg], map: "affiliatedOrg")
+  @@index([student_id], map: "student_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model users {
+  student_id        Int              @id
+  title             String          @db.VarChar(10)
+  title_en  String              @db.VarChar(10)
+  first_name        String?          @db.VarChar(50)
+  last_name         String?          @db.VarChar(50)
+  nick_name         String?          @db.VarChar(50)
+  current_year      Int?
+  category          String?          @db.VarChar(50)
+  phone_number      String?          @db.VarChar(10)
+  line_id           String?          @db.VarChar(50)
+  facebook          String?          @db.VarChar(50)
+  instagram         String?          @db.VarChar(50)
+  medical_condition String?          @db.VarChar(100)
+  allergy           String?          @db.VarChar(100)
+  special_need      String?          @db.VarChar(100)
+  createdDateTime   DateTime?        @default(now()) @db.DateTime(0)
+  updatedDateTime   DateTime?        @default(now()) @db.DateTime(0)
+  first_name_en     String?          @db.VarChar(50)
+  last_name_en      String?          @db.VarChar(50)
+  projects          projects[]
+  userCredential    userCredentials?
+
+  @@unique([student_id])
+  @@index([student_id, first_name], map: "student_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model userCodeVerification {
+  student_id      Int       @id @default(autoincrement())
+  code            String?   @db.VarChar(10)
+  createdDateTime DateTime? @default(now()) @db.DateTime(0)
+  referenceID     String?   @db.VarChar(10)
+}
+
+model userCredentials {
+  student_id      Int             @id
+  email           String?         @db.VarChar(100)
+  password        String?         @db.VarChar(500)
+  createdDateTime DateTime?       @default(now())
+  updatedDateTime DateTime?       @updatedAt
+  role            userAccessLevel @default(USER)
+  emailVerified   Int?            @default(0)
+  userData        users?          @relation(fields: [student_id], references: [student_id])
+
+  @@unique([student_id])
+}
+
+model userInfections {
+  owner_uuid      String    @db.VarChar(36)
+  dose            Int
+  date            DateTime? @db.Date
+  createdDateTime DateTime? @default(now()) @db.DateTime(0)
+
+  @@id([owner_uuid, dose])
+}
+
+model usersLogout {
+  uuid           String    @id @default(uuid())
+  token          String?   @db.VarChar(500)
+  killedDateTime DateTime? @default(now()) @db.DateTime(0)
+}
+
+model users_vaccine {
+  owner_uuid      String    @db.VarChar(36)
+  dose            Int
+  type            String?   @db.VarChar(50)
+  date            DateTime? @db.Date
+  createdDateTime DateTime? @default(now()) @db.DateTime(0)
+
+  @@id([owner_uuid, dose])
+}
+
+enum userAccessLevel {
+  ADMIN
+  PRES
+  VP
+  STAFF
+  USER
+}

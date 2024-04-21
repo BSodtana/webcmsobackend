@@ -2,13 +2,14 @@ module.exports = {
   env: {
     commonjs: true,
     es2021: true,
-    node: true
+    node: true,
   },
   extends: 'standard',
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
   },
   rules: {
-    camelcase: 'off'
-  }
+    camelcase: 'off',
+    'comma-dangle': ['never'],
+  },
 }

@@ -8,21 +8,33 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 const path = require('path')
 
-app.use(cors({
-  origin: ['http://127.0.0.1:5173', 'https://cmso.med.cmu.ac.th', 'http://localhost:5173', 'http://10.84.178.129:5173']
-}))
+app.use(
+  cors({
+    origin: [
+      'https://cmso.med.cmu.ac.th',
+      'http://localhost:3000',
+      'http://10.125.161.181:3000',
+    ],
+  })
+)
 const port = process.env.PORT || 8080
 
 const logger = morgan('dev')
 // IMPORT API V1
 const v1 = require('./v1/main')
+const v2 = require('./v2/main')
 
 app.use(logger)
 app.use('/v1', v1)
+app.use('/v2', v2)
 app.use('/v1/static', express.static(path.join(__dirname, './assets')))
+app.use('/v2/static', express.static(path.join(__dirname, './assets')))
 
 app.get('/', (req, res) => {
-  res.status(200).json({ status: `Server is Up and Running at port ${port}`, ENV_PORT: process.env.PORT })
+  res.status(200).json({
+    status: `Server is Up and Running at port ${port}`,
+    ENV_PORT: process.env.PORT,
+  })
 })
 
 app.listen(port, () => {
