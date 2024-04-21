@@ -1,5 +1,5 @@
 const axios = require('axios')
-const MAIL_ENDPOINT = require('../../../../config/mail')
+const { MAIL_ENDPOINT } = require('../../../../config/mail')
 
 async function SendEmailForCode(recepient, code) {
   try {
@@ -104,16 +104,15 @@ async function SendEmailForCode(recepient, code) {
                   <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 600px; padding: 0;">
 
                     <!-- START CENTERED WHITE CONTAINER -->
-                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">This is preheader text. Some clients will show this text as a preview.</span>
+                    <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">${code} คือรหัสยืนยันอีเมลของคุณ</span>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background: #ffffff; border: 1px solid #eaebed; border-radius: 16px; width: 100%;" width="100%">
 
                       <!-- START MAIN CONTENT AREA -->
                       <tr>
                         <td class="wrapper" style="font-family: Helvetica, sans-serif; font-size: 16px; vertical-align: top; box-sizing: border-box; padding: 24px;" valign="top">
-                          <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">ยินดีต้อนรับสู่ CMSO Online</p>
-                          <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">รหัสยืนยันของคุณคือ</p>
-                          <p style="font-family: monospace, sans-serif; font-size: 32px; font-weight: normal; margin: 0; margin-bottom: 16px;">${code}</p>
-                          <p style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">ให้ใช้รหัสนี้กรอกในหน้ารับสมัคร ภายใน 5 นาที</p>
+                          <h3 style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">ยินดีต้อนรับสู่ CMSO Online</h3>
+                          <h3 style="font-family: Helvetica, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 16px;">รหัสยืนยันของคุณคือ</h3>
+                          <h2 style="font-family: monospace, sans-serif; font-size: 32px; font-weight: normal; margin: 0; margin-bottom: 16px;">${code}</h2>
                         </td>
                       </tr>
 
