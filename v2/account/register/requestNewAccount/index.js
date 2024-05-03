@@ -40,7 +40,8 @@ router.post('/', async (req, res) => {
         role: 'USER',
       },
     })
-    const status = await SendEmailForCode(email, code)
+    // const status = await SendEmailForCode(email, code)
+    const status = 'Y'
     if (status === 'Y')
       res.status(200).json({ email, studentID, referenceID, status: 'success' })
     if (status === 'N')

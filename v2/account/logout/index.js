@@ -3,7 +3,7 @@ const router = express.Router()
 const prisma = require('../../prisma')
 // /v2/account/logout
 router.get('/', async (req, res) => {
-  const header = req.headers.authorization.split(' ')[1]
+  const header = req.headers.authorization?.split(' ')[1]
   try {
     await prisma.usersLogout.create({ data: { token: header } })
     res.status(200).json({ status: 200, detail: 'THE LOGOUT IS SUCCESSFUL' })

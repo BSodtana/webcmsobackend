@@ -5,7 +5,7 @@ const VerifyUserJWT = require('./verifyUserJwt')
 // /v2/account/login/token
 
 router.get('/', async (req, res) => {
-  const token = req.headers.authorization.split(' ')[1]
+  const token = req.headers.authorization?.split(' ')[1]
   const user = await VerifyUserJWT(token)
   if (!user.isAuthenticated)
     res.status(401).json({
