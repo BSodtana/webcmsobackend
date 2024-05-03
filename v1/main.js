@@ -13,7 +13,7 @@ router.use('/structure', structure)
 router.use('/docx-template', docxtemplates)
 
 router.get('/', (req, res) => {
-  res.status(200).json({ currentPath: '/v1/' })
+  res.status(200).json({ currentPath: '/v1/', note: ' THIS API IS OBSOLETE' })
 })
 
 module.exports = router
