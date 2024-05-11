@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -38,7 +42,9 @@ model projectParticipants {
   participantPositionID String    @id @db.VarChar(36)
   recruitID             String    @default("") @db.VarChar(15)
   student_id            Int       @default(0)
-  createdDateTime       DateTime?
+  createdDateTime       DateTime? @default(dbgenerated("(current_timestamp())"))
+  parentRecruitEntity projectParticipantRecruit @relation(fields: [recruitID], references: [recruitID])
+  studentData    users @relation(fields: [student_id], references: [student_id])
 
   @@index([recruitID], map: "recruitID")
   @@index([student_id], map: "student_id")
@@ -53,7 +59,8 @@ model projectParticipantRecruit {
   createdDateTime DateTime @default(now())
   updatedDateTime DateTime @default(now())
   isAllowed       Boolean  @default(false)
-
+  projectData projects @relation(fields: [projectID], references: [project_id])
+  member projectParticipants[]
   @@index([projectID], map: "projectID")
 }
 
@@ -65,6 +72,8 @@ model projectStaffRecruit {
   createdDateTime DateTime @default(now()) @db.DateTime(0)
   updatedDateTime DateTime @default(now()) @db.DateTime(0)
   isAllowed       Boolean  @default(false)
+  positions projectStaffRecruitPosition[]
+  projectData projects @relation(fields: [projectID], references: [project_id])
 
   @@index([projectID], map: "projectID")
 }
@@ -79,16 +88,21 @@ model projectStaffRecruitPosition {
   createdDateTime DateTime @default(now()) @db.DateTime(0)
   updatedDateTime DateTime @default(now()) @db.DateTime(0)
   isAllowed       Boolean  @default(false)
+  projectStaffRecruit projectStaffRecruit @relation(fields: [recruitID], references: [recruitID])
+  member projectStaffs[]
 
   @@index([recruitID], map: "recruitID")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model projectStaffs {
-  staffPositionID String    @id @db.VarChar(36)
+  id              String    @id @db.VarChar(36) @default(uuid())
+  positionID      String    @db.VarChar(36)
   recruitID       String    @default("") @db.VarChar(15)
   student_id      Int       @default(0)
   createdDateTime DateTime?
+  parentRecruitEntity projectStaffRecruitPosition @relation(fields: [positionID], references: [positionID])
+  studentData    users @relation(fields: [student_id], references: [student_id])
 
   @@index([recruitID], map: "recruitID")
   @@index([student_id], map: "student_id")
@@ -123,6 +137,8 @@ model projects {
   academicYear               Int                         @default(202401)
   isShown                    Int                         @default(0)
   projectConsiderationStatus ProjectConsiderationStatus?
+  participantRecruit projectParticipantRecruit[]
+  staffRecruit projectStaffRecruit[]
 
   @@index([orgID], map: "orgID")
   @@index([student_id], map: "student_id")
@@ -209,6 +225,8 @@ model users {
   projects          projects[]
   userCredential    userCredentials?
   affiliation       userAffiliation[]
+  participantOf    projectParticipants[]
+  staffOf    projectStaffs[]
 
   @@unique([student_id])
   @@index([student_id, first_name], map: "student_id")

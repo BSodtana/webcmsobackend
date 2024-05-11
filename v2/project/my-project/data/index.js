@@ -24,10 +24,13 @@ router.get('/:projectID', async (req, res) => {
           ownerOrg: { select: { orgName: true, orgType: true } },
           projectData: true,
           projectConsiderationStatus: true,
+          participantRecruit: true,
+          staffRecruit: { include: { positions: true } },
         },
       })
       res.status(200).json({ data })
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         status: 'internal server error',
         detail: 'Internal Server Error - Check Server Log',

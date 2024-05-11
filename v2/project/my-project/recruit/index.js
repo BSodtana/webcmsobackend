@@ -1,15 +1,14 @@
 const express = require('express')
 const router = express.Router()
-const prisma = require('../../prisma')
-const VerifyUserJWT = require('../../account/login/token/verifyUserJwt')
+const prisma = require('../../../prisma')
+const VerifyUserJWT = require('../../../account/login/token/verifyUserJwt')
 
-// /v2/project/my-project
+// /v2/project/my-project/recruit
 
-router.use('/data', require('./data'))
-router.use('/recruit', require('./recruit'))
-
-router.get('/', async (req, res) => {
+router.get('/:projectID', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1]
+  console.log(req.headers.authorization)
+  const { projectID } = req.params
   if (!token) {
     res.status(401).json({
       status: 'unauthorized',
@@ -19,9 +18,12 @@ router.get('/', async (req, res) => {
   if (token) {
     try {
       const tokenData = await VerifyUserJWT(token)
-      const data = await prisma.projects.findMany({
-        where: { student_id: tokenData.data.student_id },
-        include: { ownerOrg: { select: { orgName: true, orgType: true } } },
+      const data = await prisma.projects.findFirst({
+        where: { project_id: projectID },
+        include: {
+          projectParticipantRecruit: true,
+          projectStaffRecruit: true,
+        },
       })
       res.status(200).json({ data })
     } catch (error) {
