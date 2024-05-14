@@ -2,9 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+// }
 
 datasource db {
   provider = "mysql"
@@ -39,70 +39,71 @@ model project_21st_skill_set {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model projectParticipants {
-  participantPositionID String    @id @db.VarChar(36)
-  recruitID             String    @default("") @db.VarChar(15)
-  student_id            Int       @default(0)
-  createdDateTime       DateTime? @default(dbgenerated("(current_timestamp())"))
-  parentRecruitEntity projectParticipantRecruit @relation(fields: [recruitID], references: [recruitID])
-  studentData    users @relation(fields: [student_id], references: [student_id])
+  participantPositionID String                    @id @db.VarChar(36)
+  recruitID             String                    @default("") @db.VarChar(15)
+  student_id            Int                       @default(0)
+  createdDateTime       DateTime?                 @default(dbgenerated("(current_timestamp())"))
+  parentRecruitEntity   projectParticipantRecruit @relation(fields: [recruitID], references: [recruitID])
+  studentData           users                     @relation(fields: [student_id], references: [student_id])
 
   @@index([recruitID], map: "recruitID")
   @@index([student_id], map: "student_id")
 }
 
 model projectParticipantRecruit {
-  recruitID       String   @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
-  projectID       String   @db.VarChar(15)
-  registerFrom    DateTime @db.DateTime(0)
-  registerUntil   DateTime @db.DateTime(0)
-  maxNumber       Int      @default(0)
-  createdDateTime DateTime @default(now())
-  updatedDateTime DateTime @default(now())
-  isAllowed       Boolean  @default(false)
-  projectData projects @relation(fields: [projectID], references: [project_id])
-  member projectParticipants[]
+  recruitID       String                @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
+  projectID       String                @db.VarChar(15)
+  registerFrom    DateTime              @db.DateTime(0)
+  registerUntil   DateTime              @db.DateTime(0)
+  maxNumber       Int                   @default(0)
+  createdDateTime DateTime              @default(now())
+  updatedDateTime DateTime              @default(now())
+  isAllowed       Boolean               @default(false)
+  projectData     projects              @relation(fields: [projectID], references: [project_id])
+  member          projectParticipants[]
+
   @@index([projectID], map: "projectID")
 }
 
 model projectStaffRecruit {
-  recruitID       String   @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
-  projectID       String   @db.VarChar(15)
-  registerFrom    DateTime @db.DateTime(0)
-  registerUntil   DateTime @db.DateTime(0)
-  createdDateTime DateTime @default(now()) @db.DateTime(0)
-  updatedDateTime DateTime @default(now()) @db.DateTime(0)
-  isAllowed       Boolean  @default(false)
-  positions projectStaffRecruitPosition[]
-  projectData projects @relation(fields: [projectID], references: [project_id])
+  recruitID       String                        @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
+  projectID       String                        @db.VarChar(15)
+  registerFrom    DateTime                      @db.DateTime(0)
+  registerUntil   DateTime                      @db.DateTime(0)
+  createdDateTime DateTime                      @default(now()) @db.DateTime(0)
+  updatedDateTime DateTime                      @default(now()) @db.DateTime(0)
+  isAllowed       Boolean                       @default(false)
+  positions       projectStaffRecruitPosition[]
+  projectData     projects                      @relation(fields: [projectID], references: [project_id])
 
   @@index([projectID], map: "projectID")
 }
 
 model projectStaffRecruitPosition {
-  positionID      String   @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
-  recruitID       String   @db.VarChar(15)
-  positionName    String   @db.VarChar(15)
-  maxNumber       Int      @default(0)
-  registerFrom    DateTime @db.DateTime(0)
-  registerUntil   DateTime @db.DateTime(0)
-  createdDateTime DateTime @default(now()) @db.DateTime(0)
-  updatedDateTime DateTime @default(now()) @db.DateTime(0)
-  isAllowed       Boolean  @default(false)
+  positionID          String              @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
+  recruitID           String              @db.VarChar(15)
+  positionName        String              @db.VarChar(15)
+  maxNumber           Int                 @default(0)
+  registerFrom        DateTime            @db.DateTime(0)
+  registerUntil       DateTime            @db.DateTime(0)
+  createdDateTime     DateTime            @default(now()) @db.DateTime(0)
+  updatedDateTime     DateTime            @default(now()) @db.DateTime(0)
+  isAllowed           Boolean             @default(false)
   projectStaffRecruit projectStaffRecruit @relation(fields: [recruitID], references: [recruitID])
-  member projectStaffs[]
+  member              projectStaffs[]
 
   @@index([recruitID], map: "recruitID")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model projectStaffs {
-  id              String    @id @db.VarChar(36) @default(uuid())
-  positionID      String    @db.VarChar(36)
-  recruitID       String    @default("") @db.VarChar(15)
-  student_id      Int       @default(0)
-  createdDateTime DateTime?
+  id                  String                      @id @default(uuid()) @db.VarChar(36)
+  positionID          String                      @db.VarChar(36)
+  recruitID           String                      @default("") @db.VarChar(15)
+  student_id          Int                         @default(0)
+  createdDateTime     DateTime?
   parentRecruitEntity projectStaffRecruitPosition @relation(fields: [positionID], references: [positionID])
-  studentData    users @relation(fields: [student_id], references: [student_id])
+  studentData         users                       @relation(fields: [student_id], references: [student_id])
 
   @@index([recruitID], map: "recruitID")
   @@index([student_id], map: "student_id")
@@ -137,8 +138,8 @@ model projects {
   academicYear               Int                         @default(202401)
   isShown                    Int                         @default(0)
   projectConsiderationStatus ProjectConsiderationStatus?
-  participantRecruit projectParticipantRecruit[]
-  staffRecruit projectStaffRecruit[]
+  participantRecruit         projectParticipantRecruit[]
+  staffRecruit               projectStaffRecruit[]
 
   @@index([orgID], map: "orgID")
   @@index([student_id], map: "student_id")
@@ -203,30 +204,30 @@ model userAffiliation {
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model users {
-  student_id        Int               @id
-  title             String            @db.VarChar(10)
-  title_en          String            @db.VarChar(10)
-  first_name        String?           @db.VarChar(50)
-  last_name         String?           @db.VarChar(50)
-  nick_name         String?           @db.VarChar(50)
+  student_id        Int                   @id
+  title             String                @db.VarChar(10)
+  title_en          String                @db.VarChar(10)
+  first_name        String?               @db.VarChar(50)
+  last_name         String?               @db.VarChar(50)
+  nick_name         String?               @db.VarChar(50)
   current_year      Int?
-  category          String?           @db.VarChar(50)
-  phone_number      String?           @db.VarChar(10)
-  line_id           String?           @db.VarChar(50)
-  facebook          String?           @db.VarChar(50)
-  instagram         String?           @db.VarChar(50)
-  medical_condition String?           @db.VarChar(100)
-  allergy           String?           @db.VarChar(100)
-  special_need      String?           @db.VarChar(100)
-  createdDateTime   DateTime?         @default(now()) @db.DateTime(0)
-  updatedDateTime   DateTime?         @default(now()) @db.DateTime(0)
-  first_name_en     String?           @db.VarChar(50)
-  last_name_en      String?           @db.VarChar(50)
+  category          String?               @db.VarChar(50)
+  phone_number      String?               @db.VarChar(10)
+  line_id           String?               @db.VarChar(50)
+  facebook          String?               @db.VarChar(50)
+  instagram         String?               @db.VarChar(50)
+  medical_condition String?               @db.VarChar(100)
+  allergy           String?               @db.VarChar(100)
+  special_need      String?               @db.VarChar(100)
+  createdDateTime   DateTime?             @default(now()) @db.DateTime(0)
+  updatedDateTime   DateTime?             @default(now()) @db.DateTime(0)
+  first_name_en     String?               @db.VarChar(50)
+  last_name_en      String?               @db.VarChar(50)
   projects          projects[]
   userCredential    userCredentials?
   affiliation       userAffiliation[]
-  participantOf    projectParticipants[]
-  staffOf    projectStaffs[]
+  participantOf     projectParticipants[]
+  staffOf           projectStaffs[]
 
   @@unique([student_id])
   @@index([student_id, first_name], map: "student_id")
@@ -265,7 +266,7 @@ model ProjectConsiderationStatus {
   statusFinance            CheckingStatus           @default(QUEUE)
   statusSec                CheckingStatus           @default(QUEUE)
   statusPresent            ConsiderStatus           @default(QUEUE)
-  comment String @db.MediumText @default("")
+  comment                  String                   @default("") @db.MediumText
   updatedDTM               DateTime                 @default(now())
   projectConsiderationType ProjectConsiderationtype @default(NORMAL)
   dateApprovalDoc          DateTime?
