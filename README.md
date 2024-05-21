@@ -1,4 +1,4 @@
-<img src="./images/logo.sample.png" alt="Logo of the project" align="right">
+<img src="https://cmso.med.cmu.ac.th/assets/cmso.96d28b88.jpg" alt="Logo of the project" align="right">
 
 # CMSO Superplatform (Backend) 
 > Repository for CMSO Website (Backend)
