@@ -4,6 +4,9 @@
   "description": "A backend node for CMSO online project -- integrated site for all CMSO activities",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon app.js",
+    "dbsync":"npx prisma migrate dev",
+    "dblook": "npx prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

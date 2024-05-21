@@ -23,12 +23,17 @@ const logger = morgan('dev')
 // IMPORT API V1
 const v1 = require('./v1/main')
 const v2 = require('./v2/main')
+const v2_1 = require('./v2.1/main')
 
 app.use(logger)
 app.use('/v1', v1)
-app.use('/v2', v2)
 app.use('/v1/static', express.static(path.join(__dirname, './assets')))
+
+app.use('/v2', v2)
 app.use('/v2/static', express.static(path.join(__dirname, './assets')))
+
+app.use('/v2.1', v2_1)
+app.use('/v2.1/static', express.static(path.join(__dirname, './assets')))
 
 app.get('/', (req, res) => {
   res.status(200).json({
