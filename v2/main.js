@@ -9,7 +9,7 @@ router.use('/account', account)
 router.use('/project', project)
 
 router.get('/', (req, res) => {
-  res.status(200).json({ currentPath: '/v2/', DB_HOST: process.env.DB_HOST })
+  res.status(200).json({ currentPath: '/v2/', DB_HOST: process.env.DB_HOST, msg: "Hello" })
 })
 
 module.exports = router
