@@ -1,14 +1,23 @@
+const prisma = require('../prisma')
+
 require('dotenv').config()
 
-const helloWorld = (name) => {
+const helloWorld = async (name) => {
 
-    if (name === 'admin') {
-        throw { code: 'INTERNAL-ERROR', desc: "name admin not allowed" }
-    }
+    const data = await prisma.users.update({
+        where: {
+            studentID: '660710000'
+        },
+        data: {
+            firstNameTH: name
+        }
+    })
+    console.log('data', data)
 
     return {
         name: name,
-        text: `Hello ${name}`
+        text: `Hello ${name}`,
+        data: data
     }
 
 }
