@@ -7,20 +7,201 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model categorycmsomission {
+  cmsoMissionType     String        @id @default("5-4-1") @db.VarChar(10)
+  cmsoMissionTypeName String?       @default("เป็นพื้นที่ให้นักศึกษามีอิสระในการจัดโปรเจคตามที่ตนเองต้องการ") @db.Text
+  projectdata         projectdata[]
+}
+
+model categorycmsoproject {
+  cmsoProjectType     String        @id @default("5-1-1") @db.VarChar(10)
+  cmsoProjectTypeName String?       @default("ประเภทโครงงานกิจกรรมสัมมนาองค์กร") @db.Text
+  projectdata         projectdata[]
+}
+
+model categorycmumedgrad {
+  cmuMedGradType     String        @id @default("5-3-1") @db.VarChar(10)
+  cmuMedGradTypeName String?       @default("มีคุณธรรม จริยธรรม ปฏิบัติตนตามจรรยาบรรณแห่งวิชาชีพ") @db.Text
+  projectdata        projectdata[]
+}
+
+model categorycmumedorg {
+  cmuMedOrgType     String        @id @default("5-5-1") @db.VarChar(10)
+  cmuMedOrgTypeName String?       @default("Customer focus มุ่งเน้นผู้รับบริการ") @db.Text
+  projectdata       projectdata[]
+}
+
+model categorycmuproject {
+  cmuProjectType     String        @id @default("5-2-1") @db.VarChar(10)
+  cmuProjectTypeName String?       @default("โครงงานด้านอาหารและสุขภาพ") @db.Text
+  projectdata        projectdata[]
+}
+
 model organizations {
   orgID               String                @id @default("") @db.VarChar(15)
   orgName             String                @db.Text
   orgType             organizations_orgType @default(DIVISION)
-  parentOrg           String?               @default("") @db.VarChar(15)
-  subOrg              organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: Cascade, map: "organizations-parentOrg")
+  parentOrg           String?               @db.VarChar(15)
+  organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizations_organizations")
   other_organizations organizations[]       @relation("organizationsToorganizations")
-  childrenProject     projects[]
-  userAffiliation     userAffiliation[]
+  projects            projects[]
+  useraffiliation     useraffiliation[]
 
   @@index([parentOrg], map: "parentOrg")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model projectconsiderationstatus {
+  projectID                String                                              @id @default("") @db.VarChar(50)
+  statusVP                 projectconsiderationstatus_statusVP                 @default(QUEUE)
+  statusFinance            projectconsiderationstatus_statusFinance            @default(QUEUE)
+  statusSec                projectconsiderationstatus_statusSec                @default(QUEUE)
+  statusPresent            projectconsiderationstatus_statusPresent            @default(QUEUE)
+  updatedDTM               DateTime                                            @default(now())
+  projectConsiderationType projectconsiderationstatus_projectConsiderationType @default(NORMAL)
+  dateApprovalDoc          DateTime?
+  dateOtherDoc             DateTime?
+  dateActionPlan           DateTime?
+  dateReceipt              DateTime?
+  dateFinalize             DateTime?
+  projectType              projectconsiderationstatus_projectType              @default(OLD)
+  comment                  String                                              @default("") @db.MediumText
+  projects                 projects                                            @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectconsiderationstatus_projects")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectcostexpandedlist {
+  projectID         String                           @id @default("") @db.VarChar(50)
+  costType          projectcostexpandedlist_costType @default(MEDINCOME)
+  costOtherTypeText String?                          @db.Text
+  costDescription   String?                          @db.Text
+  costAmount        String?                          @db.Text
+  costEach          String?                          @db.Text
+  costTotal         String?                          @db.Text
+  projectdata       projectdata                      @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectcostexpandedlist_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdata {
+  projectID                        String                   @id @db.VarChar(50)
+  placeInCMU                       String                   @default("") @db.MediumText
+  placeOutsideCMU                  String?                  @default("") @db.MediumText
+  datePrepareStart                 DateTime?                @default(now()) @db.Date
+  datePrepareEnd                   DateTime?                @default(now()) @db.Date
+  dateEventStart                   DateTime?                @default(now()) @db.Date
+  dateEventEnd                     DateTime?                @default(now()) @db.Date
+  dateSummationStart               DateTime?                @default(now()) @db.Date
+  dateSummationEnd                 DateTime?                @default(now()) @db.Date
+  professorFullName                String?                  @default("") @db.VarChar(100)
+  professorAffiliation             String?                  @default("") @db.VarChar(100)
+  otherOrgName                     String?                  @default("") @db.MediumText
+  cmsoProjectType                  String?                  @db.VarChar(10)
+  cmuProjectType                   String?                  @db.VarChar(10)
+  cmuMedGradType                   String?                  @db.VarChar(10)
+  cmsoMissionType                  String?                  @db.VarChar(10)
+  cmuMedOrgType                    String?                  @db.VarChar(10)
+  background                       String?                  @default("") @db.VarChar(3000)
+  aims                             String?                  @default("") @db.MediumText
+  numberStudentParticipant         Int?                     @default(0)
+  numberFacultyStaffParticipant    Int?                     @default(0)
+  numberProfessorParticipant       Int?                     @default(0)
+  numberOutsideParticipant         Int?                     @default(0)
+  numberStudentStaff               Int?                     @default(0)
+  goalQualitative                  String?                  @default("") @db.MediumText
+  indicatorParticipantQuantitative String?                  @default("") @db.MediumText
+  indicatorSatisfactory            String?                  @default("") @db.MediumText
+  indicatorAims                    String?                  @default("") @db.MediumText
+  outcome                          String?                  @default("") @db.MediumText
+  createdDateTime                  DateTime?                @default(now())
+  projectcostexpandedlist          projectcostexpandedlist?
+  categorycmsomission              categorycmsomission?     @relation(fields: [cmsoMissionType], references: [cmsoMissionType], map: "FK_projectdata_categorycmsomission")
+  categorycmsoproject              categorycmsoproject?     @relation(fields: [cmsoProjectType], references: [cmsoProjectType], map: "FK_projectdata_categorycmsoproject")
+  categorycmumedgrad               categorycmumedgrad?      @relation(fields: [cmuMedGradType], references: [cmuMedGradType], map: "FK_projectdata_categorycmumedgrad")
+  categorycmumedorg                categorycmumedorg?       @relation(fields: [cmuMedOrgType], references: [cmuMedOrgType], map: "FK_projectdata_categorycmumedorg")
+  categorycmuproject               categorycmuproject?      @relation(fields: [cmuProjectType], references: [cmuProjectType], map: "FK_projectdata_categorycmuproject")
+  projects                         projects                 @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdata_projects")
+  projectdoactlists                projectdoactlists?
+  projectdochecklists              projectdochecklists?
+  projectdodolists                 projectdodolists?
+  projectdoplanlists               projectdoplanlists?
+
+  @@index([cmsoMissionType], map: "cmsoMissionType")
+  @@index([cmsoProjectType], map: "cmsoProjectType")
+  @@index([cmuMedGradType], map: "cmuMedGradType")
+  @@index([cmuMedOrgType], map: "cmuMedOrgType")
+  @@index([cmuProjectType], map: "cmuProjectType")
+  @@index([projectID], map: "projectID")
+}
+
+model projectdoactlists {
+  projectID                String      @id @default("") @db.VarChar(50)
+  doActDescriptionText     String?     @db.Text
+  doActDateText            String?     @db.Text
+  doActResponsibleFullName String?     @db.Text
+  projectdata              projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdoactlists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdochecklists {
+  projectID                  String      @id @default("") @db.VarChar(50)
+  doCheckDescriptionText     String?     @db.Text
+  doCheckDateText            String?     @db.Text
+  doCheckResponsibleFullName String?     @db.Text
+  projectdata                projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdochecklists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdodolists {
+  projectID               String      @id @default("") @db.VarChar(50)
+  doDoDescriptionText     String?     @db.Text
+  doDoDateText            String?     @db.Text
+  doDoResponsibleFullName String?     @db.Text
+  projectdata             projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdodolists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdoplanlists {
+  projectID                 String      @id @default("") @db.VarChar(50)
+  doPlanDescriptionText     String?     @db.Text
+  doPlanDateText            String?     @db.Text
+  doPlanResponsibleFullName String?     @db.Text
+  projectdata               projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectplanlists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectparticipantrecruit {
+  participantRecruitID String                @id @unique(map: "participantRecruitID") @db.VarChar(50)
+  projectID            String                @db.VarChar(50)
+  registerFrom         DateTime              @db.DateTime(0)
+  registerUntil        DateTime              @db.DateTime(0)
+  maxNumber            Int                   @default(0)
+  createdDateTime      DateTime              @default(now())
+  updatedDateTime      DateTime              @default(now())
+  isAllowed            Int                   @default(0)
+  yearAllowed          String                @default("1,2,3,4,5,6")
+  projects             projects              @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-participantrtecruit-projectID")
+  projectparticipants  projectparticipants[]
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectparticipants {
+  participantApplicationID  String                    @id @unique(map: "participantApplicationID") @db.VarChar(50)
+  recruitID                 String                    @db.VarChar(50)
+  studentID                 String                    @db.VarChar(10)
+  createdDateTime           DateTime?                 @default(now())
+  projectparticipantrecruit projectparticipantrecruit @relation(fields: [recruitID], references: [participantRecruitID], onDelete: Cascade, map: "participantRecruit-participants-recruitID")
+  users                     users                     @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-projectparticipants-studentID")
+
+  @@index([recruitID], map: "recruitID")
+  @@index([studentID], map: "studentID")
+}
+
 model projects {
   projectID                  String                      @id @unique(map: "projects_project_id_key") @db.VarChar(50)
   studentID                  String?                     @db.VarChar(10)
@@ -37,18 +218,102 @@ model projects {
   updatedDateTime            DateTime?                   @default(now())
   isShown                    Int                         @default(0)
   academicYear               Int                         @default(202401)
-  projectConsiderationStatus projectConsiderationStatus?
-  projectData                projectData?
-  projectParticipantRecruit  projectParticipantRecruit[]
-  ownerOrg                   organizations               @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
-  ownerUser                  users?                      @relation(fields: [studentID], references: [studentID], map: "users-projects-studentID")
-  projectStaffRecruit        projectStaffRecruit[]
+  projectconsiderationstatus projectconsiderationstatus?
+  projectdata                projectdata?
+  projectparticipantrecruit  projectparticipantrecruit[]
+  organizations              organizations               @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
+  users                      users?                      @relation(fields: [studentID], references: [studentID], map: "users-projects-studentID")
+  projectstaffrecruit        projectstaffrecruit[]
 
   @@index([orgID], map: "orgID")
   @@index([studentID], map: "student_id")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model projectstaffrecruit {
+  staffRecruitID              String                        @id @unique(map: "staffRecruitID") @db.VarChar(50)
+  projectID                   String                        @db.VarChar(50)
+  registerFrom                DateTime                      @db.DateTime(0)
+  registerUntil               DateTime                      @db.DateTime(0)
+  createdDateTime             DateTime                      @default(now()) @db.DateTime(0)
+  updatedDateTime             DateTime                      @default(now()) @db.DateTime(0)
+  isAllowed                   Int                           @default(0)
+  yearAllowed                 String                        @default("1,2,3,4,5,6")
+  projects                    projects                      @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-staffrecruit-projectID")
+  projectstaffrecruitposition projectstaffrecruitposition[]
+  projectstaffs               projectstaffs[]
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectstaffrecruitposition {
+  staffPositionID     String               @id @unique(map: "staffPositionID") @db.VarChar(50)
+  recruitID           String?              @db.VarChar(50)
+  positionName        String               @default("ตำแหน่งหน้าที่") @db.VarChar(100)
+  maxNumber           Int                  @default(1)
+  registerFrom        DateTime             @db.DateTime(0)
+  registerUntil       DateTime             @db.DateTime(0)
+  createdDateTime     DateTime             @default(now()) @db.DateTime(0)
+  updatedDateTime     DateTime             @default(now()) @db.DateTime(0)
+  isAllowed           Int                  @default(0)
+  projectstaffrecruit projectstaffrecruit? @relation(fields: [recruitID], references: [staffRecruitID], map: "projecttaffrecruit-staffposition-recruitID")
+  projectstaffs       projectstaffs[]
+
+  @@index([recruitID], map: "recruitID")
+}
+
+model projectstaffs {
+  staffApplicationID          String                      @id @unique(map: "staffApplicationID") @db.VarChar(50)
+  recruitID                   String                      @default("") @db.VarChar(50)
+  positionID                  String                      @db.VarChar(50)
+  studentID                   String                      @default("") @db.VarChar(10)
+  createdDateTime             DateTime                    @default(now())
+  projectstaffrecruit         projectstaffrecruit         @relation(fields: [recruitID], references: [staffRecruitID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruit-staff-recruitID")
+  projectstaffrecruitposition projectstaffrecruitposition @relation(fields: [positionID], references: [staffPositionID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruitposition-staff-positionID")
+  users                       users                       @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "users-staff-studentID")
+
+  @@index([positionID], map: "projectstaffrecruitposition-staff-positionID")
+  @@index([recruitID, positionID], map: "recruit-positionID")
+  @@index([studentID], map: "studentID")
+}
+
+model useraffiliation {
+  studentID       String                          @default("") @db.VarChar(10)
+  affiliatedOrg   String                          @db.VarChar(50)
+  affiliationID   Int
+  affiliationType useraffiliation_affiliationType @default(MEMBER)
+  createdDateTime DateTime?                       @default(now())
+  organizations   organizations                   @relation(fields: [affiliatedOrg], references: [orgID], onDelete: Cascade, map: "organizations-useraffiliation-affiliatedOrg")
+  users           users                           @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-userafiliation-studentID")
+
+  @@id([affiliatedOrg, affiliationID])
+  @@index([affiliatedOrg], map: "affiliatedOrg")
+  @@index([studentID], map: "studentID")
+}
+
+model usercodeverification {
+  studentID       String          @id @db.VarChar(15)
+  code            String?         @db.VarChar(10)
+  referenceID     String?         @db.VarChar(10)
+  createdDateTime DateTime?       @default(now()) @db.DateTime(0)
+  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-usercodeverification-studentID")
+
+  @@index([studentID], map: "studentID")
+}
+
+model usercredentials {
+  uuid                 String                @id @db.VarChar(50)
+  studentID            String                @unique(map: "studentID") @db.VarChar(10)
+  email                String?               @db.VarChar(100)
+  hashPassword         String?               @db.VarChar(500)
+  createdDateTime      DateTime?             @default(now())
+  updatedDateTime      DateTime?             @default(now())
+  role                 usercredentials_role  @default(USER)
+  emailVerified        Int                   @default(0)
+  usercodeverification usercodeverification?
+  users                users                 @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
+  userslogout          userslogout[]
+}
+
 model users {
   studentID           String                @id @default("") @db.VarChar(10)
   titleTH             String?               @db.Text
@@ -69,317 +334,23 @@ model users {
   specialNeed         String?               @db.Text
   createdDateTime     DateTime?             @default(now()) @db.DateTime(0)
   updatedDateTime     DateTime?             @default(now()) @db.DateTime(0)
-  projectParticipants projectParticipants[]
+  projectparticipants projectparticipants[]
   projects            projects[]
-  projectStaffs       projectStaffs[]
-  userAffiliation     userAffiliation[]
-  userCredentials     userCredentials       @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "usercredentials-user-studentID")
+  projectstaffs       projectstaffs[]
+  useraffiliation     useraffiliation[]
+  usercredentials     usercredentials?
 
   @@index([studentID], map: "studentID")
 }
 
-model categoryCMSOMission {
-  cmsoMissionType     String        @id @default("5-4-1") @db.VarChar(10)
-  cmsoMissionTypeName String?       @default("เป็นพื้นที่ให้นักศึกษามีอิสระในการจัดโปรเจคตามที่ตนเองต้องการ") @db.Text
-  projectData         projectData[]
-
-  @@map("categorycmsomission")
-}
-
-model categoryCMSOProject {
-  cmsoProjectType     String        @id @default("5-1-1") @db.VarChar(10)
-  cmsoProjectTypeName String?       @default("ประเภทโครงงานกิจกรรมสัมมนาองค์กร") @db.Text
-  projectData         projectData[]
-
-  @@map("categorycmsoproject")
-}
-
-model categoryCMUMedGrad {
-  cmuMedGradType     String        @id @default("5-3-1") @db.VarChar(10)
-  cmuMedGradTypeName String?       @default("มีคุณธรรม จริยธรรม ปฏิบัติตนตามจรรยาบรรณแห่งวิชาชีพ") @db.Text
-  projectData        projectData[]
-
-  @@map("categorycmumedgrad")
-}
-
-model categoryCMUMedOrg {
-  cmuMedOrgType     String        @id @default("5-5-1") @db.VarChar(10)
-  cmuMedOrgTypeName String?       @default("Customer focus มุ่งเน้นผู้รับบริการ") @db.Text
-  projectData       projectData[]
-
-  @@map("categorycmumedorg")
-}
-
-model categoryCMUProject {
-  cmuProjectType     String        @id @default("5-2-1") @db.VarChar(10)
-  cmuProjectTypeName String?       @default("โครงงานด้านอาหารและสุขภาพ") @db.Text
-  projectData        projectData[]
-
-  @@map("categorycmuproject")
-}
-
-model projectConsiderationStatus {
-  projectID                String                                              @id @default("") @db.VarChar(50)
-  statusVP                 projectconsiderationstatus_statusVP                 @default(QUEUE)
-  statusFinance            projectconsiderationstatus_statusFinance            @default(QUEUE)
-  statusSec                projectconsiderationstatus_statusSec                @default(QUEUE)
-  statusPresent            projectconsiderationstatus_statusPresent            @default(QUEUE)
-  updatedDTM               DateTime                                            @default(now())
-  projectConsiderationType projectconsiderationstatus_projectConsiderationType @default(NORMAL)
-  dateApprovalDoc          DateTime?
-  dateOtherDoc             DateTime?
-  dateActionPlan           DateTime?
-  dateReceipt              DateTime?
-  dateFinalize             DateTime?
-  projectType              projectconsiderationstatus_projectType              @default(OLD)
-  comment                  String                                              @default("") @db.MediumText
-  projects                 projects                                            @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectconsiderationstatus_projects")
-
-  @@index([projectID], map: "projectID")
-  @@map("projectconsiderationstatus")
-}
-
-model projectCostExpandedList {
-  projectID         String                           @id @default("") @db.VarChar(50)
-  costType          projectcostexpandedlist_costType @default(MEDINCOME)
-  costOtherTypeText String?                          @db.Text
-  costDescription   String?                          @db.Text
-  costAmount        String?                          @db.Text
-  costEach          String?                          @db.Text
-  costTotal         String?                          @db.Text
-  projectData       projectData                      @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectcostexpandedlist_projectdata")
-
-  @@index([projectID], map: "projectID")
-  @@map("projectcostexpandedlist")
-}
-
-model projectData {
-  projectID                        String                    @id @db.VarChar(50)
-  placeInCMU                       String                    @default("") @db.MediumText
-  placeOutsideCMU                  String?                   @default("") @db.MediumText
-  datePrepareStart                 DateTime?                 @default(now()) @db.Date
-  datePrepareEnd                   DateTime?                 @default(now()) @db.Date
-  dateEventStart                   DateTime?                 @default(now()) @db.Date
-  dateEventEnd                     DateTime?                 @default(now()) @db.Date
-  dateSummationStart               DateTime?                 @default(now()) @db.Date
-  dateSummationEnd                 DateTime?                 @default(now()) @db.Date
-  professorFullName                String?                   @default("") @db.VarChar(100)
-  professorAffiliation             String?                   @default("") @db.VarChar(100)
-  otherOrgName                     String?                   @default("") @db.MediumText
-  cmsoProjectType                  String?                   @db.VarChar(10)
-  cmuProjectType                   String?                   @db.VarChar(10)
-  cmuMedGradType                   String?                   @db.VarChar(10)
-  cmsoMissionType                  String?                   @db.VarChar(10)
-  cmuMedOrgType                    String?                   @db.VarChar(10)
-  background                       String?                   @default("") @db.VarChar(3000)
-  aims                             String?                   @default("") @db.MediumText
-  numberStudentParticipant         Int?                      @default(0)
-  numberFacultyStaffParticipant    Int?                      @default(0)
-  numberProfessorParticipant       Int?                      @default(0)
-  numberOutsideParticipant         Int?                      @default(0)
-  numberStudentStaff               Int?                      @default(0)
-  goalQualitative                  String?                   @default("") @db.MediumText
-  indicatorParticipantQuantitative String?                   @default("") @db.MediumText
-  indicatorSatisfactory            String?                   @default("") @db.MediumText
-  indicatorAims                    String?                   @default("") @db.MediumText
-  outcome                          String?                   @default("") @db.MediumText
-  createdDateTime                  DateTime?                 @default(now())
-  projectCostExpandedList          projectCostExpandedList[]
-  categoryCMSOMission              categoryCMSOMission?      @relation(fields: [cmsoMissionType], references: [cmsoMissionType], map: "FK_projectdata_categorycmsomission")
-  categoryCMSOProject              categoryCMSOProject?      @relation(fields: [cmsoProjectType], references: [cmsoProjectType], map: "FK_projectdata_categorycmsoproject")
-  categoryCMUMedGrad               categoryCMUMedGrad?       @relation(fields: [cmuMedGradType], references: [cmuMedGradType], map: "FK_projectdata_categorycmumedgrad")
-  categoryCMUMedOrg                categoryCMUMedOrg?        @relation(fields: [cmuMedOrgType], references: [cmuMedOrgType], map: "FK_projectdata_categorycmumedorg")
-  categoryCMUProject               categoryCMUProject?       @relation(fields: [cmuProjectType], references: [cmuProjectType], map: "FK_projectdata_categorycmuproject")
-  projects                         projects                  @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdata_projects")
-  projectDoActLists                projectDoActLists[]
-  projectDoCheckLists              projectDoCheckLists[]
-  projectDoDoLists                 projectDoDoLists[]
-  projectDoPlanLists               projectDoPlanLists[]
-
-  @@index([cmsoMissionType], map: "cmsoMissionType")
-  @@index([cmsoProjectType], map: "cmsoProjectType")
-  @@index([cmuMedGradType], map: "cmuMedGradType")
-  @@index([cmuMedOrgType], map: "cmuMedOrgType")
-  @@index([cmuProjectType], map: "cmuProjectType")
-  @@index([projectID], map: "projectID")
-  @@map("projectdata")
-}
-
-model projectDoActLists {
-  projectID                String      @id @default("") @db.VarChar(50)
-  doActDescriptionText     String?     @db.Text
-  doActDateText            String?     @db.Text
-  doActResponsibleFullName String?     @db.Text
-  projectData              projectData @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdoactlists_projectdata")
-
-  @@index([projectID], map: "projectID")
-  @@map("projectdoactlists")
-}
-
-model projectDoCheckLists {
-  projectID                  String      @id @default("") @db.VarChar(50)
-  doCheckDescriptionText     String?     @db.Text
-  doCheckDateText            String?     @db.Text
-  doCheckResponsibleFullName String?     @db.Text
-  projectData                projectData @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdochecklists_projectdata")
-
-  @@index([projectID], map: "projectID")
-  @@map("projectdochecklists")
-}
-
-model projectDoDoLists {
-  projectID               String      @id @default("") @db.VarChar(50)
-  doDoDescriptionText     String?     @db.Text
-  doDoDateText            String?     @db.Text
-  doDoResponsibleFullName String?     @db.Text
-  projectData             projectData @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdodolists_projectdata")
-
-  @@index([projectID], map: "projectID")
-  @@map("projectdodolists")
-}
-
-model projectDoPlanLists {
-  projectID                 String      @id @default("") @db.VarChar(50)
-  doPlanDescriptionText     String?     @db.Text
-  doPlanDateText            String?     @db.Text
-  doPlanResponsibleFullName String?     @db.Text
-  projectData               projectData @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectplanlists_projectdata")
-
-  @@index([projectID], map: "projectID")
-  @@map("projectdoplanlists")
-}
-
-model projectParticipantRecruit {
-  participantRecruitID String                @id @unique(map: "participantRecruitID") @db.VarChar(50)
-  projectID            String                @db.VarChar(50)
-  registerFrom         DateTime              @db.DateTime(0)
-  registerUntil        DateTime              @db.DateTime(0)
-  maxNumber            Int                   @default(0)
-  createdDateTime      DateTime              @default(now())
-  updatedDateTime      DateTime              @default(now())
-  isAllowed            Int                   @default(0)
-  yearAllowed          String                @default("1,2,3,4,5,6")
-  projects             projects              @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-participantrtecruit-projectID")
-  projectParticipants  projectParticipants[]
-
-  @@index([projectID], map: "projectID")
-  @@map("projectparticipantrecruit")
-}
-
-model projectParticipants {
-  participantApplicationID  String                    @id @unique(map: "participantApplicationID") @db.VarChar(50)
-  recruitID                 String                    @db.VarChar(50)
-  studentID                 String                    @db.VarChar(10)
-  createdDateTime           DateTime?                 @default(now())
-  projectparticipantrecruit projectParticipantRecruit @relation(fields: [recruitID], references: [participantRecruitID], onDelete: Cascade, map: "participantRecruit-participants-recruitID")
-  users                     users                     @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-projectparticipants-studentID")
-
-  @@index([recruitID], map: "recruitID")
-  @@index([studentID], map: "studentID")
-  @@map("projectparticipants")
-}
-
-model projectStaffRecruit {
-  staffRecruitID              String                        @id @unique(map: "staffRecruitID") @db.VarChar(50)
-  projectID                   String                        @db.VarChar(50)
-  registerFrom                DateTime                      @db.DateTime(0)
-  registerUntil               DateTime                      @db.DateTime(0)
-  createdDateTime             DateTime                      @default(now()) @db.DateTime(0)
-  updatedDateTime             DateTime                      @default(now()) @db.DateTime(0)
-  isAllowed                   Int                           @default(0)
-  yearAllowed                 String                        @default("1,2,3,4,5,6")
-  projects                    projects                      @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-staffrecruit-projectID")
-  projectStaffRecruitPosition projectStaffRecruitPosition[]
-  projectStaffs               projectStaffs[]
-
-  @@index([projectID], map: "projectID")
-  @@map("projectstaffrecruit")
-}
-
-model projectStaffRecruitPosition {
-  staffPositionID     String               @id @unique(map: "staffPositionID") @db.VarChar(50)
-  recruitID           String?              @db.VarChar(50)
-  positionName        String               @default("ตำแหน่งหน้าที่") @db.VarChar(100)
-  maxNumber           Int                  @default(1)
-  registerFrom        DateTime             @db.DateTime(0)
-  registerUntil       DateTime             @db.DateTime(0)
-  createdDateTime     DateTime             @default(now()) @db.DateTime(0)
-  updatedDateTime     DateTime             @default(now()) @db.DateTime(0)
-  isAllowed           Int                  @default(0)
-  projectstaffrecruit projectStaffRecruit? @relation(fields: [recruitID], references: [staffRecruitID], map: "projecttaffrecruit-staffposition-recruitID")
-  projectStaffs       projectStaffs[]
-
-  @@index([recruitID], map: "recruitID")
-  @@map("projectstaffrecruitposition")
-}
-
-model projectStaffs {
-  staffApplicationID          String                      @id @unique(map: "staffApplicationID") @db.VarChar(50)
-  recruitID                   String                      @default("") @db.VarChar(50)
-  positionID                  String                      @db.VarChar(50)
-  studentID                   String                      @default("") @db.VarChar(10)
-  createdDateTime             DateTime                    @default(now())
-  projectStaffRecruit         projectStaffRecruit         @relation(fields: [recruitID], references: [staffRecruitID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruit-staff-recruitID")
-  projectStaffRecruitPosition projectStaffRecruitPosition @relation(fields: [positionID], references: [staffPositionID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruitposition-staff-positionID")
-  users                       users                       @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "users-staff-studentID")
-
-  @@index([positionID], map: "projectstaffrecruitposition-staff-positionID")
-  @@index([recruitID, positionID], map: "recruit-positionID")
-  @@index([studentID], map: "studentID")
-  @@map("projectstaffs")
-}
-
-model userAffiliation {
-  studentID       String                          @default("") @db.VarChar(10)
-  affiliatedOrg   String                          @db.VarChar(50)
-  affiliationID   Int
-  affiliationType useraffiliation_affiliationType @default(MEMBER)
-  createdDateTime DateTime?                       @default(now())
-  organizations   organizations                   @relation(fields: [affiliatedOrg], references: [orgID], onDelete: Cascade, map: "organizations-useraffiliation-affiliatedOrg")
-  users           users                           @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-userafiliation-studentID")
-
-  @@id([affiliatedOrg, affiliationID])
-  @@index([affiliatedOrg], map: "affiliatedOrg")
-  @@index([studentID], map: "studentID")
-  @@map("useraffiliation")
-}
-
-model userCodeVerification {
-  studentID       String          @id @db.VarChar(15)
-  code            String?         @db.VarChar(10)
-  referenceID     String?         @db.VarChar(10)
-  createdDateTime DateTime?       @default(now()) @db.DateTime(0)
-  userCredentials userCredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-usercodeverification-studentID")
-
-  @@index([studentID], map: "studentID")
-  @@map("usercodeverification")
-}
-
-model userCredentials {
-  uuid                 String                @id @db.VarChar(50)
-  studentID            String                @unique(map: "studentID") @db.VarChar(10)
-  email                String?               @db.VarChar(100)
-  hashPassword         String?               @db.VarChar(500)
-  createdDateTime      DateTime?             @default(now())
-  updatedDateTime      DateTime?             @default(now())
-  role                 usercredentials_role  @default(USER)
-  emailVerified        Int                   @default(0)
-  userCodeVerification userCodeVerification?
-  users                users?
-  usersLogout          usersLogout[]
-
-  @@map("usercredentials")
-}
-
-model usersLogout {
+model userslogout {
   killedTokenAutoID Int             @unique(map: "killedTokenAutoID") @default(autoincrement())
   uuid              String
   token             String?         @db.VarChar(10000)
   killedDateTime    DateTime?       @default(now()) @db.DateTime(0)
-  userCredentials   userCredentials @relation(fields: [uuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-userlogout-uuid")
+  usercredentials   usercredentials @relation(fields: [uuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-userlogout-uuid")
 
   @@index([uuid], map: "uuid")
-  @@map("userslogout")
 }
 
 enum projectconsiderationstatus_statusVP {
@@ -396,6 +367,7 @@ enum projectcostexpandedlist_costType {
 }
 
 enum organizations_orgType {
+  ROOT
   CLUB
   DIVISION
   OTHER
