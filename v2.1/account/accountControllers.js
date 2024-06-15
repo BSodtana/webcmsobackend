@@ -6,7 +6,6 @@ const helloWorldController = async (req, res) => {
     try {
 
         const { name } = req.body
-        console.log('asdasd', name)
 
         // if (!name) {
         //     res.status(400).json(errorCodeToResponse('HELLOWORLD-ERROR-NONAME', 'ADMIN Test'))

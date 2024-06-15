@@ -27,6 +27,27 @@ const commonErrors = {
         "shouldContactAdmin": true,
         "shouldTryAgain": false,
     },
+    "JWT-TOKEN-NOT-FOUND": {
+        "code": "JWT-TOKEN-NOT-FOUND",
+        "textTH": "ไม่พบข้อมูลล็อกอินในระบบ",
+        "textEN": "No data associated with this token",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "JWT-TOKEN-EXPIRED": {
+        "code": "JWT-TOKEN-EXPIRED",
+        "textTH": "ข้อมูลล็อกอินหมดอายุ",
+        "textEN": "Credential Expired",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "JWT-TOKEN-NOT-PROVIDED": {
+        "code": "JWT-TOKEN-NOT-PROVIDED",
+        "textTH": "ไม่ได้ให้โทเค่นมา",
+        "textEN": "No token provided",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "INTERNAL-ERROR": {
         "code": "INTERNAL-ERROR",
         "textTH": "ระบบทำงานผิดพลาด",

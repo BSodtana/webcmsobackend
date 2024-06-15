@@ -41,6 +41,20 @@ const accountSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "LOGOUT-TOKEN-NOT-FOUND-SUCCESS": {
+        "code": "LOGOUT-TOKEN-NOT-FOUND-SUCCESS",
+        "textTH": "ออกจากระบบสำเร็จ",
+        "textEN": "Logged out successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "LOGOUT-TOKEN-FOUND-SUCCESS": {
+        "code": "LOGOUT-TOKEN-FOUND-SUCCESS",
+        "textTH": "ออกจากระบบสำเร็จ",
+        "textEN": "Logged out successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 

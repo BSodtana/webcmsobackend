@@ -57,11 +57,14 @@ const loginByEmailPass = async (email, password) => {
                 lastNameEN: userData.lastNameEN,
                 currentYear: userData.currentYear,
                 admissionCategory: userData.admissionCategory,
-                role: userData.usercredentials.role
+                role: userData.usercredentials.role,
+                uuid: userData.usercredentials.uuid,
+                email: userData.usercredentials.email,
+                emailVerified: userData.usercredentials.emailVerified
             }
 
 
-            const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '7d' })
+            const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '1s' })
 
             return {
                 studentID: userData.studentID,
