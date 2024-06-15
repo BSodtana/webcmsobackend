@@ -310,7 +310,7 @@ model usercredentials {
   role            usercredentials_role @default(USER)
   emailVerified   Int                  @default(0)
   users           users                @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
-  userslogout     userslogout[]
+  userslogout     userslogout?
 }
 
 model users {
@@ -343,14 +343,14 @@ model users {
   @@index([studentID], map: "studentID")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model userslogout {
-  killedTokenAutoID Int             @unique(map: "killedTokenAutoID") @default(autoincrement())
-  uuid              String
-  token             String?         @db.VarChar(10000)
-  killedDateTime    DateTime?       @default(now()) @db.DateTime(0)
-  usercredentials   usercredentials @relation(fields: [uuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-userlogout-uuid")
+  studentID       String          @id @default("0") @db.VarChar(50)
+  token           String          @default("0") @db.VarChar(1000)
+  killedDateTime  DateTime?       @default(now()) @db.DateTime(0)
+  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "FK_userslogout_usercredentials")
 
-  @@index([uuid], map: "uuid")
+  @@index([studentID], map: "studentID")
 }
 
 enum projectconsiderationstatus_statusVP {
