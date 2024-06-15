@@ -5,7 +5,7 @@ const router = express.Router();
 // for v2
 const login = require('./login')
 const logout = require('./logout')
-const register = require('./register')
+const register = require('./register/registerRoutes')
 const profile = require('./profile')
 const resetPassword = require('./reset-password')
 const affiliate = require('./affiliate')
@@ -22,8 +22,10 @@ const accountControllers = require('./accountControllers')
 
 router.post('/hello-world', accountControllers.helloWorldController)
 
+//---------- default -----------------
+
 router.get('/', (req, res) => {
-    res.status(200).json({ status: 200, currentPath: '/v2/account/' })
+    res.status(200).json({ status: 200, currentPath: '/v2.1/account/' })
 })
 
 module.exports = router
