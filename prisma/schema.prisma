@@ -291,54 +291,54 @@ model useraffiliation {
 }
 
 model usercodeverification {
-  studentID       String          @id @db.VarChar(15)
-  code            String?         @db.VarChar(10)
-  referenceID     String?         @db.VarChar(10)
-  createdDateTime DateTime?       @default(now()) @db.DateTime(0)
-  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-usercodeverification-studentID")
+  studentID       String    @id @db.VarChar(15)
+  code            String?   @db.VarChar(10)
+  referenceID     String?   @db.VarChar(10)
+  createdDateTime DateTime? @default(now()) @db.DateTime(0)
+  usercredentials users     @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-usercodeverification-studentID")
 
   @@index([studentID], map: "studentID")
 }
 
 model usercredentials {
-  uuid                 String                @id @db.VarChar(50)
-  studentID            String                @unique(map: "studentID") @db.VarChar(10)
-  email                String?               @db.VarChar(100)
-  hashPassword         String?               @db.VarChar(500)
-  createdDateTime      DateTime?             @default(now())
-  updatedDateTime      DateTime?             @default(now())
-  role                 usercredentials_role  @default(USER)
-  emailVerified        Int                   @default(0)
-  usercodeverification usercodeverification?
-  users                users                 @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
-  userslogout          userslogout[]
+  uuid            String               @unique(map: "uuid") @db.VarChar(50)
+  studentID       String               @id @db.VarChar(10)
+  email           String?              @db.VarChar(100)
+  hashPassword    String?              @db.VarChar(500)
+  createdDateTime DateTime?            @default(now())
+  updatedDateTime DateTime?            @default(now())
+  role            usercredentials_role @default(USER)
+  emailVerified   Int                  @default(0)
+  users           users                @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
+  userslogout     userslogout[]
 }
 
 model users {
-  studentID           String                @id @default("") @db.VarChar(10)
-  titleTH             String?               @db.Text
-  firstNameTH         String?               @db.Text
-  lastNameTH          String?               @db.Text
-  nickNameTH          String?               @db.Text
-  titleEN             String?               @db.Text
-  firstNameEN         String?               @db.Text
-  lastNameEN          String?               @db.Text
-  currentYear         Int?
-  admissionCategory   String?               @db.VarChar(5)
-  phoneNumber         String?               @db.VarChar(11)
-  lineID              String?               @db.VarChar(100)
-  facebook            String?               @db.VarChar(100)
-  instagram           String?               @db.VarChar(100)
-  medicalCondition    String?               @db.Text
-  allergy             String?               @db.Text
-  specialNeed         String?               @db.Text
-  createdDateTime     DateTime?             @default(now()) @db.DateTime(0)
-  updatedDateTime     DateTime?             @default(now()) @db.DateTime(0)
-  projectparticipants projectparticipants[]
-  projects            projects[]
-  projectstaffs       projectstaffs[]
-  useraffiliation     useraffiliation[]
-  usercredentials     usercredentials?
+  studentID            String                @id @default("") @db.VarChar(10)
+  titleTH              String?               @db.Text
+  firstNameTH          String?               @db.Text
+  lastNameTH           String?               @db.Text
+  nickNameTH           String?               @db.Text
+  titleEN              String?               @db.Text
+  firstNameEN          String?               @db.Text
+  lastNameEN           String?               @db.Text
+  currentYear          Int?
+  admissionCategory    String?               @db.VarChar(5)
+  phoneNumber          String?               @db.VarChar(11)
+  lineID               String?               @db.VarChar(100)
+  facebook             String?               @db.VarChar(100)
+  instagram            String?               @db.VarChar(100)
+  medicalCondition     String?               @db.Text
+  allergy              String?               @db.Text
+  specialNeed          String?               @db.Text
+  createdDateTime      DateTime?             @default(now()) @db.DateTime(0)
+  updatedDateTime      DateTime?             @default(now()) @db.DateTime(0)
+  projectparticipants  projectparticipants[]
+  projects             projects[]
+  projectstaffs        projectstaffs[]
+  useraffiliation      useraffiliation[]
+  usercodeverification usercodeverification?
+  usercredentials      usercredentials?
 
   @@index([studentID], map: "studentID")
 }

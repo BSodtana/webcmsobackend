@@ -34,6 +34,13 @@ const accountSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "LOGIN-PASSWORD-CORRECT": {
+        "code": "LOGIN-PASSWORD-CORRECT",
+        "textTH": "รหัสผ่านถูกต้อง",
+        "textEN": "Password correct",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 

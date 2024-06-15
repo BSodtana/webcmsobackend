@@ -62,6 +62,20 @@ const accountErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "LOGIN-EMAIL-NOT-EXISTS": {
+        "code": "LOGIN-EMAIL-NOT-EXISTS",
+        "textTH": "ไม่มีบัญชีนี้ในระบบ",
+        "textEN": "No account associated to this email",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "LOGIN-PASSWORD-INCORRECT": {
+        "code": "LOGIN-PASSWORD-INCORRECT",
+        "textTH": "รหัสผ่านไม่ถูกต้อง",
+        "textEN": "Password incorrect",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 
 }
 

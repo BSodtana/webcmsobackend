@@ -3,7 +3,7 @@ const router = express.Router();
 // /v2.1/account/
 
 // for v2
-const login = require('./login')
+const login = require('./login/loginRoutes')
 const logout = require('./logout')
 const register = require('./register/registerRoutes')
 const profile = require('./profile')
