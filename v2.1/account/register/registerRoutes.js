@@ -21,8 +21,14 @@ const registerControllers = require('./registerControllers')
 
 
 // for prelim data
-
 router.get('/prelim-data/:studentID', registerControllers.prelimDataController)
+
+// // for verification
+// router.get('/verify/', registerControllers.prelimDataController)
+router.post('/verify/sent', registerControllers.genStudentVerificationCode)
+router.post('/verify/check', registerControllers.verifiedEmailStudentCon)
+
+
 
 router.get('/', (req, res) => {
     res.status(200).json({ status: 200, currentPath: '/v2.1/account/register/' })

@@ -13,6 +13,55 @@ const accountErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "REGISTER-PRELIM-NO-STUDENT-DATA": {
+        "code": "REGISTER-PRELIM-NO-STUDENT-DATA",
+        "textTH": "ไม่มีข้อมูลจากรหัสนักศึกษานี้",
+        "textEN": "No information available for this student ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "REGISTER-GENERATE-EMAIL-NOT-ENOUGH-DATA": {
+        "code": "REGISTER-GENERATE-EMAIL-NOT-ENOUGH-DATA",
+        "textTH": "กรุณากรอกรหัสนักศึกษาและอีเมลให้ครบถ้วน",
+        "textEN": "Student ID and Email are required",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-GENERATE-EMAIL-SENT-FAILED": {
+        "code": "REGISTER-GENERATE-EMAIL-SENT-FAILED",
+        "textTH": "การส่งอีเมลยืนยันมีปัญหา",
+        "textEN": "There is an error on sending verification email",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "REGISTER-VERIFY-FAILED-CODE-NOT-MATCHED": {
+        "code": "REGISTER-VERIFY-FAILED-CODE-NOT-MATCHED",
+        "textTH": "รหัสยืนยันไม่ถูกต้อง",
+        "textEN": "Verification code was incorrect",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-EMAIL-NOT-VERIFIED": {
+        "code": "REGISTER-EMAIL-NOT-VERIFIED",
+        "textTH": "อีเมลนี้ยังไม่ได้ถูกลงทะเบียน หรือยังไม่ได้ยืนยันอีเมล",
+        "textEN": "This email hasn't been verified yet",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-PASSWORD-NOT-PASS-CONDITION": {
+        "code": "REGISTER-PASSWORD-NOT-PASS-CONDITION",
+        "textTH": "รหัสผ่านไม่สอดคล้องกับเงื่อนไขความปลอดภัยที่ตั้งไว้",
+        "textEN": "Password was not strong enough",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-EMAIL-NOT-CMU": {
+        "code": "REGISTER-EMAIL-NOT-CMU",
+        "textTH": "กรุณาใช้ CMU Mail ในการสมัคร",
+        "textEN": "Only CMU Mail is allowed",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 
 }
 
