@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "dbsync":"npx prisma migrate dev",
+    "dbsync": "npx prisma migrate dev",
     "dblook": "npx prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -36,6 +36,7 @@
     "moment": "^2.29.4",
     "momentjs": "^2.0.0",
     "morgan": "^1.10.0",
+    "nanoid": "^3.0.0",
     "nodemon": "^3.0.1",
     "passport-jwt": "^4.0.0",
     "prisma-erd-generator": "^1.11.2",
