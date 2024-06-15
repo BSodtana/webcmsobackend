@@ -2,283 +2,409 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// generator erd {
-//   provider = "prisma-erd-generator"
-// }
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model activity_characteristics_choices {
-  id   String  @id @db.VarChar(50)
-  type Int?
-  text String? @db.VarChar(150)
+model categorycmsomission {
+  cmsoMissionType     String        @id @default("5-4-1") @db.VarChar(10)
+  cmsoMissionTypeName String?       @default("เป็นพื้นที่ให้นักศึกษามีอิสระในการจัดโปรเจคตามที่ตนเองต้องการ") @db.Text
+  projectdata         projectdata[]
+}
+
+model categorycmsoproject {
+  cmsoProjectType     String        @id @default("5-1-1") @db.VarChar(10)
+  cmsoProjectTypeName String?       @default("ประเภทโครงงานกิจกรรมสัมมนาองค์กร") @db.Text
+  projectdata         projectdata[]
+}
+
+model categorycmumedgrad {
+  cmuMedGradType     String        @id @default("5-3-1") @db.VarChar(10)
+  cmuMedGradTypeName String?       @default("มีคุณธรรม จริยธรรม ปฏิบัติตนตามจรรยาบรรณแห่งวิชาชีพ") @db.Text
+  projectdata        projectdata[]
+}
+
+model categorycmumedorg {
+  cmuMedOrgType     String        @id @default("5-5-1") @db.VarChar(10)
+  cmuMedOrgTypeName String?       @default("Customer focus มุ่งเน้นผู้รับบริการ") @db.Text
+  projectdata       projectdata[]
+}
+
+model categorycmuproject {
+  cmuProjectType     String        @id @default("5-2-1") @db.VarChar(10)
+  cmuProjectTypeName String?       @default("โครงงานด้านอาหารและสุขภาพ") @db.Text
+  projectdata        projectdata[]
 }
 
 model organizations {
-  orgID           String            @id @default("") @db.VarChar(15)
-  orgName         String            @default("") @db.VarChar(100)
-  orgType         String            @default("") @db.VarChar(10)
-  parentOrg       String?           @default("") @db.VarChar(15)
-  childrenProject projects[]
-  userAffiliation userAffiliation[]
+  orgID               String                @id @default("") @db.VarChar(15)
+  orgName             String                @db.Text
+  orgType             organizations_orgType @default(DIVISION)
+  parentOrg           String?               @db.VarChar(15)
+  organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizations_organizations")
+  other_organizations organizations[]       @relation("organizationsToorganizations")
+  projects            projects[]
+  useraffiliation     useraffiliation[]
+
+  @@index([parentOrg], map: "parentOrg")
 }
 
-model project_21st_skill_items {
-  skillItemID String @id @default("") @db.VarChar(50)
-  skillSetID  String @default("") @db.VarChar(50)
-  skillName   String @default("") @db.VarChar(100)
-}
-
-model project_21st_skill_set {
-  skillSetID   String @id @db.VarChar(50)
-  skillSetName String @default("0") @db.VarChar(100)
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model projectParticipants {
-  participantPositionID String                    @id @db.VarChar(36)
-  recruitID             String                    @default("") @db.VarChar(15)
-  student_id            Int                       @default(0)
-  createdDateTime       DateTime?                 @default(dbgenerated("(current_timestamp())"))
-  parentRecruitEntity   projectParticipantRecruit @relation(fields: [recruitID], references: [recruitID])
-  studentData           users                     @relation(fields: [student_id], references: [student_id])
-
-  @@index([recruitID], map: "recruitID")
-  @@index([student_id], map: "student_id")
-}
-
-model projectParticipantRecruit {
-  recruitID       String                @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
-  projectID       String                @db.VarChar(15)
-  registerFrom    DateTime              @db.DateTime(0)
-  registerUntil   DateTime              @db.DateTime(0)
-  maxNumber       Int                   @default(0)
-  createdDateTime DateTime              @default(now())
-  updatedDateTime DateTime              @default(now())
-  isAllowed       Boolean               @default(false)
-  projectData     projects              @relation(fields: [projectID], references: [project_id])
-  member          projectParticipants[]
-
-  @@index([projectID], map: "projectID")
-}
-
-model projectStaffRecruit {
-  recruitID       String                        @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
-  projectID       String                        @db.VarChar(15)
-  registerFrom    DateTime                      @db.DateTime(0)
-  registerUntil   DateTime                      @db.DateTime(0)
-  createdDateTime DateTime                      @default(now()) @db.DateTime(0)
-  updatedDateTime DateTime                      @default(now()) @db.DateTime(0)
-  isAllowed       Boolean                       @default(false)
-  positions       projectStaffRecruitPosition[]
-  projectData     projects                      @relation(fields: [projectID], references: [project_id])
-
-  @@index([projectID], map: "projectID")
-}
-
-model projectStaffRecruitPosition {
-  positionID          String              @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(15)
-  recruitID           String              @db.VarChar(15)
-  positionName        String              @db.VarChar(15)
-  maxNumber           Int                 @default(0)
-  registerFrom        DateTime            @db.DateTime(0)
-  registerUntil       DateTime            @db.DateTime(0)
-  createdDateTime     DateTime            @default(now()) @db.DateTime(0)
-  updatedDateTime     DateTime            @default(now()) @db.DateTime(0)
-  isAllowed           Boolean             @default(false)
-  projectStaffRecruit projectStaffRecruit @relation(fields: [recruitID], references: [recruitID])
-  member              projectStaffs[]
-
-  @@index([recruitID], map: "recruitID")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model projectStaffs {
-  id                  String                      @id @default(uuid()) @db.VarChar(36)
-  positionID          String                      @db.VarChar(36)
-  recruitID           String                      @default("") @db.VarChar(15)
-  student_id          Int                         @default(0)
-  createdDateTime     DateTime?
-  parentRecruitEntity projectStaffRecruitPosition @relation(fields: [positionID], references: [positionID])
-  studentData         users                       @relation(fields: [student_id], references: [student_id])
-
-  @@index([recruitID], map: "recruitID")
-  @@index([student_id], map: "student_id")
-}
-
-model project_year_allow {
-  allowID     String  @id @default(dbgenerated("(current_timestamp())")) @db.VarChar(10)
-  recruitID   String? @db.VarChar(15)
-  yearAllowed Int?
-
-  @@index([recruitID], map: "recruitID")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model projects {
-  project_id                 String                      @id @unique @db.VarChar(50)
-  student_id                 Int
-  orgID                      String                      @db.VarChar(50)
-  projectName                String?                     @db.VarChar(500)
-  projectNickName            String?                     @db.VarChar(500)
-  projectEngName             String?                     @db.VarChar(500)
-  projectEngNickName         String?                     @db.VarChar(500)
-  projectDescription         String?                     @db.VarChar(280)
-  projectDetail              String?                     @db.VarChar(10000)
-  eventDateStart             DateTime?
-  eventDateFinish            DateTime?
-  createdDateTime            DateTime?                   @default(now())
-  updatedDateTime            DateTime?                   @default(now())
-  projectData                projectData?
-  ownerData                  users?                      @relation(fields: [student_id], references: [student_id])
-  ownerOrg                   organizations               @relation(fields: [orgID], references: [orgID])
-  academicYear               Int                         @default(202401)
-  isShown                    Int                         @default(0)
-  projectConsiderationStatus ProjectConsiderationStatus?
-  participantRecruit         projectParticipantRecruit[]
-  staffRecruit               projectStaffRecruit[]
-
-  @@index([orgID], map: "orgID")
-  @@index([student_id], map: "student_id")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model projectData {
-  project_id                String    @id @db.VarChar(50)
-  place_in_cmu              String    @default("") @db.MediumText
-  place_outside_cmu         String?   @default("") @db.MediumText
-  date_prepare_start        DateTime? @default(now()) @db.Date
-  date_prepare_end          DateTime? @default(now()) @db.Date
-  date_event_start          DateTime? @default(now()) @db.Date
-  date_event_end            DateTime? @default(now()) @db.Date
-  date_summation_start      DateTime? @default(now()) @db.Date
-  date_summation_end        DateTime? @default(now()) @db.Date
-  prof                      String?   @default("") @db.VarChar(100)
-  prof_aff                  String?   @default("") @db.VarChar(100)
-  other_org                 String?   @default("") @db.MediumText
-  cmso_proj_type            String?   @default("") @db.VarChar(10)
-  cmu_proj_type             String?   @default("") @db.VarChar(10)
-  cmu_med_grad              String?   @default("") @db.VarChar(10)
-  cmso_mission_type         String?   @default("") @db.VarChar(10)
-  cmu_med_org               String?   @default("") @db.VarChar(10)
-  background                String?   @default("") @db.VarChar(3000)
-  aims                      String?   @default("") @db.MediumText
-  participant_student       Int?      @default(0)
-  participant_prof          Int?      @default(0)
-  participant_student_staff Int?      @default(0)
-  participant_fac_staff     Int?      @default(0)
-  participant_outside       Int?      @default(0)
-  goal_qualitative          String?   @default("") @db.MediumText
-  indicator_participant     String?   @default("") @db.MediumText
-  indicator_satisfactory    String?   @default("") @db.MediumText
-  indicator_aims            String?   @default("") @db.MediumText
-  output                    String?   @default("") @db.MediumText
-  plan                      String?   @default("") @db.MediumText
-  stageDo                   String?   @default("") @db.MediumText
-  stageCheck                String?   @default("") @db.MediumText
-  act                       String?   @default("") @db.MediumText
-  fund_fac                  String?   @default("") @db.MediumText
-  fund_extracir             String?   @default("") @db.MediumText
-  fund_sport                String?   @default("") @db.MediumText
-  fund_other                String?   @default("") @db.MediumText
-  fund_name                 String?   @default("") @db.VarChar(200)
-  createdDateTime           DateTime? @default(now())
-  project                   projects? @relation(fields: [project_id], references: [project_id])
-}
-
-model userAffiliation {
-  student_id      Int
-  affiliatedOrg   String        @db.VarChar(50)
-  affiliationType UserLevel
-  createdDateTime DateTime?     @default(now())
-  affiliationID   Int           @id @default(autoincrement())
-  user            users         @relation(fields: [student_id], references: [student_id])
-  orgData         organizations @relation(fields: [affiliatedOrg], references: [orgID])
-
-  @@index([affiliatedOrg], map: "affiliatedOrg")
-  @@index([student_id], map: "student_id")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model users {
-  student_id        Int                   @id
-  title             String                @db.VarChar(10)
-  title_en          String                @db.VarChar(10)
-  first_name        String?               @db.VarChar(50)
-  last_name         String?               @db.VarChar(50)
-  nick_name         String?               @db.VarChar(50)
-  current_year      Int?
-  category          String?               @db.VarChar(50)
-  phone_number      String?               @db.VarChar(10)
-  line_id           String?               @db.VarChar(50)
-  facebook          String?               @db.VarChar(50)
-  instagram         String?               @db.VarChar(50)
-  medical_condition String?               @db.VarChar(100)
-  allergy           String?               @db.VarChar(100)
-  special_need      String?               @db.VarChar(100)
-  createdDateTime   DateTime?             @default(now()) @db.DateTime(0)
-  updatedDateTime   DateTime?             @default(now()) @db.DateTime(0)
-  first_name_en     String?               @db.VarChar(50)
-  last_name_en      String?               @db.VarChar(50)
-  projects          projects[]
-  userCredential    userCredentials?
-  affiliation       userAffiliation[]
-  participantOf     projectParticipants[]
-  staffOf           projectStaffs[]
-
-  @@unique([student_id])
-  @@index([student_id, first_name], map: "student_id")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model userCodeVerification {
-  student_id      Int       @id @default(autoincrement())
-  code            String?   @db.VarChar(10)
-  createdDateTime DateTime? @default(now()) @db.DateTime(0)
-  referenceID     String?   @db.VarChar(10)
-}
-
-model userCredentials {
-  student_id      Int             @id
-  email           String?         @db.VarChar(100)
-  password        String?         @db.VarChar(500)
-  createdDateTime DateTime?       @default(now())
-  updatedDateTime DateTime?       @updatedAt
-  role            userAccessLevel @default(USER)
-  emailVerified   Int?            @default(0)
-  userData        users?          @relation(fields: [student_id], references: [student_id])
-
-  @@unique([student_id])
-}
-
-model usersLogout {
-  uuid           String    @id @default(uuid())
-  token          String?   @db.VarChar(10000)
-  killedDateTime DateTime? @default(now()) @db.DateTime(0)
-}
-
-model ProjectConsiderationStatus {
-  project_id               String                   @id @unique
-  statusVP                 CheckingStatus           @default(QUEUE)
-  statusFinance            CheckingStatus           @default(QUEUE)
-  statusSec                CheckingStatus           @default(QUEUE)
-  statusPresent            ConsiderStatus           @default(QUEUE)
-  comment                  String                   @default("") @db.MediumText
-  updatedDTM               DateTime                 @default(now())
-  projectConsiderationType ProjectConsiderationtype @default(NORMAL)
+model projectconsiderationstatus {
+  projectID                String                                              @id @default("") @db.VarChar(50)
+  statusVP                 projectconsiderationstatus_statusVP                 @default(QUEUE)
+  statusFinance            projectconsiderationstatus_statusFinance            @default(QUEUE)
+  statusSec                projectconsiderationstatus_statusSec                @default(QUEUE)
+  statusPresent            projectconsiderationstatus_statusPresent            @default(QUEUE)
+  updatedDTM               DateTime                                            @default(now())
+  projectConsiderationType projectconsiderationstatus_projectConsiderationType @default(NORMAL)
   dateApprovalDoc          DateTime?
   dateOtherDoc             DateTime?
   dateActionPlan           DateTime?
   dateReceipt              DateTime?
   dateFinalize             DateTime?
-  projectType              ProjectType              @default(OLD)
-  projects                 projects?                @relation(fields: [project_id], references: [project_id])
+  projectType              projectconsiderationstatus_projectType              @default(OLD)
+  comment                  String                                              @default("") @db.MediumText
+  projects                 projects                                            @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectconsiderationstatus_projects")
+
+  @@index([projectID], map: "projectID")
 }
 
-enum userAccessLevel {
+model projectcostexpandedlist {
+  projectID         String                           @id @default("") @db.VarChar(50)
+  costType          projectcostexpandedlist_costType @default(MEDINCOME)
+  costOtherTypeText String?                          @db.Text
+  costDescription   String?                          @db.Text
+  costAmount        String?                          @db.Text
+  costEach          String?                          @db.Text
+  costTotal         String?                          @db.Text
+  projectdata       projectdata                      @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectcostexpandedlist_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdata {
+  projectID                        String                   @id @db.VarChar(50)
+  placeInCMU                       String                   @default("") @db.MediumText
+  placeOutsideCMU                  String?                  @default("") @db.MediumText
+  datePrepareStart                 DateTime?                @default(now()) @db.Date
+  datePrepareEnd                   DateTime?                @default(now()) @db.Date
+  dateEventStart                   DateTime?                @default(now()) @db.Date
+  dateEventEnd                     DateTime?                @default(now()) @db.Date
+  dateSummationStart               DateTime?                @default(now()) @db.Date
+  dateSummationEnd                 DateTime?                @default(now()) @db.Date
+  professorFullName                String?                  @default("") @db.VarChar(100)
+  professorAffiliation             String?                  @default("") @db.VarChar(100)
+  otherOrgName                     String?                  @default("") @db.MediumText
+  cmsoProjectType                  String?                  @db.VarChar(10)
+  cmuProjectType                   String?                  @db.VarChar(10)
+  cmuMedGradType                   String?                  @db.VarChar(10)
+  cmsoMissionType                  String?                  @db.VarChar(10)
+  cmuMedOrgType                    String?                  @db.VarChar(10)
+  background                       String?                  @default("") @db.VarChar(3000)
+  aims                             String?                  @default("") @db.MediumText
+  numberStudentParticipant         Int?                     @default(0)
+  numberFacultyStaffParticipant    Int?                     @default(0)
+  numberProfessorParticipant       Int?                     @default(0)
+  numberOutsideParticipant         Int?                     @default(0)
+  numberStudentStaff               Int?                     @default(0)
+  goalQualitative                  String?                  @default("") @db.MediumText
+  indicatorParticipantQuantitative String?                  @default("") @db.MediumText
+  indicatorSatisfactory            String?                  @default("") @db.MediumText
+  indicatorAims                    String?                  @default("") @db.MediumText
+  outcome                          String?                  @default("") @db.MediumText
+  createdDateTime                  DateTime?                @default(now())
+  projectcostexpandedlist          projectcostexpandedlist?
+  categorycmsomission              categorycmsomission?     @relation(fields: [cmsoMissionType], references: [cmsoMissionType], map: "FK_projectdata_categorycmsomission")
+  categorycmsoproject              categorycmsoproject?     @relation(fields: [cmsoProjectType], references: [cmsoProjectType], map: "FK_projectdata_categorycmsoproject")
+  categorycmumedgrad               categorycmumedgrad?      @relation(fields: [cmuMedGradType], references: [cmuMedGradType], map: "FK_projectdata_categorycmumedgrad")
+  categorycmumedorg                categorycmumedorg?       @relation(fields: [cmuMedOrgType], references: [cmuMedOrgType], map: "FK_projectdata_categorycmumedorg")
+  categorycmuproject               categorycmuproject?      @relation(fields: [cmuProjectType], references: [cmuProjectType], map: "FK_projectdata_categorycmuproject")
+  projects                         projects                 @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdata_projects")
+  projectdoactlists                projectdoactlists?
+  projectdochecklists              projectdochecklists?
+  projectdodolists                 projectdodolists?
+  projectdoplanlists               projectdoplanlists?
+
+  @@index([cmsoMissionType], map: "cmsoMissionType")
+  @@index([cmsoProjectType], map: "cmsoProjectType")
+  @@index([cmuMedGradType], map: "cmuMedGradType")
+  @@index([cmuMedOrgType], map: "cmuMedOrgType")
+  @@index([cmuProjectType], map: "cmuProjectType")
+  @@index([projectID], map: "projectID")
+}
+
+model projectdoactlists {
+  projectID                String      @id @default("") @db.VarChar(50)
+  doActDescriptionText     String?     @db.Text
+  doActDateText            String?     @db.Text
+  doActResponsibleFullName String?     @db.Text
+  projectdata              projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdoactlists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdochecklists {
+  projectID                  String      @id @default("") @db.VarChar(50)
+  doCheckDescriptionText     String?     @db.Text
+  doCheckDateText            String?     @db.Text
+  doCheckResponsibleFullName String?     @db.Text
+  projectdata                projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdochecklists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdodolists {
+  projectID               String      @id @default("") @db.VarChar(50)
+  doDoDescriptionText     String?     @db.Text
+  doDoDateText            String?     @db.Text
+  doDoResponsibleFullName String?     @db.Text
+  projectdata             projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectdodolists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectdoplanlists {
+  projectID                 String      @id @default("") @db.VarChar(50)
+  doPlanDescriptionText     String?     @db.Text
+  doPlanDateText            String?     @db.Text
+  doPlanResponsibleFullName String?     @db.Text
+  projectdata               projectdata @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectplanlists_projectdata")
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectparticipantrecruit {
+  participantRecruitID String                @id @unique(map: "participantRecruitID") @db.VarChar(50)
+  projectID            String                @db.VarChar(50)
+  registerFrom         DateTime              @db.DateTime(0)
+  registerUntil        DateTime              @db.DateTime(0)
+  maxNumber            Int                   @default(0)
+  createdDateTime      DateTime              @default(now())
+  updatedDateTime      DateTime              @default(now())
+  isAllowed            Int                   @default(0)
+  yearAllowed          String                @default("1,2,3,4,5,6")
+  projects             projects              @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-participantrtecruit-projectID")
+  projectparticipants  projectparticipants[]
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectparticipants {
+  participantApplicationID  String                    @id @unique(map: "participantApplicationID") @db.VarChar(50)
+  recruitID                 String                    @db.VarChar(50)
+  studentID                 String                    @db.VarChar(10)
+  createdDateTime           DateTime?                 @default(now())
+  projectparticipantrecruit projectparticipantrecruit @relation(fields: [recruitID], references: [participantRecruitID], onDelete: Cascade, map: "participantRecruit-participants-recruitID")
+  users                     users                     @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-projectparticipants-studentID")
+
+  @@index([recruitID], map: "recruitID")
+  @@index([studentID], map: "studentID")
+}
+
+model projects {
+  projectID                  String                      @id @unique(map: "projects_project_id_key") @db.VarChar(50)
+  studentID                  String?                     @db.VarChar(10)
+  orgID                      String                      @db.VarChar(50)
+  projectNameTH              String?                     @db.Text
+  projectNickNameTH          String?                     @db.VarChar(500)
+  projectShortDescriptionTH  String?                     @db.Text
+  projectNameEN              String?                     @db.Text
+  projectNickNameEN          String?                     @db.VarChar(500)
+  projectFullDetail          String?                     @db.MediumText
+  eventDateStart             DateTime?
+  eventDateFinish            DateTime?
+  createdDateTime            DateTime?                   @default(now())
+  updatedDateTime            DateTime?                   @default(now())
+  isShown                    Int                         @default(0)
+  academicYear               Int                         @default(202401)
+  projectconsiderationstatus projectconsiderationstatus?
+  projectdata                projectdata?
+  projectparticipantrecruit  projectparticipantrecruit[]
+  organizations              organizations               @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
+  users                      users?                      @relation(fields: [studentID], references: [studentID], map: "users-projects-studentID")
+  projectstaffrecruit        projectstaffrecruit[]
+
+  @@index([orgID], map: "orgID")
+  @@index([studentID], map: "student_id")
+}
+
+model projectstaffrecruit {
+  staffRecruitID              String                        @id @unique(map: "staffRecruitID") @db.VarChar(50)
+  projectID                   String                        @db.VarChar(50)
+  registerFrom                DateTime                      @db.DateTime(0)
+  registerUntil               DateTime                      @db.DateTime(0)
+  createdDateTime             DateTime                      @default(now()) @db.DateTime(0)
+  updatedDateTime             DateTime                      @default(now()) @db.DateTime(0)
+  isAllowed                   Int                           @default(0)
+  yearAllowed                 String                        @default("1,2,3,4,5,6")
+  projects                    projects                      @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-staffrecruit-projectID")
+  projectstaffrecruitposition projectstaffrecruitposition[]
+  projectstaffs               projectstaffs[]
+
+  @@index([projectID], map: "projectID")
+}
+
+model projectstaffrecruitposition {
+  staffPositionID     String               @id @unique(map: "staffPositionID") @db.VarChar(50)
+  recruitID           String?              @db.VarChar(50)
+  positionName        String               @default("ตำแหน่งหน้าที่") @db.VarChar(100)
+  maxNumber           Int                  @default(1)
+  registerFrom        DateTime             @db.DateTime(0)
+  registerUntil       DateTime             @db.DateTime(0)
+  createdDateTime     DateTime             @default(now()) @db.DateTime(0)
+  updatedDateTime     DateTime             @default(now()) @db.DateTime(0)
+  isAllowed           Int                  @default(0)
+  projectstaffrecruit projectstaffrecruit? @relation(fields: [recruitID], references: [staffRecruitID], map: "projecttaffrecruit-staffposition-recruitID")
+  projectstaffs       projectstaffs[]
+
+  @@index([recruitID], map: "recruitID")
+}
+
+model projectstaffs {
+  staffApplicationID          String                      @id @unique(map: "staffApplicationID") @db.VarChar(50)
+  recruitID                   String                      @default("") @db.VarChar(50)
+  positionID                  String                      @db.VarChar(50)
+  studentID                   String                      @default("") @db.VarChar(10)
+  createdDateTime             DateTime                    @default(now())
+  projectstaffrecruit         projectstaffrecruit         @relation(fields: [recruitID], references: [staffRecruitID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruit-staff-recruitID")
+  projectstaffrecruitposition projectstaffrecruitposition @relation(fields: [positionID], references: [staffPositionID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruitposition-staff-positionID")
+  users                       users                       @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "users-staff-studentID")
+
+  @@index([positionID], map: "projectstaffrecruitposition-staff-positionID")
+  @@index([recruitID, positionID], map: "recruit-positionID")
+  @@index([studentID], map: "studentID")
+}
+
+model useraffiliation {
+  studentID       String                          @default("") @db.VarChar(10)
+  affiliatedOrg   String                          @db.VarChar(50)
+  affiliationID   Int
+  affiliationType useraffiliation_affiliationType @default(MEMBER)
+  createdDateTime DateTime?                       @default(now())
+  organizations   organizations                   @relation(fields: [affiliatedOrg], references: [orgID], onDelete: Cascade, map: "organizations-useraffiliation-affiliatedOrg")
+  users           users                           @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-userafiliation-studentID")
+
+  @@id([affiliatedOrg, affiliationID])
+  @@index([affiliatedOrg], map: "affiliatedOrg")
+  @@index([studentID], map: "studentID")
+}
+
+model usercodeverification {
+  studentID       String          @id @db.VarChar(15)
+  code            String?         @db.VarChar(10)
+  referenceID     String?         @db.VarChar(10)
+  createdDateTime DateTime?       @default(now()) @db.DateTime(0)
+  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-usercodeverification-studentID")
+
+  @@index([studentID], map: "studentID")
+}
+
+model usercredentials {
+  uuid                 String                @id @db.VarChar(50)
+  studentID            String                @unique(map: "studentID") @db.VarChar(10)
+  email                String?               @db.VarChar(100)
+  hashPassword         String?               @db.VarChar(500)
+  createdDateTime      DateTime?             @default(now())
+  updatedDateTime      DateTime?             @default(now())
+  role                 usercredentials_role  @default(USER)
+  emailVerified        Int                   @default(0)
+  usercodeverification usercodeverification?
+  users                users                 @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
+  userslogout          userslogout[]
+}
+
+model users {
+  studentID           String                @id @default("") @db.VarChar(10)
+  titleTH             String?               @db.Text
+  firstNameTH         String?               @db.Text
+  lastNameTH          String?               @db.Text
+  nickNameTH          String?               @db.Text
+  titleEN             String?               @db.Text
+  firstNameEN         String?               @db.Text
+  lastNameEN          String?               @db.Text
+  currentYear         Int?
+  admissionCategory   String?               @db.VarChar(5)
+  phoneNumber         String?               @db.VarChar(11)
+  lineID              String?               @db.VarChar(100)
+  facebook            String?               @db.VarChar(100)
+  instagram           String?               @db.VarChar(100)
+  medicalCondition    String?               @db.Text
+  allergy             String?               @db.Text
+  specialNeed         String?               @db.Text
+  createdDateTime     DateTime?             @default(now()) @db.DateTime(0)
+  updatedDateTime     DateTime?             @default(now()) @db.DateTime(0)
+  projectparticipants projectparticipants[]
+  projects            projects[]
+  projectstaffs       projectstaffs[]
+  useraffiliation     useraffiliation[]
+  usercredentials     usercredentials?
+
+  @@index([studentID], map: "studentID")
+}
+
+model userslogout {
+  killedTokenAutoID Int             @unique(map: "killedTokenAutoID") @default(autoincrement())
+  uuid              String
+  token             String?         @db.VarChar(10000)
+  killedDateTime    DateTime?       @default(now()) @db.DateTime(0)
+  usercredentials   usercredentials @relation(fields: [uuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "usercredentials-userlogout-uuid")
+
+  @@index([uuid], map: "uuid")
+}
+
+enum projectconsiderationstatus_statusVP {
+  QUEUE
+  APPROVED
+  REJECTED
+}
+
+enum projectcostexpandedlist_costType {
+  MEDINCOME
+  EXTRACIRR
+  SPORTS
+  OTHER
+}
+
+enum organizations_orgType {
+  ROOT
+  CLUB
+  DIVISION
+  OTHER
+}
+
+enum projectconsiderationstatus_statusFinance {
+  QUEUE
+  APPROVED
+  REJECTED
+}
+
+enum projectconsiderationstatus_statusSec {
+  QUEUE
+  APPROVED
+  REJECTED
+}
+
+enum useraffiliation_affiliationType {
+  PRESIDENT
+  VICE_PRESIDENT
+  SECRETARY
+  MEMBER
+}
+
+enum projectconsiderationstatus_statusPresent {
+  QUEUE
+  REJECTED
+  PASS_IN_PRINCIPLE
+  PASS
+}
+
+enum projectconsiderationstatus_projectConsiderationType {
+  EARLY_BIRD
+  NORMAL
+}
+
+enum usercredentials_role {
   ADMIN
   PRES
   VP
@@ -286,32 +412,7 @@ enum userAccessLevel {
   USER
 }
 
-enum UserLevel {
-  PRESIDENT
-  VICE_PRESIDENT
-  SECRETARY
-  MEMBER
-}
-
-enum CheckingStatus {
-  QUEUE
-  APPROVED
-  REJECTED
-}
-
-enum ConsiderStatus {
-  QUEUE
-  REJECTED
-  PASS_IN_PRINCIPLE
-  PASS
-}
-
-enum ProjectConsiderationtype {
-  EARLY_BIRD
-  NORMAL
-}
-
-enum ProjectType {
+enum projectconsiderationstatus_projectType {
   OLD
   NEW
 }

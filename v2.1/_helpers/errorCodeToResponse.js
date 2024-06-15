@@ -1,7 +1,8 @@
 const accountErrors = require("./error_text/accountError");
 const commonErrors = require("./error_text/commonError");
+const demoErrors = require('./error_text/demoError')
 
-const fullErrors = Object.assign(commonErrors, accountErrors)
+const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors)
 
 
 
