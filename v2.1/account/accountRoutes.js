@@ -6,7 +6,7 @@ const router = express.Router();
 const login = require('./login/loginRoutes')
 const logout = require('./logout')
 const register = require('./register/registerRoutes')
-const profile = require('./profile')
+const profile = require('./profile/profileRoutes')
 const resetPassword = require('./reset-password')
 const affiliate = require('./affiliate')
 
@@ -18,9 +18,9 @@ router.use('/reset-password', resetPassword)
 router.use('/affiliate', affiliate)
 
 // for v2.1
-const accountControllers = require('./accountControllers')
+// const accountControllers = require('./accountControllers')
 
-router.post('/hello-world', accountControllers.helloWorldController)
+// router.post('/hello-world', accountControllers.helloWorldController)
 
 //---------- default -----------------
 

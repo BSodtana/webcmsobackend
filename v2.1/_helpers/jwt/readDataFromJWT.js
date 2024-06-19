@@ -42,11 +42,11 @@ const readDataFromJWT = async (jwtToken, forced = false) => {
                 }
             })
 
-            if (!searchToken) {
+            if (searchToken) {
 
                 return {
                     dataAvailable: false,
-                    code: 'JWT-TOKEN-NOT-FOUND'
+                    code: 'JWT-TOKEN-EXPIRED'
                 }
 
             } else {

@@ -48,6 +48,20 @@ const commonErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "ACCESS-DENIED-ROLE": {
+        "code": "ACCESS-DENIED-ROLE",
+        "textTH": "คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้ เนื่องจากมีสิทธิ์ไม่เพียงพอ",
+        "textEN": "Access Denied (Not enough permission)",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "ACCESS-DENIED-ALL": {
+        "code": "ACCESS-DENIED-ALL",
+        "textTH": "คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้ ",
+        "textEN": "Access Denied",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
     "INTERNAL-ERROR": {
         "code": "INTERNAL-ERROR",
         "textTH": "ระบบทำงานผิดพลาด",

@@ -64,7 +64,7 @@ const loginByEmailPass = async (email, password) => {
             }
 
 
-            const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '1s' })
+            const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '7d' })
 
             return {
                 studentID: userData.studentID,

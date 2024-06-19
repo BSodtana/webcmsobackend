@@ -76,6 +76,27 @@ const accountErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "PERSONAL-DATA-NO-INFORMATION": {
+        "code": "PERSONAL-DATA-NO-INFORMATION",
+        "textTH": "ไม่มีข้อมูลส่วนตัวของผู้ใช้คนนี้",
+        "textEN": "No personal information associated with this student ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "PERSONAL-DATA-UPDATE-PROTECTED-DATA": {
+        "code": "PERSONAL-DATA-UPDATE-PROTECTED-DATA",
+        "textTH": "ไม่สามารถแก้ไขข้อมูลบางอย่างได้ กรุณายกเลิกการแก้ไข",
+        "textEN": "Some data provided cannot be edited",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "CREDENTIAL-DATA-NO-INFORMATION": {
+        "code": "CREDENTIAL-DATA-NO-INFORMATION",
+        "textTH": "ไม่มีข้อมูลของผู้ใช้คนนี้",
+        "textEN": "No credential information associated with this student ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
 
 }
 

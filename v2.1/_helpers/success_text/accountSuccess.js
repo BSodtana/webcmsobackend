@@ -55,6 +55,20 @@ const accountSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-PERSONAL-DATA-SUCCESS": {
+        "code": "GET-PERSONAL-DATA-SUCCESS",
+        "textTH": "ขอข้อมูลส่วนตัวของผู้ใช้สำเร็จ",
+        "textEN": "Get personal data of student success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "UPDATE-PERSONAL-DATA-SUCCESS": {
+        "code": "UPDATE-PERSONAL-DATA-SUCCESS",
+        "textTH": "แก้ไขข้อมูลส่วนตัวของผู้ใช้สำเร็จ",
+        "textEN": "Update personal data of student success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 
