@@ -41,6 +41,8 @@ model categorycmuproject {
 model organizations {
   orgID               String                @id @default("") @db.VarChar(15)
   orgName             String                @db.Text
+  orgDesc             String?               @db.Text
+  orgImageID          String?               @db.VarChar(50)
   orgType             organizations_orgType @default(DIVISION)
   parentOrg           String?               @db.VarChar(15)
   organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizations_organizations")
@@ -285,7 +287,7 @@ model projectstaffs {
 model useraffiliation {
   studentID       String                          @default("") @db.VarChar(10)
   affiliatedOrg   String                          @db.VarChar(50)
-  affiliationID   Int
+  affiliationID   String                          @default("") @db.VarChar(50)
   affiliationType useraffiliation_affiliationType @default(MEMBER)
   createdDateTime DateTime?                       @default(now())
   organizations   organizations                   @relation(fields: [affiliatedOrg], references: [orgID], onDelete: Cascade, map: "organizations-useraffiliation-affiliatedOrg")

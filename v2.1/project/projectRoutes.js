@@ -7,7 +7,7 @@ router.use('/my-project', require('./my-project'))
 
 
 // for v2.1
-const eachProjectRoute = require('./each-project/eachProjectRoutes')
+const eachProjectRoute = require('./(each-project)/eachProjectRoutes')
 
 const projectControllers = require('./projectControllers');
 
