@@ -57,9 +57,23 @@ const commonErrors = {
     },
     "ACCESS-DENIED-ALL": {
         "code": "ACCESS-DENIED-ALL",
-        "textTH": "คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้ ",
+        "textTH": "คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้",
         "textEN": "Access Denied",
         "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "DECLINED-CONFIRM-DELETE": {
+        "code": "DECLINED-CONFIRM-DELETE",
+        "textTH": "คุณไม่ได้ยืนยันการลบข้อมูล",
+        "textEN": "Confirmation of data deletion was not done",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "NO-PROJECT-DATA": {
+        "code": "NO-PROJECT-DATA",
+        "textTH": "ไม่มีกิจกรรมนี้",
+        "textEN": "This project does not exist",
+        "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
     "INTERNAL-ERROR": {

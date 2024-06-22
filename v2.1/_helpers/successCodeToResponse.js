@@ -6,8 +6,8 @@ const projectSuccess = require("./success_text/projectSuccess");
 const fullSuccess = Object.assign(commonSuccess, demoSuccess, accountSuccess, projectSuccess)
 
 
-const successCodeToResponse = (data = {}, successCode, desc = '') => {
-    console.log('[Success]', successCode, desc);
+const successCodeToResponse = (data = {}, successCode, desc = '', desc2 = '') => {
+    console.log('[Success]', successCode, desc, desc2);
 
     return {
         status: "success",

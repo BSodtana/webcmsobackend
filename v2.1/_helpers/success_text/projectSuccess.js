@@ -20,6 +20,41 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-PROJECT-BRIEF-DATA-SUCCESS": {
+        "code": "GET-PROJECT-BRIEF-DATA-SUCCESS",
+        "textTH": "รับข้อมูลกิจกรรมสำเร็จ",
+        "textEN": "Retreive project brief data success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "UPDATE-PROJECT-BRIEF-DATA-SUCCESS": {
+        "code": "UPDATE-PROJECT-BRIEF-DATA-SUCCESS",
+        "textTH": "แก้ไขข้อมูลกิจกรรมสำเร็จ",
+        "textEN": "Update project brief data success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "DELETE-PROJECT-SUCCESS": {
+        "code": "DELETE-PROJECT-SUCCESS",
+        "textTH": "ลบกิจกรรมสำเร็จ",
+        "textEN": "Delete project success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "GET-PROJECT-FULL-DATA-SUCCESS": {
+        "code": "GET-PROJECT-FULL-DATA-SUCCESS",
+        "textTH": "รับข้อมูลกิจกรรมสำเร็จ",
+        "textEN": "Retreive project full data success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "UPDATE-PROJECT-FULL-DATA-SUCCESS": {
+        "code": "UPDATE-PROJECT-FULL-DATA-SUCCESS",
+        "textTH": "แก้ไขข้อมูลกิจกรรมสำเร็จ",
+        "textEN": "Update project full data success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = projectSuccess

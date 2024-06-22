@@ -7,8 +7,8 @@ const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors, projec
 
 
 
-const errorCodeToResponse = (errcode, desc = '') => {
-    console.log('[Error]', errcode, desc);
+const errorCodeToResponse = (errcode, desc = '', desc2 = '') => {
+    console.log('[Error]', errcode, desc, desc2);
 
     return {
         status: "failed",

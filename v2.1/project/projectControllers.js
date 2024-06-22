@@ -5,7 +5,7 @@ const projectServices = require("./projectServices")
 const getAnnouncementListController = async (req, res) => {
     try {
 
-        const studentID = req?.userData?.studentID || 'NO-STD-ID'
+        const { studentID = 'NO-STD-ID' } = await req?.userData
 
         const results = await projectServices.getAnnouncementList()
         res.status(200).json(successCodeToResponse(results, 'GET-GLOBAL-ANNOUNCEMENT-SUCCESS', studentID))
@@ -20,12 +20,12 @@ const getAnnouncementListController = async (req, res) => {
 const searchListProjectByNamePageController = async (req, res) => {
     try {
 
-        const studentID = req?.userData?.studentID || 'NO-STD-ID'
+        // const { studentID = 'NO-STD-ID' } = await req?.userData
         const { name = '', language = 'TH', page = 1 } = req.query
 
 
         const results = await projectServices.searchListProjectByNamePage(name.toString(), language.toString(), parseInt(page) || 1)
-        res.status(200).json(successCodeToResponse(results, 'SEARCH-PROJECT-BY-NAME-PAGE-SUCCESS', studentID))
+        res.status(200).json(successCodeToResponse(results, 'SEARCH-PROJECT-BY-NAME-PAGE-SUCCESS', name))
 
 
     } catch (error) {
