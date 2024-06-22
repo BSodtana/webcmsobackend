@@ -94,8 +94,8 @@ model projectdata {
   dateEventEnd                     DateTime?                @default(now()) @db.Date
   dateSummationStart               DateTime?                @default(now()) @db.Date
   dateSummationEnd                 DateTime?                @default(now()) @db.Date
-  professorFullName                String?                  @default("") @db.VarChar(100)
-  professorAffiliation             String?                  @default("") @db.VarChar(100)
+  professorFullName                String?                  @default("") @db.VarChar(150)
+  professorAffiliation             String?                  @default("") @db.VarChar(150)
   otherOrgName                     String?                  @default("") @db.MediumText
   cmsoProjectType                  String?                  @db.VarChar(10)
   cmuProjectType                   String?                  @db.VarChar(10)
@@ -114,7 +114,7 @@ model projectdata {
   indicatorSatisfactory            String?                  @default("") @db.MediumText
   indicatorAims                    String?                  @default("") @db.MediumText
   outcome                          String?                  @default("") @db.MediumText
-  createdDateTime                  DateTime?                @default(now())
+  updatedDateTime                  DateTime?                @default(now())
   projectcostexpandedlist          projectcostexpandedlist?
   categorycmsomission              categorycmsomission?     @relation(fields: [cmsoMissionType], references: [cmsoMissionType], map: "FK_projectdata_categorycmsomission")
   categorycmsoproject              categorycmsoproject?     @relation(fields: [cmsoProjectType], references: [cmsoProjectType], map: "FK_projectdata_categorycmsoproject")
