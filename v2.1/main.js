@@ -3,7 +3,7 @@ const router = express.Router()
 
 // IMPORTS
 const account = require('./account/accountRoutes')
-const project = require('./project')
+const project = require('./project/projectRoutes')
 const demo = require('./demo/demoRoutes')
 
 router.use('/account', account)

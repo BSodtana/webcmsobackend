@@ -19,8 +19,6 @@ module.exports = function () {
                     next()
                 }
 
-
-
             } else {
                 res.status(400).json(errorCodeToResponse("JWT-TOKEN-NOT-FOUND", 'NO-TOKEN-LOGIN'))
             }

@@ -24,7 +24,7 @@
   },
   "homepage": "https://gitlab.com/cmso-dn/cmso_backend#readme",
   "dependencies": {
-    "@prisma/client": "^5.12.1",
+    "@prisma/client": "^5.15.1",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
@@ -48,6 +48,6 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^16.0.0",
     "eslint-plugin-promise": "^6.1.1",
-    "prisma": "^5.12.1"
+    "prisma": "^5.15.1"
   }
 }

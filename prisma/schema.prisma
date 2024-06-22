@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -217,7 +218,8 @@ model projects {
   createdDateTime            DateTime?                   @default(now())
   updatedDateTime            DateTime?                   @default(now())
   isShown                    Int                         @default(0)
-  academicYear               Int                         @default(202401)
+  academicYear               String                      @default("202401") @db.VarChar(50)
+  cmsoprojectannouncement    cmsoprojectannouncement[]
   projectconsiderationstatus projectconsiderationstatus?
   projectdata                projectdata?
   projectparticipantrecruit  projectparticipantrecruit[]
@@ -227,6 +229,10 @@ model projects {
 
   @@index([orgID], map: "orgID")
   @@index([studentID], map: "student_id")
+  @@fulltext([projectNameTH], map: "projectNameTH")
+  @@fulltext([projectNameEN], map: "projectNameEN")
+  @@fulltext([projectNickNameEN], map: "projectNickNameEN")
+  @@fulltext([projectNickNameTH], map: "projectNickNameTH")
 }
 
 model projectstaffrecruit {
@@ -310,46 +316,63 @@ model usercredentials {
   role            usercredentials_role @default(USER)
   emailVerified   Int                  @default(0)
   users           users                @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
-  userslogout     userslogout?
+  userslogout     userslogout[]
 }
 
 model users {
-  studentID            String                @id @default("") @db.VarChar(10)
-  titleTH              String?               @db.Text
-  firstNameTH          String?               @db.Text
-  lastNameTH           String?               @db.Text
-  nickNameTH           String?               @db.Text
-  titleEN              String?               @db.Text
-  firstNameEN          String?               @db.Text
-  lastNameEN           String?               @db.Text
-  currentYear          Int?
-  admissionCategory    String?               @db.VarChar(5)
-  phoneNumber          String?               @db.VarChar(11)
-  lineID               String?               @db.VarChar(100)
-  facebook             String?               @db.VarChar(100)
-  instagram            String?               @db.VarChar(100)
-  medicalCondition     String?               @db.Text
-  allergy              String?               @db.Text
-  specialNeed          String?               @db.Text
-  createdDateTime      DateTime?             @default(now()) @db.DateTime(0)
-  updatedDateTime      DateTime?             @default(now()) @db.DateTime(0)
-  projectparticipants  projectparticipants[]
-  projects             projects[]
-  projectstaffs        projectstaffs[]
-  useraffiliation      useraffiliation[]
-  usercodeverification usercodeverification?
-  usercredentials      usercredentials?
+  studentID               String                    @id @default("") @db.VarChar(10)
+  titleTH                 String?                   @db.Text
+  firstNameTH             String?                   @db.Text
+  lastNameTH              String?                   @db.Text
+  nickNameTH              String?                   @db.Text
+  titleEN                 String?                   @db.Text
+  firstNameEN             String?                   @db.Text
+  lastNameEN              String?                   @db.Text
+  currentYear             Int?
+  admissionCategory       String?                   @db.VarChar(5)
+  phoneNumber             String?                   @db.VarChar(11)
+  lineID                  String?                   @db.VarChar(100)
+  facebook                String?                   @db.VarChar(100)
+  instagram               String?                   @db.VarChar(100)
+  medicalCondition        String?                   @db.Text
+  allergy                 String?                   @db.Text
+  specialNeed             String?                   @db.Text
+  createdDateTime         DateTime?                 @default(now()) @db.DateTime(0)
+  updatedDateTime         DateTime?                 @default(now()) @db.DateTime(0)
+  cmsoprojectannouncement cmsoprojectannouncement[]
+  projectparticipants     projectparticipants[]
+  projects                projects[]
+  projectstaffs           projectstaffs[]
+  useraffiliation         useraffiliation[]
+  usercodeverification    usercodeverification?
+  usercredentials         usercredentials?
 
   @@index([studentID], map: "studentID")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model userslogout {
-  studentID       String          @id @default("0") @db.VarChar(50)
+  autoID          Int             @id @default(autoincrement())
+  studentID       String          @default("0") @db.VarChar(50)
   token           String          @default("0") @db.VarChar(1000)
   killedDateTime  DateTime?       @default(now()) @db.DateTime(0)
-  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "FK_userslogout_usercredentials")
+  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "FK_userslogout_usercredentials")
 
+  @@index([studentID], map: "studentID")
+}
+
+model cmsoprojectannouncement {
+  announcementID      String    @id @db.VarChar(50)
+  studentID           String    @db.VarChar(10)
+  projectID           String?   @db.VarChar(10)
+  announcementTitle   String?   @default("New Announcement") @db.VarChar(250)
+  announcementBody    String?   @db.MediumText
+  announcementCTALink String?   @db.Text
+  lastUpdatedDateTime String    @default(dbgenerated("(current_timestamp())")) @db.VarChar(50)
+  projects            projects? @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_cmsoprojectannouncement_projects")
+  users               users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
+
+  @@index([projectID], map: "projectID")
   @@index([studentID], map: "studentID")
 }
 

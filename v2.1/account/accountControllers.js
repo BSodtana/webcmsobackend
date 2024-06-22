@@ -17,7 +17,7 @@ const helloWorldController = async (req, res) => {
 
 
     } catch (error) {
-        console.log('aa', error)
+        console.log('helloWorldController', error)
         res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'helloWorldController'))
     }
 }
