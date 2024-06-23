@@ -19,12 +19,8 @@ router.post('/', async (req, res) => {
       res.status(200).json(successCodeToResponse(tokenData.dataAvailable, 'LOGOUT-TOKEN-NOT-FOUND-SUCCESS', 'LOGOUT-UNKNOWN-TOKEN'))
 
     } else {
-      await prisma.userslogout.upsert({
-        where: {
-          studentID: tokenData.data?.studentID || '000000000',
-          token: token
-        }, update: {},
-        create: {
+      await prisma.userslogout.create({
+        data: {
           studentID: tokenData.data?.studentID || '000000000',
           token: token
         }
