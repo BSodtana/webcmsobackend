@@ -39,13 +39,13 @@ model categorycmuproject {
 }
 
 model organizations {
-  orgID               String                @id @default("") @db.VarChar(15)
+  orgID               String                @id @db.VarChar(15)
   orgName             String                @db.Text
   orgDesc             String?               @db.Text
   orgImageID          String?               @db.VarChar(50)
   orgType             organizations_orgType @default(DIVISION)
   parentOrg           String?               @db.VarChar(15)
-  organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizations_organizations")
+  organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
   other_organizations organizations[]       @relation("organizationsToorganizations")
   projects            projects[]
   useraffiliation     useraffiliation[]
@@ -180,13 +180,15 @@ model projectdoplanlists {
 model projectparticipantrecruit {
   participantRecruitID String                @id @unique(map: "participantRecruitID") @db.VarChar(50)
   projectID            String                @db.VarChar(50)
+  recruitName          String?               @default("New Recruitment") @db.VarChar(250)
+  recruitDescription   String?               @db.Text
   registerFrom         DateTime              @db.DateTime(0)
   registerUntil        DateTime              @db.DateTime(0)
   maxNumber            Int                   @default(0)
   createdDateTime      DateTime              @default(now())
   updatedDateTime      DateTime              @default(now())
   isAllowed            Int                   @default(0)
-  yearAllowed          String                @default("1,2,3,4,5,6")
+  yearAllowed          String                @default("0,1,2,3,4,5,6,99")
   projects             projects              @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-participantrtecruit-projectID")
   projectparticipants  projectparticipants[]
 
@@ -240,12 +242,14 @@ model projects {
 model projectstaffrecruit {
   staffRecruitID              String                        @id @unique(map: "staffRecruitID") @db.VarChar(50)
   projectID                   String                        @db.VarChar(50)
-  registerFrom                DateTime                      @db.DateTime(0)
-  registerUntil               DateTime                      @db.DateTime(0)
+  recruitName                 String?                       @default("New Recruitment") @db.VarChar(250)
+  recruitDescription          String?                       @db.Text
+  registerFrom                DateTime                      @default(now()) @db.DateTime(0)
+  registerUntil               DateTime                      @default(now()) @db.DateTime(0)
   createdDateTime             DateTime                      @default(now()) @db.DateTime(0)
   updatedDateTime             DateTime                      @default(now()) @db.DateTime(0)
   isAllowed                   Int                           @default(0)
-  yearAllowed                 String                        @default("1,2,3,4,5,6")
+  yearAllowed                 String                        @default("0,1,2,3,4,5,6,99")
   projects                    projects                      @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-staffrecruit-projectID")
   projectstaffrecruitposition projectstaffrecruitposition[]
   projectstaffs               projectstaffs[]
@@ -258,8 +262,6 @@ model projectstaffrecruitposition {
   recruitID           String?              @db.VarChar(50)
   positionName        String               @default("ตำแหน่งหน้าที่") @db.VarChar(100)
   maxNumber           Int                  @default(1)
-  registerFrom        DateTime             @db.DateTime(0)
-  registerUntil       DateTime             @db.DateTime(0)
   createdDateTime     DateTime             @default(now()) @db.DateTime(0)
   updatedDateTime     DateTime             @default(now()) @db.DateTime(0)
   isAllowed           Int                  @default(0)
@@ -370,7 +372,7 @@ model cmsoprojectannouncement {
   announcementTitle   String?   @default("New Announcement") @db.VarChar(250)
   announcementBody    String?   @db.MediumText
   announcementCTALink String?   @db.Text
-  lastUpdatedDateTime String    @default(dbgenerated("(current_timestamp())")) @db.VarChar(50)
+  updatedDateTime     DateTime  @default(now()) @db.DateTime(0)
   projects            projects? @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_cmsoprojectannouncement_projects")
   users               users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
 
