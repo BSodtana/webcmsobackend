@@ -64,7 +64,7 @@ const deleteProjectBriefData = async (projectID, confirmed = false) => {
             }
         })
 
-        return deleteResult
+        return {}
 
 
     }

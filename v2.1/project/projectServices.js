@@ -56,7 +56,7 @@ const deleteAnnouncement = async (announcementID, confirmed = false) => {
             }
         })
 
-        return deleteResult
+        return {}
 
     }
 
