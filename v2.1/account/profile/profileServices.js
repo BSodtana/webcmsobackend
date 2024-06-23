@@ -2,22 +2,32 @@ const prisma = require('../../prisma')
 
 require('dotenv').config()
 
-const helloWorld = async (name) => {
+const getUserBriefPersonalData = async (studentID) => {
 
-    const data = await prisma.users.update({
+    const data = await prisma.users.findUnique({
         where: {
-            studentID: '660710000'
+            studentID: studentID
         },
-        data: {
-            firstNameTH: name
+        select: {
+            studentID: true,
+            titleTH: true,
+            firstNameTH: true,
+            lastNameTH: true,
+            nickNameTH: true,
+            titleEN: true,
+            firstNameEN: true,
+            lastNameEN: true,
+            currentYear: true,
         }
     })
-    console.log('data', data)
 
-    return {
-        name: name,
-        text: `Hello ${name}`,
-        data: data
+    if (!data) {
+        throw {
+            code: 'PERSONAL-DATA-NO-INFORMATION',
+            desc: { userData: { studentID }, data }
+        }
+    } else {
+        return data
     }
 
 }
@@ -78,8 +88,7 @@ const getUserFullCredentialData = async (studentID) => {
 }
 
 module.exports = {
-    helloWorld,
-
+    getUserBriefPersonalData,
     getUserFullPersonalData,
     putUserFullPersonalData,
 
