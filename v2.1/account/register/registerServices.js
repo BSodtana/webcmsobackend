@@ -4,19 +4,16 @@ const { sentMail } = require('../../_helpers/email/sentMail')
 const { verificationMail } = require('../../_helpers/email/verificationMail')
 
 const { customAlphabet, nanoid } = require('nanoid')
-const sixDigitToken = customAlphabet('123456789ABCEFGHIJKLMNPQRSTUVXYZ', 6)
-const fourDigitToken = customAlphabet('123456789ABCEFGHIJKLMNPQRSTUVXYZ', 4)
+const sixDigitToken = customAlphabet('123456789ABCEFGHJKLMNPQRSTUVXYZ', 6)
+const fourDigitToken = customAlphabet('123456789ABCEFGHJKLMNPQRSTUVXYZ', 4)
 
 const bcrypt = require('bcrypt')
+const { getUserBriefPersonalData } = require('../profile/profileServices')
 
 
 const getPrelimDataFromStudentID = async (studentID) => {
 
-    const data = await prisma.users.findUnique({
-        where: {
-            studentID: studentID
-        }
-    })
+    const data = await getUserBriefPersonalData(studentID)
 
     if (!data) {
 
