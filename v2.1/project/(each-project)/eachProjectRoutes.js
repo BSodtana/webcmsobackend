@@ -2,8 +2,13 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 // /v2.1/project/:projectID
 
-
 // for v2.1
+// for recruitment
+
+router.use('/recruitment', require('./recruitment/recruitmentRoutes'))
+
+// for others
+
 const eachProjectControllers = require('./eachProjectControllers');
 const isLoggedIn = require("../../_middleware/isLoggedIn");
 const isProjectOwner = require("../../_middleware/isProjectOwner");
