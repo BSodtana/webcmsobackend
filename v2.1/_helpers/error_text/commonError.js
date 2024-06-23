@@ -62,6 +62,13 @@ const commonErrors = {
         "shouldContactAdmin": true,
         "shouldTryAgain": false,
     },
+    "ACCESS-DENIED-OTHER": {
+        "code": "ACCESS-DENIED-OTHER",
+        "textTH": "คุณไม่มีสิทธิ์เข้าถึงเนื้อหานี้ หรือเนื้อหานี้ไม่มีอยู่จริง",
+        "textEN": "Access Denied (or data not exist)",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
     "DECLINED-CONFIRM-DELETE": {
         "code": "DECLINED-CONFIRM-DELETE",
         "textTH": "คุณไม่ได้ยืนยันการลบข้อมูล",
