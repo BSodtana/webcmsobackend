@@ -6,13 +6,6 @@ const demoError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
-    'P2025': {
-        "code": "DEMO-ERROR-NO-STUDENT-ID-DATA",
-        "textTH": "ไม่มีข้อมูลรหัสนักศึกษานี้ในระบบ",
-        "textEN": "There is no data related to this student ID",
-        "shouldContactAdmin": false,
-        "shouldTryAgain": true,
-    },
     'DEMO-ERROR-NEW-ORG-MISSING-DATA': {
         "code": "DEMO-ERROR-NEW-ORG-MISSING-DATA",
         "textTH": "ข้อมูลในการสร้างองค์กรใหม่ไม่ครบ",

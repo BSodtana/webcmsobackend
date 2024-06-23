@@ -76,6 +76,13 @@ const commonErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    'P2025': {
+        "code": "DATA-NOT-EXIST",
+        "textTH": "ไม่มีข้อมูลนี้ในระบบ",
+        "textEN": "There is no data existed",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "INTERNAL-ERROR": {
         "code": "INTERNAL-ERROR",
         "textTH": "ระบบทำงานผิดพลาด",
