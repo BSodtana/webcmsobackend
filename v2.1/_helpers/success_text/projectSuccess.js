@@ -55,6 +55,34 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-PROJECT-ANNOUNCEMENT-SUCCESS": {
+        "code": "GET-PROJECT-ANNOUNCEMENT-SUCCESS",
+        "textTH": "รับข้อมูลประกาศของกิจกรรมสำเร็จ",
+        "textEN": "Retreive project announcement success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "UPDATE-PROJECT-ANNOUNCEMENT-SUCCESS": {
+        "code": "UPDATE-PROJECT-ANNOUNCEMENT-SUCCESS",
+        "textTH": "แก้ไขข้อมูลประกาศของกิจกรรมสำเร็จ",
+        "textEN": "Updated project announcement success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "DELETE-PROJECT-ANNOUNCEMENT-SUCCESS": {
+        "code": "DELETE-PROJECT-ANNOUNCEMENT-SUCCESS",
+        "textTH": "ลบประกาศของกิจกรรมสำเร็จ",
+        "textEN": "Deleted project announcement success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CREATE-NEW-PROJECT-ANNOUNCEMENT-SUCCESS": {
+        "code": "CREATE-NEW-PROJECT-ANNOUNCEMENT-SUCCESS",
+        "textTH": "เพิ่มข้อมูลประกาศของกิจกรรมสำเร็จ",
+        "textEN": "Added new project announcement success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = projectSuccess

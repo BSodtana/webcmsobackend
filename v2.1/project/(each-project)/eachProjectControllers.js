@@ -1,5 +1,6 @@
 const { errorCodeToResponse } = require("../../_helpers/errorCodeToResponse")
 const { successCodeToResponse } = require("../../_helpers/successCodeToResponse")
+const projectServices = require("../projectServices")
 const eachprojectServices = require("./eachprojectServices")
 
 const getProjectBriefDataCon = async (req, res) => {
@@ -107,11 +108,101 @@ const putProjectFullDataCon = async (req, res) => {
     }
 }
 
+// ----- announcement -----
+const getProjectAnnouncementCon = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+
+        if (!projectID) {
+            res.status(400).json(errorCodeToResponse('GET-PROJECT-ANNOUNCEMENT-NO-PROJECT-ID-PROVIDED', projectID, studentID))
+        } else {
+            const results = await projectServices.getAnnouncementList(projectID)
+            res.status(200).json(successCodeToResponse(results, 'GET-PROJECT-ANNOUNCEMENT-SUCCESS', projectID))
+        }
+
+    } catch (error) {
+        console.log('getProjectAnnouncementCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getProjectAnnouncementCon'))
+    }
+}
+
+const putProjectAnnouncementCon = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const data = req.body
+
+        const found = ["studentID", "projectID", "updatedDateTime"].some(r => Object.keys(data).includes(r))
+
+        // restricted some data to be edited
+        if (found) {
+            res.status(400).json(errorCodeToResponse("PROJECT-ANNOUNCEMENT-UPDATE-PROTECTED-DATA", projectID, studentID))
+        } else {
+            const results = await projectServices.updateAnnouncement(data?.announcementID, studentID, data)
+            res.status(200).json(successCodeToResponse(results, 'UPDATE-PROJECT-ANNOUNCEMENT-SUCCESS', data?.announcementID, studentID))
+        }
+
+    } catch (error) {
+        console.log('putProjectAnnouncementCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'putProjectAnnouncementCon'))
+    }
+}
+
+const deleteProjectAnnouncementCon = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+        const { announcementID, confirmDeleted } = req.body
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+
+
+        const results = await projectServices.deleteAnnouncement(announcementID, confirmDeleted)
+        res.status(200).json(successCodeToResponse(results, 'DELETE-PROJECT-ANNOUNCEMENT-SUCCESS', announcementID, studentID))
+
+    } catch (error) {
+        console.log('deleteProjectAnnouncementCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'deleteProjectAnnouncementCon'))
+    }
+}
+
+const newProjectAnnouncementCon = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const data = req.body
+
+        const found = ["announcementID", "studentID", "projectID", "updatedDateTime"].some(r => Object.keys(data).includes(r))
+
+        // restricted some data to be edited
+        if (found) {
+            res.status(400).json(errorCodeToResponse("PROJECT-ANNOUNCEMENT-CREATED-PROTECTED-DATA", projectID, studentID))
+        } else {
+            // todo: allowed an option to notify staff & pcp if created new announcement
+            const results = await projectServices.newAnnouncement(studentID, false, projectID, data)
+            res.status(200).json(successCodeToResponse(results, 'CREATE-NEW-PROJECT-ANNOUNCEMENT-SUCCESS', results.announcementID, studentID))
+        }
+
+    } catch (error) {
+        console.log('newProjectAnnouncementCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'newProjectAnnouncementCon'))
+    }
+}
+
+
 module.exports = {
     getProjectBriefDataCon,
     putProjectBriefDataCon,
     deleteProjectBriefDataCon,
 
     getProjectFullDataCon,
-    putProjectFullDataCon
+    putProjectFullDataCon,
+
+    getProjectAnnouncementCon,
+    putProjectAnnouncementCon,
+    deleteProjectAnnouncementCon,
+    newProjectAnnouncementCon
 }

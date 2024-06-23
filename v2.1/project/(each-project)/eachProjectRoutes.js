@@ -15,6 +15,14 @@ router.delete('/data', [isLoggedIn(), isProjectOwner()], eachProjectControllers.
 router.get('/detail', [isLoggedIn()], eachProjectControllers.getProjectFullDataCon)
 router.put('/detail', [isLoggedIn(), isProjectOwner()], eachProjectControllers.putProjectFullDataCon)
 
+// todo: middleware check if user is joining this activity be4 get announcement
+// todo: middleware check if projectID is matching in the announcement b4 view/editing
+router.get('/announcement', [isLoggedIn()], eachProjectControllers.getProjectAnnouncementCon)
+router.put('/announcement', [isLoggedIn(), isProjectOwner()], eachProjectControllers.putProjectAnnouncementCon)
+router.delete('/announcement', [isLoggedIn(), isProjectOwner()], eachProjectControllers.deleteProjectAnnouncementCon)
+router.post('/announcement/new', [isLoggedIn(), isProjectOwner()], eachProjectControllers.newProjectAnnouncementCon)
+
+
 
 //---------- default -----------------
 router.get('/', eachProjectControllers.getProjectBriefDataCon)

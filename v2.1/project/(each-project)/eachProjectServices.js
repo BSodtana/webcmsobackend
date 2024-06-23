@@ -1,6 +1,7 @@
 require('dotenv').config()
 const prisma = require('../../prisma')
 
+// ----- brief data -----
 const getProjectBriefData = async (projectID) => {
 
     const search = await prisma.projects.findUnique({
@@ -106,6 +107,10 @@ const putProjectFullData = async (projectID, data) => {
 
     return updatedResults
 }
+
+
+// ----- announcement -----
+
 
 module.exports = {
     getProjectBriefData,
