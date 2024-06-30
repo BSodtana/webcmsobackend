@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "dbsync":"npx prisma migrate dev",
+    "dbsync": "npx prisma migrate dev",
     "dblook": "npx prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,7 +24,7 @@
   },
   "homepage": "https://gitlab.com/cmso-dn/cmso_backend#readme",
   "dependencies": {
-    "@prisma/client": "^5.12.1",
+    "@prisma/client": "^5.15.1",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
@@ -36,6 +36,7 @@
     "moment": "^2.29.4",
     "momentjs": "^2.0.0",
     "morgan": "^1.10.0",
+    "nanoid": "^3.0.0",
     "nodemon": "^3.0.1",
     "passport-jwt": "^4.0.0",
     "prisma-erd-generator": "^1.11.2",
@@ -47,6 +48,6 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^16.0.0",
     "eslint-plugin-promise": "^6.1.1",
-    "prisma": "^5.12.1"
+    "prisma": "^5.15.1"
   }
 }
