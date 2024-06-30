@@ -6,13 +6,13 @@ const prisma = require('../../../../prisma')
 router.post('/', async (req, res) => {
   const { code, studentID, email, referenceID } = req.body
   try {
-    const verifyCode = await prisma.userCodeVerification.findFirst({
-      where: { student_id: studentID },
+    const verifyCode = await prisma.usercodeverification.findFirst({
+      where: { studentID: studentID },
       select: { code: true, referenceID: true },
     })
     if (verifyCode.code === code && verifyCode.referenceID === referenceID) {
-      await prisma.userCredentials.update({
-        where: { student_id: studentID },
+      await prisma.usercredentials.update({
+        where: { studentID: studentID },
         data: { emailVerified: 1 },
       })
       res.status(200).json({ status: 200, status: 'success' })

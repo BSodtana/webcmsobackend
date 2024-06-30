@@ -10,7 +10,7 @@ async function VerifyUserJWT(token) {
       reason: 'jwt must be provided',
     }
   try {
-    const isLogout = await prisma.usersLogout.count({ where: { token } })
+    const isLogout = await prisma.userslogout.count({ where: { token } })
     if (isLogout)
       return { isAuthenticated: false, data: null, reason: 'USER_LOGGED_OUT' }
     if (!isLogout) {

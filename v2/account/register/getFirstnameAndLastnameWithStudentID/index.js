@@ -6,29 +6,29 @@ const prisma = require('../../../prisma')
 router.get('/:studentID', async (req, res) => {
   const { studentID } = req.params
   const count = await prisma.users.count({
-    where: { student_id: { equals: parseInt(studentID) } },
+    where: { studentID: { equals: studentID } },
   })
-  const userExist = await prisma.userCredentials.count({
-    where: { student_id: { equals: parseInt(studentID) } },
+  const userExist = await prisma.usercredentials.count({
+    where: { studentID: { equals: studentID } },
   })
   if (count) {
     const data = await prisma.users.findFirst({
-      where: { student_id: { equals: parseInt(studentID) } },
-      select: { first_name: true, last_name: true, current_year: true },
+      where: { studentID: { equals: studentID } },
+      select: { firstNameTH: true, lastNameTH: true, currentYear: true },
     })
     if (userExist)
       res.status(200).json({
         status: 'existed',
-        first_name: data.first_name,
-        last_name: data.last_name,
-        year: data.current_year,
+        firstNameTH: data.firstNameTH,
+        lastNameTH: data.lastNameTH,
+        currentYear: data.currentYear,
       })
     else {
       res.status(200).json({
         status: 'success',
-        first_name: data.first_name,
-        last_name: data.last_name,
-        year: data.current_year,
+        firstNameTH: data.firstNameTH,
+        lastNameTH: data.lastNameTH,
+        currentYear: data.currentYear,
       })
     }
   }
