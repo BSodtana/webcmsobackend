@@ -10,19 +10,27 @@ router.get('/', async (req, res) => {
   if (!token) {
     res.status(400).json({ detail: 'TOKEN NEEDED' })
   }
-  if (token) {
-    const data = await VerifyUserJWT(token)
-    if (data.isAuthenticated) {
-      const affiliation = await prisma.users.findFirst({
-        where: { student_id: data.data.student_id },
-        select: { affiliation: { include: { orgData: true } } },
-      })
-      res.status(200).json({
-        status: 200,
-        currentPath: '/v2/account/login/affiliate/',
-        affiliation,
-      })
+  console.log(token)
+  try {
+    if (token) {
+      const data = await VerifyUserJWT(token)
+      if (data.isAuthenticated) {
+        const affiliation = await prisma.users.findFirst({
+          where: { studentID: data.data.studentID },
+          select: {
+            useraffiliation: { include: { organizations: true } },
+          },
+        })
+        console.log(affiliation.useraffiliation)
+        res.status(200).json({
+          status: 200,
+          currentPath: '/v2/account/login/affiliate/',
+          affiliation,
+        })
+      }
     }
+  } catch (err) {
+    console.log(err)
   }
 })
 module.exports = router
