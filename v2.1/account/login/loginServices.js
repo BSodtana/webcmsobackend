@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 
 const loginByEmailPass = async (email, password) => {
 
-    const searchUser = await prisma.usercredentials.findFirst({
+    const searchUser = await prisma.usercredentials.findFirstOrThrow({
         where: {
             email: email
         }
@@ -23,15 +23,11 @@ const loginByEmailPass = async (email, password) => {
 
         // account existed
         // check pw
+        try {
 
-        const compare = await bcrypt.compare(password, searchUser?.hashPassword).then(async () => {
-            if (!compare) {
+            const compare2 = await bcrypt.compare(password, searchUser?.hashPassword || '')
 
-                throw {
-                    code: 'LOGIN-PASSWORD-INCORRECT',
-                    desc: { userData: { email }, compare }
-                }
-            } else {
+            if (compare2) {
 
                 // get basic info and gen jwt to frontend
 
@@ -44,6 +40,7 @@ const loginByEmailPass = async (email, password) => {
                     }
 
                 })
+
 
                 const dataToFrontend = {
                     studentID: userData.studentID,
@@ -63,23 +60,39 @@ const loginByEmailPass = async (email, password) => {
                 }
 
 
-                const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '7d' })
+                try {
 
-                return {
-                    studentID: userData.studentID,
-                    token: token,
-                    updatedDateTime: userData.updatedDateTime
+                    const token2 = await jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '7d' })
+
+                    return {
+                        studentID: userData.studentID,
+                        token: token2,
+                        updatedDateTime: userData.updatedDateTime
+                    }
+
+                } catch (error) {
+                    throw {
+                        code: 'INTERNAL-ERROR',
+                        desc: { userData: { email }, error }
+                    }
                 }
 
+
+
+
+            } else {
+                throw {
+                    code: 'LOGIN-PASSWORD-INCORRECT',
+                    desc: { userData: { email }, compare2 }
+                }
             }
-        }).catch((error) => {
+
+        } catch (error) {
             throw {
                 code: 'INTERNAL-ERROR',
                 desc: { userData: { email }, error }
             }
-        })
-
-
+        }
 
     }
 
