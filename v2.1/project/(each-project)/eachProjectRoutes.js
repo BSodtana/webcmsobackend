@@ -28,6 +28,7 @@ router.delete('/announcement', [isLoggedIn(), isProjectOwner()], eachProjectCont
 router.post('/announcement/new', [isLoggedIn(), isProjectOwner()], eachProjectControllers.newProjectAnnouncementCon)
 
 router.get('/list', [isLoggedIn(), isProjectOwner()], eachProjectControllers.getProjectAllPCPCon)
+router.post('/join', [isLoggedIn()], eachProjectControllers.joinProjectCon)
 
 
 //---------- default -----------------

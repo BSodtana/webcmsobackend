@@ -1,5 +1,7 @@
 require('dotenv').config()
 const prisma = require('../../prisma')
+const eachRCMServices = require('./(joinProjectLogic)/joinProjectPCPLogic')
+const { getDataSpecificRecruitID } = require('./recruitment/(recruitmentID)/eachRCMServices')
 
 // ----- brief data -----
 const getProjectBriefData = async (projectID) => {
@@ -109,7 +111,31 @@ const putProjectFullData = async (projectID, data) => {
 }
 
 
-// ----- announcement -----
+// ----- joining a project -----
+
+const joinProjectPCP = async (recruitID, studentID, password, forced = false) => {
+
+    const checkListForJoining = [
+        await eachRCMServices.checkIfRecruitIsOpen(recruitID),
+        await eachRCMServices.checkIfUserYearIsAllowed(recruitID, studentID),
+        await eachRCMServices.checkIfMaxNumberExceed(recruitID),
+        await eachRCMServices.checkIfPasswordIsTrue(recruitID, password),
+        await eachRCMServices.checkIfUserJoinAsPCPAlready(recruitID, studentID)
+    ]
+
+    // check if can regis?
+    const isNotAllowedRegis = checkListForJoining.includes(false)
+
+    if (!forced && isNotAllowedRegis) {
+        throw {
+            code: 'REGISTER-PRELIM-NO-STUDENT-DATA',
+            desc: { userData: { studentID }, data }
+        }
+    }
+
+    return true
+
+}
 
 
 module.exports = {
@@ -118,5 +144,7 @@ module.exports = {
     deleteProjectBriefData,
 
     getProjectFullData,
-    putProjectFullData
+    putProjectFullData,
+
+    joinProjectPCP
 }

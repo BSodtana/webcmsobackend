@@ -83,6 +83,13 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "JOIN-PROJECT-PCP-SUCCESS": {
+        "code": "JOIN-PROJECT-PCP-SUCCESS",
+        "textTH": "เข้าร่วมกิจกรรมในฐานะผู้เข้าร่วม สำเร็จ",
+        "textEN": "Join a project as participant successfully!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = projectSuccess
