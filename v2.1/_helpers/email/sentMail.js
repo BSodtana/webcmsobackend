@@ -1,0 +1,37 @@
+const axios = require('axios')
+require('dotenv').config()
+
+const sentMail = async (recipient, subject, HTMLcontent) => {
+
+  try {
+
+    const mail = await axios.post(
+      `${process.env.MAIL_ENDPOINT}`,
+      {
+        subject: `[CMSO] ${subject}`,
+        content: HTMLcontent,
+        relay: 'no-reply-cmso.med@cmu.ac.th',
+        mailsent: [recipient],
+        mailmaster: 'relay-noname',
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.MAIL_TOKEN}`
+        },
+      }
+    )
+    return mail.data.status
+
+  } catch (error) {
+    console.log('[Email Error]', error)
+    throw {
+      code: 'EMAIL-ERROR',
+      desc: { userData: { recipient, subject, HTMLcontent }, error }
+    }
+
+  }
+
+}
+
+
+module.exports = { sentMail }

@@ -1,0 +1,99 @@
+require('dotenv').config()
+const prisma = require('../../../prisma')
+
+// const getProjectBriefData = async (projectID) => {
+
+//     const search = await prisma.projects.findUnique({
+//         where: {
+//             projectID: projectID
+//         },
+//         include: {
+//             projectdata: {
+//                 select: {
+//                     placeInCMU: true,
+//                     placeOutsideCMU: true
+//                 }
+//             }
+//         }
+//     })
+
+//     // if search = 0
+//     if (!search) {
+//         throw {
+//             code: 'GET-PROJECT-BRIEF-DATA-NOT-EXIST',
+//             desc: { userData: { projectID }, search }
+//         }
+//     } else {
+//         return search
+//     }
+
+// }
+
+// const putProjectBriefData = async (projectID, data) => {
+
+//     const updatedResults = await prisma.projects.update({
+//         where: {
+//             projectID: projectID
+//         },
+//         data: {
+//             ...data,
+//             updatedDateTime: new Date()
+//         }
+//     })
+
+//     return updatedResults
+// }
+
+// const deleteProjectBriefData = async (projectID, confirmed = false) => {
+
+
+//     // check if confirmed?
+//     if (!confirmed) {
+
+//         throw {
+//             code: 'DECLINED-CONFIRM-DELETE',
+//             desc: { userData: { projectID, confirmed } }
+//         }
+
+//     } else {
+
+//         const deleteResult = await prisma.projects.delete({
+//             where: {
+//                 projectID: projectID
+//             }
+//         })
+
+//         return deleteResult
+
+
+//     }
+
+// }
+
+const getSpecificOrgDetails = async (orgID) => {
+
+    const data = await prisma.organizations.findUnique({
+        where: {
+            orgID: orgID
+        }
+    })
+
+    return data
+}
+
+const getSubOrgList = async (orgID) => {
+
+    const data = await prisma.organizations.findMany({
+        where: {
+            parentOrg: orgID
+        }
+    })
+
+    return data
+}
+
+
+module.exports = {
+    getSpecificOrgDetails,
+    getSubOrgList
+}

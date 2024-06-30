@@ -1,0 +1,103 @@
+const accountErrors = {
+    "HELLOWORLD-ERROR-NONAME": {
+        "code": "HELLOWORLD-ERROR-NONAME",
+        "textTH": "คุณไม่ได้แจ้งชื่อไว้",
+        "textEN": "Name is required",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-PRELIM-NO-STUDENT-ID": {
+        "code": "REGISTER-PRELIM-NO-STUDENT-ID",
+        "textTH": "กรุณากรอกรหัสนักศึกษา",
+        "textEN": "Student ID is required",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "REGISTER-PRELIM-NO-STUDENT-DATA": {
+        "code": "REGISTER-PRELIM-NO-STUDENT-DATA",
+        "textTH": "ไม่มีข้อมูลจากรหัสนักศึกษานี้",
+        "textEN": "No information available for this student ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "REGISTER-GENERATE-EMAIL-NOT-ENOUGH-DATA": {
+        "code": "REGISTER-GENERATE-EMAIL-NOT-ENOUGH-DATA",
+        "textTH": "กรุณากรอกรหัสนักศึกษาและอีเมลให้ครบถ้วน",
+        "textEN": "Student ID and Email are required",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-GENERATE-EMAIL-SENT-FAILED": {
+        "code": "REGISTER-GENERATE-EMAIL-SENT-FAILED",
+        "textTH": "การส่งอีเมลยืนยันมีปัญหา",
+        "textEN": "There is an error on sending verification email",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "REGISTER-VERIFY-FAILED-CODE-NOT-MATCHED": {
+        "code": "REGISTER-VERIFY-FAILED-CODE-NOT-MATCHED",
+        "textTH": "รหัสยืนยันไม่ถูกต้อง",
+        "textEN": "Verification code was incorrect",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-EMAIL-NOT-VERIFIED": {
+        "code": "REGISTER-EMAIL-NOT-VERIFIED",
+        "textTH": "อีเมลนี้ยังไม่ได้ถูกลงทะเบียน หรือยังไม่ได้ยืนยันอีเมล",
+        "textEN": "This email hasn't been verified yet",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-PASSWORD-NOT-PASS-CONDITION": {
+        "code": "REGISTER-PASSWORD-NOT-PASS-CONDITION",
+        "textTH": "รหัสผ่านไม่สอดคล้องกับเงื่อนไขความปลอดภัยที่ตั้งไว้",
+        "textEN": "Password was not strong enough",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "REGISTER-EMAIL-NOT-CMU": {
+        "code": "REGISTER-EMAIL-NOT-CMU",
+        "textTH": "กรุณาใช้ CMU Mail ในการสมัคร",
+        "textEN": "Only CMU Mail is allowed",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "LOGIN-EMAIL-NOT-EXISTS": {
+        "code": "LOGIN-EMAIL-NOT-EXISTS",
+        "textTH": "ไม่มีบัญชีนี้ในระบบ",
+        "textEN": "No account associated to this email",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "LOGIN-PASSWORD-INCORRECT": {
+        "code": "LOGIN-PASSWORD-INCORRECT",
+        "textTH": "รหัสผ่านไม่ถูกต้อง",
+        "textEN": "Password incorrect",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "PERSONAL-DATA-NO-INFORMATION": {
+        "code": "PERSONAL-DATA-NO-INFORMATION",
+        "textTH": "ไม่มีข้อมูลส่วนตัวของผู้ใช้คนนี้",
+        "textEN": "No personal information associated with this student ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "PERSONAL-DATA-UPDATE-PROTECTED-DATA": {
+        "code": "PERSONAL-DATA-UPDATE-PROTECTED-DATA",
+        "textTH": "ไม่สามารถแก้ไขข้อมูลบางอย่างได้ กรุณายกเลิกการแก้ไข",
+        "textEN": "Some data provided cannot be edited",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "CREDENTIAL-DATA-NO-INFORMATION": {
+        "code": "CREDENTIAL-DATA-NO-INFORMATION",
+        "textTH": "ไม่มีข้อมูลของผู้ใช้คนนี้",
+        "textEN": "No credential information associated with this student ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+
+}
+
+module.exports = accountErrors
