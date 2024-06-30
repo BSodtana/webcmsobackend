@@ -335,7 +335,7 @@ model users {
   firstNameEN             String?                   @db.Text
   lastNameEN              String?                   @db.Text
   currentYear             Int?
-  admissionCategory       String?                   @db.VarChar(5)
+  admissionCategory       String?                   @db.VarChar(10)
   phoneNumber             String?                   @db.VarChar(11)
   lineID                  String?                   @db.VarChar(100)
   facebook                String?                   @db.VarChar(100)
