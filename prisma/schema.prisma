@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  previewFeatures = ["fullTextIndex", "fullTextSearch", "relationJoins"]
 }
 
 datasource db {
@@ -184,11 +184,12 @@ model projectparticipantrecruit {
   recruitDescription   String?               @db.Text
   registerFrom         DateTime              @db.DateTime(0)
   registerUntil        DateTime              @db.DateTime(0)
-  maxNumber            Int                   @default(0)
+  maxNumber            Int                   @default(1)
   createdDateTime      DateTime              @default(now())
   updatedDateTime      DateTime              @default(now())
   isAllowed            Int                   @default(0)
   yearAllowed          String                @default("0,1,2,3,4,5,6,99")
+  password             String?               @db.VarChar(50)
   projects             projects              @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-participantrtecruit-projectID")
   projectparticipants  projectparticipants[]
 
@@ -250,6 +251,7 @@ model projectstaffrecruit {
   updatedDateTime             DateTime                      @default(now()) @db.DateTime(0)
   isAllowed                   Int                           @default(0)
   yearAllowed                 String                        @default("0,1,2,3,4,5,6,99")
+  password                    String?                       @db.VarChar(50)
   projects                    projects                      @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "projects-staffrecruit-projectID")
   projectstaffrecruitposition projectstaffrecruitposition[]
   projectstaffs               projectstaffs[]
@@ -347,6 +349,7 @@ model users {
   projectparticipants     projectparticipants[]
   projects                projects[]
   projectstaffs           projectstaffs[]
+  uploadedfiledraft       uploadedfiledraft[]
   useraffiliation         useraffiliation[]
   usercodeverification    usercodeverification?
   usercredentials         usercredentials?
@@ -354,7 +357,6 @@ model users {
   @@index([studentID], map: "studentID")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model userslogout {
   autoID          Int             @id @default(autoincrement())
   studentID       String          @default("0") @db.VarChar(50)
@@ -368,7 +370,7 @@ model userslogout {
 model cmsoprojectannouncement {
   announcementID      String    @id @db.VarChar(50)
   studentID           String    @db.VarChar(10)
-  projectID           String?   @db.VarChar(10)
+  projectID           String?   @db.VarChar(50)
   announcementTitle   String?   @default("New Announcement") @db.VarChar(250)
   announcementBody    String?   @db.MediumText
   announcementCTALink String?   @db.Text
@@ -377,6 +379,17 @@ model cmsoprojectannouncement {
   users               users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
 
   @@index([projectID], map: "projectID")
+  @@index([studentID], map: "studentID")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model uploadedfiledraft {
+  fileID          String    @id @default("") @db.VarChar(50)
+  studentID       String    @db.VarChar(10)
+  path            String    @db.Text
+  updatedDatetime DateTime? @db.DateTime(0)
+  users           users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_uploadedfile_draft_users")
+
   @@index([studentID], map: "studentID")
 }
 
