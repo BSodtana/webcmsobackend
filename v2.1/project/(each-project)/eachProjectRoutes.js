@@ -27,6 +27,7 @@ router.put('/announcement', [isLoggedIn(), isProjectOwner()], eachProjectControl
 router.delete('/announcement', [isLoggedIn(), isProjectOwner()], eachProjectControllers.deleteProjectAnnouncementCon)
 router.post('/announcement/new', [isLoggedIn(), isProjectOwner()], eachProjectControllers.newProjectAnnouncementCon)
 
+router.get('/list', [isLoggedIn(), isProjectOwner()], eachProjectControllers.getProjectAllPCPCon)
 
 
 //---------- default -----------------

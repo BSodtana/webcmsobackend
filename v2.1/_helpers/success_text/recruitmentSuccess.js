@@ -41,6 +41,13 @@ const recruitmentSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-RECRUITMENT-PCP-LIST-SUCCESS": {
+        "code": "GET-RECRUITMENT-PCP-LIST-SUCCESS",
+        "textTH": "ดึงข้อมูลผู้เข้าร่วมกิจกรรมจากประกาศรับสมัครสำเร็จ",
+        "textEN": "Get recruitment information success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "DELETE-RECRUITMENT-DATA-SUCCESS": {
         "code": "DELETE-RECRUITMENT-DATA-SUCCESS",
         "textTH": "ลบข้อมูลประกาศรับสมัครสำเร็จ",

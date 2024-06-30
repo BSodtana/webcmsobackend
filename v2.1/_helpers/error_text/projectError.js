@@ -69,6 +69,20 @@ const projectError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "PROJECT-JOIN-PCP-FAILED-SEAT-FULL": {
+        "code": "PROJECT-JOIN-PCP-FAILED-SEAT-FULL",
+        "textTH": "ไม่สามารถเข้าร่วมกิจกรรมได้ เนื่องจากรับเต็มจำนวนแล้ว",
+        "textEN": "No seats available for joining this project",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "GET-PROJECT-PCP-LIST-NO-PROJECT-ID-PROVIDED": {
+        "code": "GET-PROJECT-PCP-LIST-NO-PROJECT-ID-PROVIDED",
+        "textTH": "ไม่มีข้อมูลผู้เข้าร่วมกิจกรรมเนื่องจากไม่ได้ให้รหัสกิจกรรม",
+        "textEN": "No project ID was provided",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = projectError

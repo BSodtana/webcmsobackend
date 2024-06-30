@@ -1,6 +1,7 @@
 const { errorCodeToResponse } = require("../../_helpers/errorCodeToResponse")
 const { successCodeToResponse } = require("../../_helpers/successCodeToResponse")
 const projectServices = require("../projectServices")
+const { getAllPCPInProject } = require("./(allPCPLogic)/allPCPLogic")
 const eachprojectServices = require("./eachprojectServices")
 
 const getProjectBriefDataCon = async (req, res) => {
@@ -192,6 +193,54 @@ const newProjectAnnouncementCon = async (req, res) => {
     }
 }
 
+// ----- pcp list -----
+const getProjectAllPCPCon = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+
+        if (!projectID) {
+            res.status(400).json(errorCodeToResponse('GET-PROJECT-PCP-LIST-NO-PROJECT-ID-PROVIDED', projectID, studentID))
+        } else {
+            const resultsPCP = await getAllPCPInProject(projectID)
+            res.status(200).json(successCodeToResponse({
+                participant: resultsPCP,
+                staff: []
+            }, 'GET-PROJECT-ANNOUNCEMENT-SUCCESS', projectID))
+        }
+
+    } catch (error) {
+        console.log('getProjectAllPCPCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getProjectAllPCPCon'))
+    }
+}
+
+
+// ----- join project -----
+const joinProjectCon = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { recruitID, password = null, forced = false } = req.body
+
+        // todo: password protected recruitment
+        if (!projectID || !studentID || !recruitID || (typeof (forced) !== "boolean")) {
+            console.log('dataget', projectID, studentID, recruitID, forced)
+            res.status(400).json(errorCodeToResponse("NOT-ENOUGH-DATA", recruitID, studentID))
+        } else {
+            // todo: allowed an option to notify staff & pcp if created new announcement
+            const results = await eachprojectServices.joinProjectPCP(recruitID, studentID, password, forced)
+            res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-PCP-SUCCESS', recruitID, studentID))
+        }
+
+    } catch (error) {
+        console.log('joinProjectCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'joinProjectCon'))
+    }
+}
+
 
 module.exports = {
     getProjectBriefDataCon,
@@ -204,5 +253,9 @@ module.exports = {
     getProjectAnnouncementCon,
     putProjectAnnouncementCon,
     deleteProjectAnnouncementCon,
-    newProjectAnnouncementCon
+    newProjectAnnouncementCon,
+
+    getProjectAllPCPCon,
+
+    joinProjectCon
 }
