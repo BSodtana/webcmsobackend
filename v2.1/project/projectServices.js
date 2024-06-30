@@ -126,6 +126,14 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                         }
                     }
                 ]
+            },
+            include: {
+                projectdata: {
+                    select: {
+                        placeInCMU: true,
+                        placeOutsideCMU: true
+                    }
+                }
             }
         })
 
@@ -151,6 +159,14 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                         }
                     }
                 ]
+            },
+            include: {
+                projectdata: {
+                    select: {
+                        placeInCMU: true,
+                        placeOutsideCMU: true
+                    }
+                }
             }
         })
 

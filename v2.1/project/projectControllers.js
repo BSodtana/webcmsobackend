@@ -25,7 +25,7 @@ const searchListProjectByNamePageController = async (req, res) => {
 
 
         const results = await projectServices.searchListProjectByNamePage(name.toString(), language.toString(), parseInt(page) || 1)
-        res.status(200).json(successCodeToResponse(results, 'SEARCH-PROJECT-BY-NAME-PAGE-SUCCESS', name))
+        res.status(200).json(successCodeToResponse(results, 'SEARCH-PROJECT-BY-NAME-PAGE-SUCCESS', `${name}-${language}-${page}`))
 
 
     } catch (error) {
