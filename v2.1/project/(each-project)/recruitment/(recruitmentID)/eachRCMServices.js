@@ -122,10 +122,73 @@ const deleteDataSpecificRecruitID = async (recruitmentID = '', confirmed = false
 
 }
 
+const getAllUserInSpecificRecruitID = async (recruitmentID = '') => {
+
+    // check if this id was PCP or STF
+    const isPCP = recruitmentID.includes('PCP')
+
+    if (isPCP) {
+        // participant recruit id
+
+        const search = await prisma.projectparticipants.findMany({
+            where: {
+                recruitID: recruitmentID
+            },
+            include: {
+                users: {
+                    select: {
+                        studentID: true,
+                        titleTH: true,
+                        firstNameTH: true,
+                        lastNameTH: true,
+                        nickNameTH: true,
+                        titleEN: true,
+                        firstNameEN: true,
+                        lastNameEN: true,
+                        currentYear: true,
+                    }
+                }
+            }
+        })
+
+        return search
+
+
+    } else {
+
+        // STF id
+        const search = await prisma.projectstaffs.findMany({
+            where: {
+                recruitID: recruitmentID
+            },
+            include: {
+                users: {
+                    select: {
+                        studentID: true,
+                        titleTH: true,
+                        firstNameTH: true,
+                        lastNameTH: true,
+                        nickNameTH: true,
+                        titleEN: true,
+                        firstNameEN: true,
+                        lastNameEN: true,
+                        currentYear: true,
+                    }
+                }
+            }
+        })
+
+        return search
+
+    }
+}
+
 
 
 module.exports = {
     getDataSpecificRecruitID,
     editDataSpecificRecruitID,
-    deleteDataSpecificRecruitID
+    deleteDataSpecificRecruitID,
+
+    getAllUserInSpecificRecruitID
 }

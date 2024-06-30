@@ -82,10 +82,27 @@ const deleteDataSpecificRecruitIDCon = async (req, res) => {
     }
 }
 
+const getAllUserInSpecificRecruitIDCon = async (req, res) => {
+    try {
 
+        const { projectID, recruitmentID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+
+        const results = await eachRCMServices.getAllUserInSpecificRecruitID(recruitmentID)
+        res.status(200).json(successCodeToResponse(results, 'GET-RECRUITMENT-DATA-SUCCESS', recruitmentID, studentID))
+
+
+
+    } catch (error) {
+        console.log('getAllUserInSpecificRecruitID', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getAllUserInSpecificRecruitID'))
+    }
+}
 
 module.exports = {
     getDataSpecificRecruitIDCon,
     editDataSpecificRecruitIDCon,
-    deleteDataSpecificRecruitIDCon
+    deleteDataSpecificRecruitIDCon,
+
+    getAllUserInSpecificRecruitIDCon
 }

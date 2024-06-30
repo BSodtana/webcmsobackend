@@ -15,6 +15,9 @@ router.get('/data', [isLoggedIn()], eachRCMControllers.getDataSpecificRecruitIDC
 router.put('/data', [isLoggedIn(), isProjectOwner()], eachRCMControllers.editDataSpecificRecruitIDCon)
 router.delete('/data', [isLoggedIn(), isProjectOwner()], eachRCMControllers.deleteDataSpecificRecruitIDCon)
 
+router.get('/list', [isLoggedIn(), isProjectOwner()], eachRCMControllers.getAllUserInSpecificRecruitIDCon)
+
+router.use('/position/:positionID', require('./position/(positionID)/eachPOSRoutes'))
 
 //---------- default -----------------
 
