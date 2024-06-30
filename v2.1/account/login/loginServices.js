@@ -24,55 +24,62 @@ const loginByEmailPass = async (email, password) => {
         // account existed
         // check pw
 
-        const compare = await bcrypt.compare(password, searchUser?.hashPassword)
+        const compare = await bcrypt.compare(password, searchUser?.hashPassword).then(async () => {
+            if (!compare) {
 
-        if (!compare) {
+                throw {
+                    code: 'LOGIN-PASSWORD-INCORRECT',
+                    desc: { userData: { email }, compare }
+                }
+            } else {
 
-            throw {
-                code: 'LOGIN-PASSWORD-INCORRECT',
-                desc: { userData: { email }, compare }
-            }
-        } else {
+                // get basic info and gen jwt to frontend
 
-            // get basic info and gen jwt to frontend
+                const userData = await prisma.users.findUnique({
+                    where: {
+                        studentID: searchUser.studentID
+                    },
+                    include: {
+                        usercredentials: true
+                    }
 
-            const userData = await prisma.users.findUnique({
-                where: {
-                    studentID: searchUser.studentID
-                },
-                include: {
-                    usercredentials: true
+                })
+
+                const dataToFrontend = {
+                    studentID: userData.studentID,
+                    titleTH: userData.titleTH,
+                    firstNameTH: userData.firstNameTH,
+                    lastNameTH: userData.lastNameTH,
+                    nickNameTH: userData.nickNameTH,
+                    titleEN: userData.titleEN,
+                    firstNameEN: userData.firstNameEN,
+                    lastNameEN: userData.lastNameEN,
+                    currentYear: userData.currentYear,
+                    admissionCategory: userData.admissionCategory,
+                    role: userData.usercredentials.role,
+                    uuid: userData.usercredentials.uuid,
+                    email: userData.usercredentials.email,
+                    emailVerified: userData.usercredentials.emailVerified
                 }
 
-            })
 
-            const dataToFrontend = {
-                studentID: userData.studentID,
-                titleTH: userData.titleTH,
-                firstNameTH: userData.firstNameTH,
-                lastNameTH: userData.lastNameTH,
-                nickNameTH: userData.nickNameTH,
-                titleEN: userData.titleEN,
-                firstNameEN: userData.firstNameEN,
-                lastNameEN: userData.lastNameEN,
-                currentYear: userData.currentYear,
-                admissionCategory: userData.admissionCategory,
-                role: userData.usercredentials.role,
-                uuid: userData.usercredentials.uuid,
-                email: userData.usercredentials.email,
-                emailVerified: userData.usercredentials.emailVerified
+                const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '7d' })
+
+                return {
+                    studentID: userData.studentID,
+                    token: token,
+                    updatedDateTime: userData.updatedDateTime
+                }
+
             }
-
-
-            const token = jwt.sign(dataToFrontend, process.env.PRIVATE_KEY, { expiresIn: '7d' })
-
-            return {
-                studentID: userData.studentID,
-                token: token,
-                updatedDateTime: userData.updatedDateTime
+        }).catch((error) => {
+            throw {
+                code: 'INTERNAL-ERROR',
+                desc: { userData: { email }, error }
             }
+        })
 
-        }
+
 
     }
 

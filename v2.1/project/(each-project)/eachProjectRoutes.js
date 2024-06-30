@@ -13,7 +13,7 @@ const eachProjectControllers = require('./eachProjectControllers');
 const isLoggedIn = require("../../_middleware/isLoggedIn");
 const isProjectOwner = require("../../_middleware/isProjectOwner");
 
-router.get('/data', eachProjectControllers.getProjectBriefDataCon)
+router.get('/data', [isLoggedIn()], eachProjectControllers.getProjectBriefDataCon)
 router.put('/data', [isLoggedIn(), isProjectOwner()], eachProjectControllers.putProjectBriefDataCon)
 router.delete('/data', [isLoggedIn(), isProjectOwner()], eachProjectControllers.deleteProjectBriefDataCon)
 
@@ -32,7 +32,7 @@ router.post('/join', [isLoggedIn()], eachProjectControllers.joinProjectCon)
 
 
 //---------- default -----------------
-router.get('/', eachProjectControllers.getProjectBriefDataCon)
+router.get('/', [isLoggedIn()], eachProjectControllers.getProjectBriefDataCon)
 
 
 module.exports = router

@@ -11,6 +11,19 @@ const getProjectBriefData = async (projectID) => {
             projectID: projectID
         },
         include: {
+            users: {
+                select: {
+                    studentID: true,
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true,
+                    nickNameTH: true,
+                    titleEN: true,
+                    firstNameEN: true,
+                    lastNameEN: true,
+                    currentYear: true,
+                }
+            },
             projectdata: {
                 select: {
                     placeInCMU: true,
