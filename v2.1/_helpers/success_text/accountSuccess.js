@@ -69,6 +69,13 @@ const accountSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-PERSONAL-PROJECT-DATA-SUCCESS": {
+        "code": "GET-PERSONAL-PROJECT-DATA-SUCCESS",
+        "textTH": "ขอข้อมูลโครงการส่วนตัวของผู้ใช้สำเร็จ",
+        "textEN": "Get personal project data of student success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    }
 
 }
 

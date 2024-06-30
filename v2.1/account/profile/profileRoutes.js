@@ -13,6 +13,7 @@ const isLoggedIn = require("../../_middleware/isLoggedIn");
 router.get('/personal', [isLoggedIn()], profileControllers.getUserFullDataController)
 router.put('/personal', [isLoggedIn()], profileControllers.putUserFullDataController)
 
+router.use('/project', require('./project/myProjectRoutes'))
 
 //---------- default -----------------
 router.get('/', [isLoggedIn()], profileControllers.getUserFullDataController)
