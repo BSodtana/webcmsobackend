@@ -50,8 +50,57 @@ const getProjectIJoinAsPCP = async (studentID = '') => {
     })
 }
 
+const getProjectIJoinAsSTF = async (studentID = '') => {
+    const searchProject = await prisma.projectstaffs.findMany({
+        where: {
+            studentID: studentID
+        },
+        include: {
+            projectstaffrecruit: {
+                include: {
+                    projects: {
+                        select: {
+                            projectNameEN: true,
+                            projectNameTH: true,
+                            projectNickNameEN: true,
+                            projectNickNameTH: true,
+                            projectID: true,
+                        }
+                    }
+                }
+            },
+            projectstaffrecruitposition: {
+                select: {
+                    staffPositionID: true,
+                    positionName: true
+                }
+            }
+        }
+    })
+
+    return searchProject.map((each) => {
+        return {
+            "staffApplicationID": each.staffApplicationID,
+            "recruitID": each.recruitID,
+            "studentID": each.studentID,
+            "recruitName": each.projectstaffrecruit.recruitName,
+            "staffPositionID": each.projectstaffrecruitposition.staffPositionID,
+            "positionName": each.projectstaffrecruitposition.positionName,
+
+            "projectID": each.projectstaffrecruit.projectID,
+            "projectNameEN": each.projectstaffrecruit.projects.projectNameEN,
+            "projectNameTH": each.projectstaffrecruit.projects.projectNameTH,
+            "projectNickNameEN": each.projectstaffrecruit.projects.projectNickNameEN,
+            "projectNickNameTH": each.projectstaffrecruit.projects.projectNickNameTH,
+            "createdDateTime": each.createdDateTime,
+
+        }
+    })
+}
+
 
 module.exports = {
     getProjectMyOwn,
-    getProjectIJoinAsPCP
+    getProjectIJoinAsPCP,
+    getProjectIJoinAsSTF
 }
