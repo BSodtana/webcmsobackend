@@ -133,12 +133,13 @@ const joinProjectPCP = async (recruitID, studentID, password, forced = false) =>
         await eachRCMServices.checkIfUserYearIsAllowed(recruitID, studentID),
         await eachRCMServices.checkIfMaxNumberExceed(recruitID),
         await eachRCMServices.checkIfPasswordIsTrue(recruitID, password),
-        await eachRCMServices.checkIfUserJoinAsPCPAlready(recruitID, studentID)
+        await eachRCMServices.checkIfUserJoinAsPCPAlready(recruitID, studentID),
+        await eachRCMServices.checkIfUserJoinAsSTFAlready(recruitID, studentID)
     ]
 
     const dictDesc = [
         {
-            "textTH": "ตำแหน่งนี้ยังไม่เปิดรับสมัคร",
+            "textTH": "รอบสมัครนี้ยังไม่เปิดรับสมัคร",
             "textEN": "This recruitment is not open yet",
         },
         {
@@ -154,27 +155,30 @@ const joinProjectPCP = async (recruitID, studentID, password, forced = false) =>
             "textEN": "Password not correct",
         },
         {
-            "textTH": "คุณเข้าร่วมกิจกรรมนี้ไปแล้ว",
-            "textEN": "You already join this project",
+            "textTH": "คุณเข้าร่วมกิจกรรมนี้ในฐานะผู้เข้าร่วมกิจกรรมไปแล้ว",
+            "textEN": "You already join this project as participant",
+        },
+        {
+            "textTH": "คุณเข้าร่วมกิจกรรมนี้ในฐานะผู้จัดกิจกรรมไปแล้ว",
+            "textEN": "You already join this project as staff",
         },
     ]
 
     // check if can regis?
     const isNotAllowedRegis = checkListForJoining.includes(false)
-    const desc = dictDesc.filter((d, ind) => !checkListForJoining[ind])
-    console.log('checkListForJoining', checkListForJoining);
+    const error = dictDesc.filter((d, ind) => !checkListForJoining[ind])
 
     if (!forced && isNotAllowedRegis) {
         throw {
             code: 'JOIN-PROJECT-AS-PCP-FAILED-NOT-MEET-CRITERIA',
-            desc: { userData: { recruitID, studentID }, desc }
+            desc: { userData: { recruitID, studentID }, error }
         }
     } else {
 
         // generate join id
-        const searchAll = await prisma.projectparticipantrecruit.count({
+        const searchAll = await prisma.projectparticipants.count({
             where: {
-                participantRecruitID: recruitID
+                recruitID: recruitID
             }
         })
 
@@ -206,6 +210,108 @@ const joinProjectPCP = async (recruitID, studentID, password, forced = false) =>
 
 }
 
+const joinProjectAsSTF = async (recruitID, positionID, studentID, password, forced = false) => {
+
+    const checkListForJoining = [
+        await eachRCMServices.checkIfRecruitIsOpen(recruitID),
+        await eachRCMServices.checkIfPositionIsOpen(positionID),
+        await eachRCMServices.checkIfUserYearIsAllowed(recruitID, studentID),
+        await eachRCMServices.checkIfMaxNumberPositionExceed(positionID),
+        await eachRCMServices.checkIfPasswordIsTrue(recruitID, password),
+        await eachRCMServices.checkIfUserJoinAsPCPAlready(recruitID, studentID),
+        await eachRCMServices.checkIfUserJoinAsSTFAlready(recruitID, studentID)
+    ]
+
+    const dictDesc = [
+        {
+            "textTH": "รอบสมัครนี้ยังไม่เปิดรับสมัคร",
+            "textEN": "This recruitment is not open yet",
+        },
+        {
+            "textTH": "ตำแหน่งนี้ยังไม่เปิดรับสมัคร",
+            "textEN": "This position is not open yet",
+        },
+        {
+            "textTH": "ไม่อนุญาติชั้นปีนี้ให้สมัคร",
+            "textEN": "Student yeat not met criteria",
+        },
+        {
+            "textTH": "จำนวนรับของตำแหน่งนี้เต็มแล้ว",
+            "textEN": "This position was full",
+        },
+        {
+            "textTH": "รหัสผ่านไม่ถูกต้อง",
+            "textEN": "Password not correct",
+        },
+        {
+            "textTH": "คุณเข้าร่วมกิจกรรมนี้ในฐานะผู้เข้าร่วมกิจกรรมไปแล้ว",
+            "textEN": "You already join this project as participant",
+        },
+        {
+            "textTH": "คุณเข้าร่วมกิจกรรมนี้ในฐานะผู้จัดกิจกรรมไปแล้ว",
+            "textEN": "You already join this project as staff",
+        },
+    ]
+
+    // check if can regis?
+    const isNotAllowedRegis = checkListForJoining.includes(false)
+    const error = dictDesc.filter((d, ind) => !checkListForJoining[ind])
+
+    if (!forced && isNotAllowedRegis) {
+        throw {
+            code: 'JOIN-PROJECT-AS-STF-FAILED-NOT-MEET-CRITERIA',
+            desc: { userData: { recruitID, positionID, studentID }, error }
+        }
+    } else {
+
+        // generate join id
+        const searchAll = await prisma.projectstaffs.count({
+            where: {
+                positionID: positionID
+            }
+        })
+
+        const joinIDNew = `${positionID}-${(searchAll).toString().padStart(4, '0')}`
+
+        const joinProjectAsSTF = await prisma.projectstaffs.create({
+            data: {
+                staffApplicationID: joinIDNew,
+                positionID: positionID,
+                recruitID: recruitID,
+                studentID: studentID
+            },
+            include: {
+                projectstaffrecruit: {
+                    select: {
+                        projectID: true,
+                        recruitName: true
+                    }
+                },
+                projectstaffrecruitposition: {
+                    select: {
+                        staffPositionID: true,
+                        recruitID: true,
+                        positionName: true,
+                    }
+                }
+            }
+        })
+
+        return {
+            "staffApplicationID": joinProjectAsSTF.staffApplicationID,
+            "recruitID": joinProjectAsSTF.recruitID,
+            "positionID": joinProjectAsSTF.positionID,
+            "projectID": joinProjectAsSTF.projectstaffrecruit.projectID,
+            "studentID": joinProjectAsSTF.studentID,
+            "recruitName": joinProjectAsSTF.projectstaffrecruit.recruitName,
+            "positionName": joinProjectAsSTF.projectstaffrecruitposition.positionName,
+            "createdDateTime": joinProjectAsSTF.createdDateTime,
+        }
+
+    }
+
+}
+
 
 module.exports = {
     getProjectBriefData,
@@ -215,5 +321,6 @@ module.exports = {
     getProjectFullData,
     putProjectFullData,
 
-    joinProjectPCP
+    joinProjectPCP,
+    joinProjectAsSTF
 }

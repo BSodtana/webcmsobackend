@@ -29,6 +29,48 @@ const getAllPCPInProject = async (projectID = '') => {
     return searchPCP
 }
 
+const getAllSTFInProject = async (projectID = '') => {
+
+    const searchSTF = await prisma.projectstaffs.findMany({
+        where: {
+            projectstaffrecruit: {
+                projectID: projectID
+            }
+        },
+        include: {
+            users: {
+                select: {
+                    studentID: true,
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true,
+                    nickNameTH: true,
+                    titleEN: true,
+                    firstNameEN: true,
+                    lastNameEN: true,
+                    currentYear: true,
+                }
+            },
+            projectstaffrecruitposition: {
+                select: {
+                    positionName: true,
+
+                }
+            },
+            projectstaffrecruit: {
+                select: {
+                    projectID: true,
+                    recruitName: true,
+
+                }
+            }
+        }
+    })
+
+    return searchSTF
+}
+
 module.exports = {
-    getAllPCPInProject
+    getAllPCPInProject,
+    getAllSTFInProject
 }
