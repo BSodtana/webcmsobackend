@@ -2,7 +2,7 @@ const { errorCodeToResponse } = require("../../_helpers/errorCodeToResponse")
 const { successCodeToResponse } = require("../../_helpers/successCodeToResponse")
 const projectServices = require("../projectServices")
 const allPCPLogic = require("./(allPCPLogic)/allPCPLogic")
-const eachprojectServices = require("./eachprojectServices")
+const eachprojectServices = require("./eachProjectServices")
 
 
 const getProjectBriefDataCon = async (req, res) => {
