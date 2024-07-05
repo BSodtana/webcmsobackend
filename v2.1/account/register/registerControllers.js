@@ -30,7 +30,8 @@ const genStudentVerificationCode = async (req, res) => {
         } else {
 
             // check email requirement (RegEx) cmu.ac.th
-            const condition = /^[A-Za-z0-9._%+-]+@cmu\.ac\.th$/;
+            const condition = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
+            // const condition = /^[A-Za-z0-9._%+-]+@cmu\.ac\.th$/;
             const check = condition.exec(email)
 
             if (!check) {
