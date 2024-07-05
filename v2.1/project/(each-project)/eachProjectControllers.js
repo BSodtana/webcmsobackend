@@ -227,7 +227,6 @@ const joinProjectCon = async (req, res) => {
 
         // todo: password protected recruitment
         if (!projectID || !studentID || !recruitID || (typeof (forced) !== "boolean")) {
-            console.log('dataget', projectID, studentID, recruitID, forced)
             res.status(400).json(errorCodeToResponse("NOT-ENOUGH-DATA", recruitID, studentID))
         } else {
             // todo: allowed an option to notify staff & pcp if created new announcement

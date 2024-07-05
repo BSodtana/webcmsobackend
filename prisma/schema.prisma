@@ -182,8 +182,8 @@ model projectparticipantrecruit {
   projectID            String                @db.VarChar(50)
   recruitName          String?               @default("New Recruitment") @db.VarChar(250)
   recruitDescription   String?               @db.Text
-  registerFrom         DateTime              @db.DateTime(0)
-  registerUntil        DateTime              @db.DateTime(0)
+  registerFrom         DateTime              @default(now()) @db.DateTime(0)
+  registerUntil        DateTime              @default(now()) @db.DateTime(0)
   maxNumber            Int                   @default(1)
   createdDateTime      DateTime              @default(now())
   updatedDateTime      DateTime              @default(now())
