@@ -42,9 +42,9 @@ const checkIfMaxNumberExceed = async (recruitID = '') => {
 
     // check number of already join
 
-    const searchAll = await prisma.projectparticipantrecruit.count({
+    const searchAll = await prisma.projectparticipants.count({
         where: {
-            participantRecruitID: recruitID
+            recruitID: recruitID
         }
     })
 
@@ -77,13 +77,13 @@ const checkIfUserJoinAsPCPAlready = async (recruitID = '', studentID = '') => {
     const projectAllPCP = await getAllPCPInProject(recruitData.projectID)
 
     //check if user is alredy joined
-    const isJoined = projectAllPCP.some((key, value) => {
-        if ((key === 'studentID') && (value === studentID)) {
+    const isJoined = projectAllPCP.some((key) => {
+        if (key.studentID === studentID) {
             return true
         }
     })
 
-    return isJoined
+    return !isJoined
 }
 
 module.exports = {

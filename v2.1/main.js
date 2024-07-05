@@ -9,7 +9,6 @@ const common = require('./common/commonRoutes')
 
 router.use('/account', account)
 router.use('/project', project)
-// router.use('/demo', demo)
 router.use('/common', common)
 
 router.get('/', (req, res) => {

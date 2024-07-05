@@ -13,7 +13,7 @@ const errorCodeToResponse = (errcode, desc = '', desc2 = '') => {
 
     return {
         status: "failed",
-        payload: {},
+        payload: { desc, desc2 },
         description: fullErrors[errcode] || fullErrors['INTERNAL-ERROR']
     }
 
