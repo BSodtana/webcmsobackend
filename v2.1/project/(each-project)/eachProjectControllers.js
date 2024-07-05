@@ -1,8 +1,9 @@
 const { errorCodeToResponse } = require("../../_helpers/errorCodeToResponse")
 const { successCodeToResponse } = require("../../_helpers/successCodeToResponse")
 const projectServices = require("../projectServices")
-const { getAllPCPInProject } = require("./(allPCPLogic)/allPCPLogic")
-const eachprojectServices = require("./eachProjectServices")
+const allPCPLogic = require("./(allPCPLogic)/allPCPLogic")
+const eachprojectServices = require("./eachprojectServices")
+
 
 const getProjectBriefDataCon = async (req, res) => {
     try {
@@ -203,10 +204,12 @@ const getProjectAllPCPCon = async (req, res) => {
         if (!projectID) {
             res.status(400).json(errorCodeToResponse('GET-PROJECT-PCP-LIST-NO-PROJECT-ID-PROVIDED', projectID, studentID))
         } else {
-            const resultsPCP = await getAllPCPInProject(projectID)
+            const resultsPCP = await allPCPLogic.getAllPCPInProject(projectID)
+            const resultsSTF = await allPCPLogic.getAllSTFInProject(projectID)
+
             res.status(200).json(successCodeToResponse({
                 participant: resultsPCP,
-                staff: []
+                staff: resultsSTF
             }, 'GET-PROJECT-ANNOUNCEMENT-SUCCESS', projectID))
         }
 
