@@ -16,11 +16,11 @@ router.post('/', async (req, res) => {
   if (email) {
     const studentID = prisma.userCredentials.findFirst({
       where: { email: email },
-      select: { student_id: true },
+      select: { studentID: true },
     })
     prisma.userCodeVerification.create({
       data: {
-        student_id: studentID.student_id,
+        studentID: studentID.studentID,
         code: code,
         referenceID: refCode,
       },

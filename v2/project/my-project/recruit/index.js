@@ -19,7 +19,7 @@ router.get('/:projectID', async (req, res) => {
     try {
       const tokenData = await VerifyUserJWT(token)
       const data = await prisma.projects.findFirst({
-        where: { project_id: projectID },
+        where: { projectID: projectID },
         include: {
           projectParticipantRecruit: true,
           projectStaffRecruit: true,

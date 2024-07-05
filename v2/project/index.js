@@ -5,6 +5,7 @@ const router = express.Router()
 // /v2/project/
 
 router.use('/my-project', require('./my-project'))
+router.use('/join', require('./join'))
 
 router.get('/', (req, res) => {
   const today = new Date()

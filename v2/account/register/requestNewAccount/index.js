@@ -3,6 +3,7 @@ const router = express.Router()
 const prisma = require('../../../prisma')
 const { CreateReferenceID } = require('./createReferenceString')
 const { SendEmailForCode } = require('./sendMail')
+const { v4: uuid } = require('uuid')
 
 // /v2/account/register/getFirstnameAndLastnameWithStudentID
 
@@ -13,35 +14,38 @@ router.post('/', async (req, res) => {
   const { studentID, email } = req.body
   const referenceID = CreateReferenceID(6)
   const code = CreateReferenceID(6)
+  console.log(uuid())
   try {
-    await prisma.userCodeVerification.upsert({
-      where: { student_id: studentID },
+    await prisma.usercodeverification.upsert({
+      where: { studentID: studentID },
       update: {
-        student_id: studentID,
+        studentID: studentID,
         code: code,
         referenceID: referenceID,
       },
       create: {
-        student_id: studentID,
+        studentID: studentID,
         code: code,
         referenceID: referenceID,
       },
     })
-    await prisma.userCredentials.upsert({
-      where: { student_id: studentID },
+    await prisma.usercredentials.upsert({
+      where: { studentID: studentID },
       update: {
         email: email,
-        student_id: studentID,
+        studentID: studentID,
         role: 'USER',
       },
       create: {
         email: email,
-        student_id: studentID,
+        studentID: studentID,
         role: 'USER',
+        uuid: uuid(),
       },
     })
-    // const status = await SendEmailForCode(email, code)
-    const status = 'Y'
+
+    const status = await SendEmailForCode(email, code)
+    // const status = 'Y'
     if (status === 'Y')
       res.status(200).json({ email, studentID, referenceID, status: 'success' })
     if (status === 'N')

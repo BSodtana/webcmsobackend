@@ -20,11 +20,14 @@ router.get('/', async (req, res) => {
     try {
       const tokenData = await VerifyUserJWT(token)
       const data = await prisma.projects.findMany({
-        where: { student_id: tokenData.data.student_id },
-        include: { ownerOrg: { select: { orgName: true, orgType: true } } },
+        where: { studentID: tokenData.data.studentID },
+        include: {
+          organizations: { select: { orgName: true, orgType: true } },
+        },
       })
       res.status(200).json({ data })
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         status: 'internal server error',
         detail: 'Internal Server Error - Check Server Log',

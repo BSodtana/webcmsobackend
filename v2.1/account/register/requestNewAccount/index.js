@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
   const referenceID = CreateReferenceID(6)
   const code = CreateReferenceID(6)
   try {
-    await prisma.userCodeVerification.upsert({
+    await prisma.usercodeverification.upsert({
       where: { student_id: studentID },
       update: {
         student_id: studentID,
@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
         referenceID: referenceID,
       },
     })
-    await prisma.userCredentials.upsert({
+    await prisma.usercredentials.upsert({
       where: { student_id: studentID },
       update: {
         email: email,
@@ -40,8 +40,8 @@ router.post('/', async (req, res) => {
         role: 'USER',
       },
     })
-    // const status = await SendEmailForCode(email, code)
-    const status = 'Y'
+    const status = await SendEmailForCode(email, code)
+    // const status = 'Y'
     if (status === 'Y')
       res.status(200).json({ email, studentID, referenceID, status: 'success' })
     if (status === 'N')

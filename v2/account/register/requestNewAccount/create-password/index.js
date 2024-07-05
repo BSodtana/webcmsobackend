@@ -24,23 +24,23 @@ router.post('/', async (req, res) => {
         }
         if (hash) {
           const password = hash
-          await prisma.userCredentials.update({
-            where: { student_id: studentID },
-            data: { password: password },
+          await prisma.usercredentials.update({
+            where: { studentID: studentID },
+            data: { hashPassword: password },
           })
 
           const accountInformation = await prisma.users.findFirst({
             where: {
-              student_id: { equals: studentID },
+              studentID: { equals: studentID },
             },
             select: {
-              student_id: true,
-              first_name: true,
-              last_name: true,
-              first_name_en: true,
-              last_name_en: true,
-              current_year: true,
-              userCredential: {
+              studentID: true,
+              firstNameTH: true,
+              lastNameTH: true,
+              firstNameEN: true,
+              lastNameEN: true,
+              currentYear: true,
+              usercredentials: {
                 select: { email: true, role: true, updatedDateTime: true },
               },
             },
@@ -48,8 +48,8 @@ router.post('/', async (req, res) => {
           const token = await jwt.sign(accountInformation, JS_PRIVATE_KEY, {
             expiresIn: '30d',
           })
-          await prisma.userCodeVerification.delete({
-            where: { student_id: studentID },
+          await prisma.usercodeverification.delete({
+            where: { studentID: studentID },
           })
           res.status(200).json({
             status: 'success',
