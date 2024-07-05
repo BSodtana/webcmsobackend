@@ -136,17 +136,73 @@ const joinProjectPCP = async (recruitID, studentID, password, forced = false) =>
         await eachRCMServices.checkIfUserJoinAsPCPAlready(recruitID, studentID)
     ]
 
+    const dictDesc = [
+        {
+            "textTH": "ตำแหน่งนี้ยังไม่เปิดรับสมัคร",
+            "textEN": "This recruitment is not open yet",
+        },
+        {
+            "textTH": "ไม่อนุญาติชั้นปีนี้ให้สมัคร",
+            "textEN": "Student yeat not met criteria",
+        },
+        {
+            "textTH": "จำนวนรับของตำแหน่งนี้เต็มแล้ว",
+            "textEN": "This position was full",
+        },
+        {
+            "textTH": "รหัสผ่านไม่ถูกต้อง",
+            "textEN": "Password not correct",
+        },
+        {
+            "textTH": "คุณเข้าร่วมกิจกรรมนี้ไปแล้ว",
+            "textEN": "You already join this project",
+        },
+    ]
+
     // check if can regis?
     const isNotAllowedRegis = checkListForJoining.includes(false)
+    const desc = dictDesc.filter((d, ind) => !checkListForJoining[ind])
+    console.log('checkListForJoining', checkListForJoining);
 
     if (!forced && isNotAllowedRegis) {
         throw {
-            code: 'REGISTER-PRELIM-NO-STUDENT-DATA',
-            desc: { userData: { studentID }, data }
+            code: 'JOIN-PROJECT-AS-PCP-FAILED-NOT-MEET-CRITERIA',
+            desc: { userData: { recruitID, studentID }, desc }
+        }
+    } else {
+
+        // generate join id
+        const searchAll = await prisma.projectparticipantrecruit.count({
+            where: {
+                participantRecruitID: recruitID
+            }
+        })
+
+        const joinIDNew = `${recruitID}-${(searchAll).toString().padStart(4, '0')}`
+
+        const joinProjectAsPCP = await prisma.projectparticipants.create({
+            data: {
+                participantApplicationID: joinIDNew,
+                recruitID: recruitID,
+                studentID: studentID
+            }, include: {
+                projectparticipantrecruit: {
+                    select: {
+                        recruitName: true,
+
+                    }
+                }
+            }
+        })
+
+        return {
+            "participantApplicationID": joinProjectAsPCP.participantApplicationID,
+            "recruitID": joinProjectAsPCP.recruitID,
+            "studentID": joinProjectAsPCP.studentID,
+            "createdDateTime": joinProjectAsPCP.createdDateTime,
+            "recruitName": joinProjectAsPCP.projectparticipantrecruit.recruitName
         }
     }
-
-    return true
 
 }
 
