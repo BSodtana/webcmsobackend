@@ -32,8 +32,24 @@ const getProjectIJoinedPCPController = async (req, res) => {
     }
 }
 
+const getProjectIJoinedSTFController = async (req, res) => {
+    try {
+
+        const { studentID } = await req?.userData
+
+        const results = await myProjectServices.getProjectIJoinAsSTF(studentID)
+        res.status(200).json(successCodeToResponse(results, 'GET-PROJECT-JOINED-AS-STF-SUCCESS', studentID))
+
+
+    } catch (error) {
+        console.log('getProjectIJoinedSTFController', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getProjectIJoinedSTFController'))
+    }
+}
+
 
 module.exports = {
     getProjectMyOwnController,
-    getProjectIJoinedPCPController
+    getProjectIJoinedPCPController,
+    getProjectIJoinedSTFController
 }

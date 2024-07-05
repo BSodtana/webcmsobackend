@@ -72,8 +72,8 @@ const loginByEmailPass = async (email, password) => {
 
                 } catch (error) {
                     throw {
-                        code: 'INTERNAL-ERROR',
-                        desc: { userData: { email }, error }
+                        code: error?.code || 'INTERNAL-ERROR',
+                        desc: error?.desc || { userData: { email }, error }
                     }
                 }
 
@@ -89,8 +89,8 @@ const loginByEmailPass = async (email, password) => {
 
         } catch (error) {
             throw {
-                code: 'INTERNAL-ERROR',
-                desc: { userData: { email }, error }
+                code: error?.code || 'INTERNAL-ERROR',
+                desc: error?.desc || { userData: { email }, error }
             }
         }
 
