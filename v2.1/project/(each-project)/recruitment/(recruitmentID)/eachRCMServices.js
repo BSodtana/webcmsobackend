@@ -122,6 +122,20 @@ const deleteDataSpecificRecruitID = async (recruitmentID = '', confirmed = false
 
 }
 
+
+const getDataSpecificPositionID = async (positionID = '') => {
+
+
+    const search = await prisma.projectstaffrecruitposition.findUnique({
+        where: {
+            staffPositionID: positionID
+        }
+    })
+
+    return search
+
+}
+
 const getAllUserInSpecificRecruitID = async (recruitmentID = '') => {
 
     // check if this id was PCP or STF
@@ -190,5 +204,6 @@ module.exports = {
     editDataSpecificRecruitID,
     deleteDataSpecificRecruitID,
 
-    getAllUserInSpecificRecruitID
+    getAllUserInSpecificRecruitID,
+    getDataSpecificPositionID
 }
