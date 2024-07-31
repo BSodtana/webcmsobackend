@@ -83,6 +83,20 @@ const projectError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "JOIN-PROJECT-AS-PCP-FAILED-NOT-MEET-CRITERIA": {
+        "code": "JOIN-PROJECT-AS-PCP-FAILED-NOT-MEET-CRITERIA",
+        "textTH": "ไม่สามารถเข้าร่วมกิจกรรมได้ เนื่องจากไม่ผ่านเงื่อนไขการสมัคร",
+        "textEN": "Failed to join a project because all criteria were not met",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "JOIN-PROJECT-AS-STF-FAILED-NOT-MEET-CRITERIA": {
+        "code": "JOIN-PROJECT-AS-STF-FAILED-NOT-MEET-CRITERIA",
+        "textTH": "ไม่สามารถเข้าร่วมกิจกรรมได้ เนื่องจากไม่ผ่านเงื่อนไขการสมัคร",
+        "textEN": "Failed to join a project because all criteria were not met",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = projectError

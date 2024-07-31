@@ -4,7 +4,7 @@ const { MAIL_ENDPOINT } = require('../../../../config/mail')
 async function SendEmailForCode(recepient, code) {
   try {
     const sendmail = await axios.post(
-      `${MAIL_ENDPOINT}`,
+      'https://w3.med.cmu.ac.th/api/v1/mail/',
       {
         subject: `${code} คือรหัสยืนยันของคุณ`,
         content: `<!doctype html>

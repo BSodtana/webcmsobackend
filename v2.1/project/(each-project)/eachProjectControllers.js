@@ -1,8 +1,9 @@
 const { errorCodeToResponse } = require("../../_helpers/errorCodeToResponse")
 const { successCodeToResponse } = require("../../_helpers/successCodeToResponse")
 const projectServices = require("../projectServices")
-const { getAllPCPInProject } = require("./(allPCPLogic)/allPCPLogic")
-const eachprojectServices = require("./eachprojectServices")
+const allPCPLogic = require("./(allPCPLogic)/allPCPLogic")
+const eachprojectServices = require("./eachProjectServices")
+
 
 const getProjectBriefDataCon = async (req, res) => {
     try {
@@ -203,10 +204,12 @@ const getProjectAllPCPCon = async (req, res) => {
         if (!projectID) {
             res.status(400).json(errorCodeToResponse('GET-PROJECT-PCP-LIST-NO-PROJECT-ID-PROVIDED', projectID, studentID))
         } else {
-            const resultsPCP = await getAllPCPInProject(projectID)
+            const resultsPCP = await allPCPLogic.getAllPCPInProject(projectID)
+            const resultsSTF = await allPCPLogic.getAllSTFInProject(projectID)
+
             res.status(200).json(successCodeToResponse({
                 participant: resultsPCP,
-                staff: []
+                staff: resultsSTF
             }, 'GET-PROJECT-ANNOUNCEMENT-SUCCESS', projectID))
         }
 
@@ -223,16 +226,25 @@ const joinProjectCon = async (req, res) => {
 
         const { projectID } = req.params
         const { studentID = 'NO-STD-ID' } = await req?.userData
-        const { recruitID, password = null, forced = false } = req.body
+        const { joinAs = "participant", recruitID, positionID = null, password = null, forced = false } = req.body
+
 
         // todo: password protected recruitment
+        // todo: check type of 
         if (!projectID || !studentID || !recruitID || (typeof (forced) !== "boolean")) {
-            console.log('dataget', projectID, studentID, recruitID, forced)
             res.status(400).json(errorCodeToResponse("NOT-ENOUGH-DATA", recruitID, studentID))
         } else {
             // todo: allowed an option to notify staff & pcp if created new announcement
-            const results = await eachprojectServices.joinProjectPCP(recruitID, studentID, password, forced)
-            res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-PCP-SUCCESS', recruitID, studentID))
+
+            // check if this id was PCP or STF
+            if (joinAs === 'staff') {
+                const results = await eachprojectServices.joinProjectAsSTF(recruitID, positionID, studentID, password, forced)
+                res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-STF-SUCCESS', positionID, studentID))
+            } else {
+                const results = await eachprojectServices.joinProjectPCP(recruitID, studentID, password, forced)
+                res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-PCP-SUCCESS', recruitID, studentID))
+
+            }
         }
 
     } catch (error) {

@@ -75,6 +75,20 @@ const accountSuccess = {
         "textEN": "Get personal project data of student success",
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
+    },
+    "GET-PROJECT-JOINED-AS-PCP-SUCCESS": {
+        "code": "GET-PROJECT-JOINED-AS-PCP-SUCCESS",
+        "textTH": "ขอข้อมูลโครงการที่ผู้ใช้เข้าร่วมสำเร็จ",
+        "textEN": "Get list of participating project success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "GET-PROJECT-JOINED-AS-STF-SUCCESS": {
+        "code": "GET-PROJECT-JOINED-AS-STF-SUCCESS",
+        "textTH": "ขอข้อมูลโครงการที่ผู้ใช้จัดกิจกรรมสำเร็จ",
+        "textEN": "Get list of project (as staff) success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
     }
 
 }

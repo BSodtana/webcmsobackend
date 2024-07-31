@@ -90,6 +90,13 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "JOIN-PROJECT-STF-SUCCESS": {
+        "code": "JOIN-PROJECT-STF-SUCCESS",
+        "textTH": "เข้าร่วมกิจกรรมในฐานะผู้จัดกิจกรรม สำเร็จ",
+        "textEN": "Join a project as staff successfully!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = projectSuccess

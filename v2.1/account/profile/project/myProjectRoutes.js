@@ -11,6 +11,9 @@ const myProjectControllers = require('./myProjectControllers');
 const isLoggedIn = require("../../../_middleware/isLoggedIn");
 
 router.get('/own', [isLoggedIn()], myProjectControllers.getProjectMyOwnController)
+router.get('/participant', [isLoggedIn()], myProjectControllers.getProjectIJoinedPCPController)
+router.get('/staff', [isLoggedIn()], myProjectControllers.getProjectIJoinedSTFController)
+
 // router.put('/personal', [isLoggedIn()], profileControllers.putUserFullDataController)
 
 

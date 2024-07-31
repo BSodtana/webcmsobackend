@@ -1,4 +1,4 @@
-const { getAllPCPInProject } = require("../(allPCPLogic)/allPCPLogic")
+const allPCPLogic = require("../(allPCPLogic)/allPCPLogic")
 const { getUserFullPersonalData } = require("../../../account/profile/profileServices")
 const prisma = require("../../../prisma")
 const eachRCMServices = require('../recruitment/(recruitmentID)/eachRCMServices')
@@ -8,6 +8,19 @@ const checkIfRecruitIsOpen = async (recruitID = '') => {
     const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID)
 
     if (recruitData.isAllowed) {
+        return true
+    } else {
+        return false
+    }
+
+
+}
+
+const checkIfPositionIsOpen = async (positionID = '') => {
+
+    const positionData = await eachRCMServices.getDataSpecificPositionID(positionID)
+
+    if (positionData.isAllowed) {
         return true
     } else {
         return false
@@ -33,22 +46,38 @@ const checkIfUserYearIsAllowed = async (recruitID = '', studentID = '') => {
 const checkIfMaxNumberExceed = async (recruitID = '') => {
 
     // check max number now
-    const maxNumSearch = await prisma.projectparticipantrecruit.findUnique({
-        where: {
-            participantRecruitID: recruitID
-        }
-    })
-    const maxNum = maxNumSearch.maxNumber
+    const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID)
+    const maxNum = recruitData.maxNumber
 
     // check number of already join
-
-    const searchAll = await prisma.projectparticipantrecruit.count({
+    const searchAll = await prisma.projectparticipants.count({
         where: {
-            participantRecruitID: recruitID
+            recruitID: recruitID
         }
     })
 
     if (searchAll < maxNum) {
+        return true
+    } else {
+        return false
+    }
+
+}
+
+const checkIfMaxNumberPositionExceed = async (positionID = '') => {
+
+    // check max number now
+    const recruitData = await eachRCMServices.getDataSpecificPositionID(positionID)
+    const maxNum = recruitData.maxNumber
+
+    // check number of already join of each position
+    const positionJoined = await prisma.projectstaffs.count({
+        where: {
+            positionID: positionID
+        }
+    })
+
+    if (positionJoined < maxNum) {
         return true
     } else {
         return false
@@ -74,16 +103,33 @@ const checkIfUserJoinAsPCPAlready = async (recruitID = '', studentID = '') => {
     const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID)
 
     // const getAllPCPInThisActivity
-    const projectAllPCP = await getAllPCPInProject(recruitData.projectID)
+    const projectAllPCP = await allPCPLogic.getAllPCPInProject(recruitData.projectID)
 
     //check if user is alredy joined
-    const isJoined = projectAllPCP.some((key, value) => {
-        if ((key === 'studentID') && (value === studentID)) {
+    const isJoined = projectAllPCP.some((key) => {
+        if (key.studentID === studentID) {
             return true
         }
     })
 
-    return isJoined
+    return !isJoined
+}
+
+const checkIfUserJoinAsSTFAlready = async (recruitID = '', studentID = '') => {
+
+    const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID)
+
+    // const getAllPCPInThisActivity
+    const projectAllSTF = await allPCPLogic.getAllSTFInProject(recruitData.projectID)
+
+    //check if user is alredy joined
+    const isJoined = projectAllSTF.some((key) => {
+        if (key.studentID === studentID) {
+            return true
+        }
+    })
+
+    return !isJoined
 }
 
 module.exports = {
@@ -91,5 +137,9 @@ module.exports = {
     checkIfUserYearIsAllowed,
     checkIfMaxNumberExceed,
     checkIfPasswordIsTrue,
-    checkIfUserJoinAsPCPAlready
+    checkIfUserJoinAsPCPAlready,
+
+    checkIfPositionIsOpen,
+    checkIfMaxNumberPositionExceed,
+    checkIfUserJoinAsSTFAlready
 }
