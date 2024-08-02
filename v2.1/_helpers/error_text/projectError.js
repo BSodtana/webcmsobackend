@@ -97,6 +97,13 @@ const projectError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "GET-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED": {
+        "code": "GET-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED",
+        "textTH": "ไม่มีข้อมูลพิจารณากิจกรรมเนื่องจากไม่ได้ให้รหัสกิจกรรม",
+        "textEN": "No project ID was provided",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = projectError

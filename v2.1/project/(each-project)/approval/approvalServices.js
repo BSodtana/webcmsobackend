@@ -1,27 +1,40 @@
 require('dotenv').config()
-const prisma = require('../prisma')
+const prisma = require('../../../prisma')
 
-const allConsiderationData = async () => {
-    const data = await prisma.projectconsiderationstatus.findMany({
+const getProjectConsiderationData = async (projectID) => {
+
+    const data2 = await prisma.projectconsiderationstatus.findFirst({
+        where: {
+            projectID: projectID
+        },
         select: {
             projectID: true,
+
             statusVP: true,
             statusFinance: true,
             statusSec: true,
             statusPresent: true,
-            updatedDTM: true,
+            comment: true,
+
             projectConsiderationType: true,
+            projectType: true,
+
             dateApprovalDoc: true,
             dateOtherDoc: true,
             dateActionPlan: true,
             dateReceipt: true,
             dateFinalize: true,
-            projectType: true,
-            comment: true
+
+            updatedDatetime: true,
+
         }
+
     })
+    return data2
 }
 
+
+
 module.exports = {
-    allConsiderationData
+    getProjectConsiderationData
 }
