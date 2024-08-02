@@ -267,7 +267,7 @@ model projectstaffrecruitposition {
   createdDateTime     DateTime             @default(now()) @db.DateTime(0)
   updatedDateTime     DateTime             @default(now()) @db.DateTime(0)
   isAllowed           Int                  @default(0)
-  projectstaffrecruit projectstaffrecruit? @relation(fields: [recruitID], references: [staffRecruitID], map: "projecttaffrecruit-staffposition-recruitID")
+  projectstaffrecruit projectstaffrecruit? @relation(fields: [recruitID], references: [staffRecruitID], onDelete: Cascade, map: "projecttaffrecruit-staffposition-recruitID")
   projectstaffs       projectstaffs[]
 
   @@index([recruitID], map: "recruitID")
@@ -279,9 +279,9 @@ model projectstaffs {
   positionID                  String                      @db.VarChar(50)
   studentID                   String                      @default("") @db.VarChar(10)
   createdDateTime             DateTime                    @default(now())
-  projectstaffrecruit         projectstaffrecruit         @relation(fields: [recruitID], references: [staffRecruitID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruit-staff-recruitID")
-  projectstaffrecruitposition projectstaffrecruitposition @relation(fields: [positionID], references: [staffPositionID], onDelete: NoAction, onUpdate: NoAction, map: "projectstaffrecruitposition-staff-positionID")
-  users                       users                       @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "users-staff-studentID")
+  projectstaffrecruit         projectstaffrecruit         @relation(fields: [recruitID], references: [staffRecruitID], onDelete: Cascade, map: "projectstaffrecruit-staff-recruitID")
+  projectstaffrecruitposition projectstaffrecruitposition @relation(fields: [positionID], references: [staffPositionID], onDelete: Cascade, map: "projectstaffrecruitposition-staff-positionID")
+  users                       users                       @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-staff-studentID")
 
   @@index([positionID], map: "projectstaffrecruitposition-staff-positionID")
   @@index([recruitID, positionID], map: "recruit-positionID")

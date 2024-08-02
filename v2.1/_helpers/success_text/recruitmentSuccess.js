@@ -55,6 +55,27 @@ const recruitmentSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "CREATE-NEW-STF-POSITION-SUCCESS": {
+        "code": "CREATE-NEW-STF-POSITION-SUCCESS",
+        "textTH": "สร้างตำแหน่งรับใหม่สำหรับกิจกรรมสำเร็จ",
+        "textEN": "Create new staff position success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "UPDATE-STF-POSITION-SUCCESS": {
+        "code": "UPDATE-STF-POSITION-SUCCESS",
+        "textTH": "แก้ไขตำแหน่งของกิจกรรมสำเร็จ",
+        "textEN": "Edit staff position success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "DELETE-STF-POSITION-SUCCESS": {
+        "code": "DELETE-STF-POSITION-SUCCESS",
+        "textTH": "ลบข้อมูลตำแหน่งของกิจกรรมสำเร็จ",
+        "textEN": "Delete staff position success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = recruitmentSuccess
