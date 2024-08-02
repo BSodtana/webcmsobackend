@@ -59,15 +59,15 @@ model projectconsiderationstatus {
   statusFinance            projectconsiderationstatus_statusFinance            @default(QUEUE)
   statusSec                projectconsiderationstatus_statusSec                @default(QUEUE)
   statusPresent            projectconsiderationstatus_statusPresent            @default(QUEUE)
-  updatedDTM               DateTime                                            @default(now())
+  updatedDatetime          DateTime                                            @default(now()) @db.DateTime(0)
   projectConsiderationType projectconsiderationstatus_projectConsiderationType @default(NORMAL)
-  dateApprovalDoc          DateTime?
-  dateOtherDoc             DateTime?
-  dateActionPlan           DateTime?
-  dateReceipt              DateTime?
-  dateFinalize             DateTime?
+  dateApprovalDoc          DateTime?                                           @db.Date
+  dateOtherDoc             DateTime?                                           @db.Date
+  dateActionPlan           DateTime?                                           @db.Date
+  dateReceipt              DateTime?                                           @db.Date
+  dateFinalize             DateTime?                                           @db.Date
   projectType              projectconsiderationstatus_projectType              @default(OLD)
-  comment                  String                                              @default("") @db.MediumText
+  comment                  String?                                             @default("") @db.MediumText
   projects                 projects                                            @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectconsiderationstatus_projects")
 
   @@index([projectID], map: "projectID")
@@ -116,7 +116,7 @@ model projectdata {
   indicatorSatisfactory            String?                  @default("") @db.MediumText
   indicatorAims                    String?                  @default("") @db.MediumText
   outcome                          String?                  @default("") @db.MediumText
-  updatedDateTime                  DateTime?                @default(now())
+  updatedDateTime                  DateTime?                @default(now()) @db.DateTime(0)
   projectcostexpandedlist          projectcostexpandedlist?
   categorycmsomission              categorycmsomission?     @relation(fields: [cmsoMissionType], references: [cmsoMissionType], map: "FK_projectdata_categorycmsomission")
   categorycmsoproject              categorycmsoproject?     @relation(fields: [cmsoProjectType], references: [cmsoProjectType], map: "FK_projectdata_categorycmsoproject")
@@ -185,8 +185,8 @@ model projectparticipantrecruit {
   registerFrom         DateTime              @default(now()) @db.DateTime(0)
   registerUntil        DateTime              @default(now()) @db.DateTime(0)
   maxNumber            Int                   @default(1)
-  createdDateTime      DateTime              @default(now())
-  updatedDateTime      DateTime              @default(now())
+  createdDateTime      DateTime              @default(now()) @db.DateTime(0)
+  updatedDateTime      DateTime              @default(now()) @db.DateTime(0)
   isAllowed            Int                   @default(0)
   yearAllowed          String                @default("0,1,2,3,4,5,6,99")
   password             String?               @db.VarChar(50)
@@ -218,10 +218,10 @@ model projects {
   projectNameEN              String?                     @db.Text
   projectNickNameEN          String?                     @db.VarChar(500)
   projectFullDetail          String?                     @db.MediumText
-  eventDateStart             DateTime?
-  eventDateFinish            DateTime?
-  createdDateTime            DateTime?                   @default(now())
-  updatedDateTime            DateTime?                   @default(now())
+  eventDateStart             DateTime?                   @default(dbgenerated("(curdate())")) @db.Date
+  eventDateFinish            DateTime?                   @default(dbgenerated("(curdate())")) @db.Date
+  createdDateTime            DateTime?                   @default(now()) @db.DateTime(0)
+  updatedDateTime            DateTime?                   @default(now()) @db.DateTime(0)
   isShown                    Int                         @default(0)
   academicYear               String                      @default("202401") @db.VarChar(50)
   cmsoprojectannouncement    cmsoprojectannouncement[]
