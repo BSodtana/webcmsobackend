@@ -18,9 +18,8 @@ router.use('/reset-password', resetPassword)
 router.use('/affiliate', affiliate)
 
 // for v2.1
-// const accountControllers = require('./accountControllers')
+router.use('/credential', require('./credential/credentialRoutes'))
 
-// router.post('/hello-world', accountControllers.helloWorldController)
 
 //---------- default -----------------
 
