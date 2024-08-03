@@ -34,6 +34,20 @@ const recruitmentError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "RECRUIT-STAFF-POS-CREATE-ERROR": {
+        "code": "RECRUIT-STAFF-POS-CREATE-ERROR",
+        "textTH": "ไม่สามารถสร้างหน้าที่ใหม่สำหรับกิจกรรมนี้ได้",
+        "textEN": "Cannot create new position for this recruitment",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "POSITION-UPDATE-PROTECTED-DATA": {
+        "code": "POSITION-UPDATE-PROTECTED-DATA",
+        "textTH": "ไม่สามารถแก้ไขข้อมูลบางอย่างได้ กรุณายกเลิกการแก้ไข",
+        "textEN": "Some data provided cannot be edited",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = recruitmentError

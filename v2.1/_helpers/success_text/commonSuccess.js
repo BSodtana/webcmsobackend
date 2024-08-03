@@ -27,7 +27,13 @@ const commonSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
-
+    "GET-COMMON-CATEGORY-SUCCESS": {
+        "code": "GET-COMMON-CATEGORY-SUCCESS",
+        "textTH": "ดึงรายชื่อประเภทของโครงการสำเร็จ",
+        "textEN": "Get list of project category success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = commonSuccess

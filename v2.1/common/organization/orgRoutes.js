@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// /v2.1/common/
+// /v2.1/common/organization
 
 // for v2.1
 const eachOrgRoute = require('./(orgID)/eachOrgRoutes')

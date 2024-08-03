@@ -35,10 +35,8 @@ const getStaffRecruitmentList = async (projectID) => {
 const newParticipantRecruitment = async (projectID, data) => {
 
     // get current number & new ID of recruitment
-    const search = await getParticipantRecruitmentList(projectID)
-    const countNow = search.length
-    const newPCPNo = (countNow + 1).toString().padStart(3, '0')
-    const newparticipantRecruitID = `${projectID}-PCP${newPCPNo}`
+    const newparticipantRecruitID = await generateNewPCPRecruitID(projectID)
+
 
     // create new recruitment
     const newRecruit = await prisma.projectparticipantrecruit.create({
@@ -54,13 +52,44 @@ const newParticipantRecruitment = async (projectID, data) => {
     return newRecruit
 }
 
+const generateNewPCPRecruitID = async (projectID) => {
+
+    // get current number & new ID of recruitment
+    const search = await getParticipantRecruitmentList(projectID)
+    const countNow = search.length
+    const newPCPNo = countNow + 1
+    // const newStaffRecruitID = `${projectID}-STF${newSTFNo}`
+
+    // check if this posNum already exist
+    let runNum = newPCPNo
+    let searchNum = true
+    do {
+        const searchNewRecruitID = await prisma.projectparticipantrecruit.findFirst({
+            where: {
+                participantRecruitID: `${projectID}-PCP${runNum.toString().padStart(3, '0')}`
+            }
+        })
+
+
+        if (searchNewRecruitID?.participantRecruitID) {
+            runNum += 1
+        } else {
+            searchNum = false
+        }
+
+    } while (searchNum)
+
+
+    return `${projectID}-PCP${runNum.toString().padStart(3, '0')}`
+
+}
+
+
 const newStaffRecruitment = async (projectID, data) => {
 
     // get current number & new ID of recruitment
-    const search = await getStaffRecruitmentList(projectID)
-    const countNow = search.length
-    const newSTFNo = (countNow + 1).toString().padStart(3, '0')
-    const newStaffRecruitID = `${projectID}-STF${newSTFNo}`
+    const newStaffRecruitID = await generateNewSTFRecruitID(projectID)
+
 
     // create new recruitment
     const newRecruit = await prisma.projectstaffrecruit.create({
@@ -74,6 +103,38 @@ const newStaffRecruitment = async (projectID, data) => {
     })
 
     return newRecruit
+}
+
+const generateNewSTFRecruitID = async (projectID) => {
+
+    // get current number & new ID of recruitment
+    const search = await getStaffRecruitmentList(projectID)
+    const countNow = search.length
+    const newSTFNo = countNow + 1
+    // const newStaffRecruitID = `${projectID}-STF${newSTFNo}`
+
+    // check if this posNum already exist
+    let runNum = newSTFNo
+    let searchNum = true
+    do {
+        const searchNewRecruitID = await prisma.projectstaffrecruit.findFirst({
+            where: {
+                staffRecruitID: `${projectID}-STF${runNum.toString().padStart(3, '0')}`
+            }
+        })
+
+
+        if (searchNewRecruitID?.staffRecruitID) {
+            runNum += 1
+        } else {
+            searchNum = false
+        }
+
+    } while (searchNum)
+
+
+    return `${projectID}-STF${runNum.toString().padStart(3, '0')}`
+
 }
 
 

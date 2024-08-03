@@ -10,8 +10,11 @@ const isProjectOwner = require("../../../../../../_middleware/isProjectOwner");
 const eachPOSControllers = require("./eachPOSControllers");
 
 router.get('/data', [isLoggedIn()], eachPOSControllers.getDataStaffSpecificPositionIDCon)
-// router.put('/data', [isLoggedIn(), isProjectOwner()], eachRCMControllers.editDataSpecificRecruitIDCon)
-// router.delete('/data', [isLoggedIn(), isProjectOwner()], eachRCMControllers.deleteDataSpecificRecruitIDCon)
+router.put('/data', [isLoggedIn(), isProjectOwner()], eachPOSControllers.editStaffPositionCon)
+router.delete('/data', [isLoggedIn(), isProjectOwner()], eachPOSControllers.deleteStaffPositionCon)
+
+router.post('/new', [isLoggedIn(), isProjectOwner()], eachPOSControllers.createNewStaffPositionCon)
+
 
 
 //---------- default -----------------

@@ -97,6 +97,13 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-PROJECT-CONSIDER-DATA-SUCCESS": {
+        "code": "GET-PROJECT-CONSIDER-DATA-SUCCESS",
+        "textTH": "รับข้อมูลพิจารณาโครงการสำเร็จ",
+        "textEN": "Get project consideration data success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = projectSuccess

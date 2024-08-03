@@ -5,14 +5,7 @@ const router = express.Router();
 // for v2.1
 
 router.use('/organization', require('./organization/orgRoutes'))
-
-// const eachOrgRoute = require('./(orgID)/eachOrgRoutes')
-// const commonControllers = require('./commonControllers');
-// const isLoggedIn = require("../../_middleware/isLoggedIn");
-
-// router.get('/list', [isLoggedIn()], commonControllers.listAllOrgCMSOCon)
-// router.use('/:orgID', eachOrgRoute)
-
+router.use('/category', require('./category/commonCatRoutes'))
 
 //---------- default -----------------
 
