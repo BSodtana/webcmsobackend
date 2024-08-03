@@ -42,8 +42,25 @@ const genStudentVerificationCode = async (req, res) => {
                 }
 
             } else {
-                const results = await registerServices.generateVerificationEmail(studentID.toString(), check[0])
-                res.status(200).json(successCodeToResponse(results, 'REGISTER-GENERATE-EMAIL-SUCCESS', studentID.toString()))
+
+                // check if this email or studentID was already registered
+                const arrayChecked = [
+                    await registerServices.checkIfStdIDWasRegistered(studentID),
+                    await registerServices.checkIfEmailWasRegistered(email)
+                ]
+                const notPass = arrayChecked.some(data => data === true)
+
+                if (notPass) {
+                    throw {
+                        code: 'REGISTER-ACCOUNT-ALREADY-EXIST',
+                        desc: { userData: { studentID, email }, arrayChecked }
+                    }
+
+                } else {
+                    const results = await registerServices.generateVerificationEmail(studentID.toString(), check[0])
+                    res.status(200).json(successCodeToResponse(results, 'REGISTER-GENERATE-EMAIL-SUCCESS', studentID.toString()))
+
+                }
 
             }
 

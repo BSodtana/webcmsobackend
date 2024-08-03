@@ -184,9 +184,44 @@ const createPasswordForUser = async (studentID, email, password) => {
   }
 }
 
+const checkIfStdIDWasRegistered = async (studentID = '') => {
+  const search = await prisma.usercredentials.findMany({
+    where: {
+      studentID: studentID
+    }
+  })
+
+  if (search.length !== 0) {
+    // this student id was already used for register
+    return true
+  } else {
+    return false
+  }
+
+}
+
+const checkIfEmailWasRegistered = async (email = '') => {
+  const search = await prisma.usercredentials.findMany({
+    where: {
+      email: email
+    }
+  })
+
+  if (search.length !== 0) {
+    // this email was already used for register
+    return true
+  } else {
+    return false
+  }
+
+}
+
 module.exports = {
   getPrelimDataFromStudentID,
   generateVerificationEmail,
   verifiedEmailStudent,
   createPasswordForUser,
+
+  checkIfStdIDWasRegistered,
+  checkIfEmailWasRegistered
 }

@@ -62,6 +62,13 @@ const accountErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "REGISTER-ACCOUNT-ALREADY-EXIST": {
+        "code": "REGISTER-ACCOUNT-ALREADY-EXIST",
+        "textTH": "มีบัญชีที่สมัครด้วยรหัสนักศึกษาหรืออีเมลนี้แล้ว",
+        "textEN": "Account associated with student id or email already exists",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
     "LOGIN-EMAIL-NOT-EXISTS": {
         "code": "LOGIN-EMAIL-NOT-EXISTS",
         "textTH": "ไม่มีบัญชีนี้ในระบบ",
