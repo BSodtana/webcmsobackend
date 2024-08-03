@@ -16,14 +16,15 @@ router.use('/requestNewAccount', requestNewAccount)
 
 
 // for v2.1
-const registerControllers = require('./registerControllers')
+const registerControllers = require('./registerControllers');
+const { rateLimiter } = require("../../_middleware/rateLimit");
 
 // for prelim data
-router.get('/prelim-data/:studentID', registerControllers.prelimDataController)
+router.get('/prelim-data/:studentID', [rateLimiter], registerControllers.prelimDataController)
 
 // // for verification
-router.post('/verify/sent', registerControllers.genStudentVerificationCode)
-router.post('/verify/check', registerControllers.verifiedEmailStudentCon)
+router.post('/verify/sent', [rateLimiter], registerControllers.genStudentVerificationCode)
+router.post('/verify/check', [rateLimiter], registerControllers.verifiedEmailStudentCon)
 
 
 router.get('/', (req, res) => {
