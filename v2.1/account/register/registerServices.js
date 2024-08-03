@@ -23,8 +23,6 @@ const getPrelimDataFromStudentID = async (studentID) => {
 }
 
 const generateVerificationEmail = async (studentID, email) => {
-  // check if this user exist
-  const userData = await getPrelimDataFromStudentID(studentID)
 
   // revoke all existing verification email of this user by changing verification code
   const code = sixDigitToken()
@@ -45,7 +43,6 @@ const generateVerificationEmail = async (studentID, email) => {
   })
 
   // check if this uuid was used
-
   let uuid = ''
   let uniqueUUID = false
   while (!uniqueUUID) {
@@ -55,12 +52,10 @@ const generateVerificationEmail = async (studentID, email) => {
         uuid: uuid,
       },
     })
-    console.log('checkUUID', checkUUID)
     if (!checkUUID) break
   }
 
   //code match, update email to database
-
   const userData2 = await prisma.usercredentials.upsert({
     where: {
       studentID: studentID,
@@ -91,7 +86,7 @@ const generateVerificationEmail = async (studentID, email) => {
   } else {
     throw {
       code: 'REGISTER-GENERATE-EMAIL-SENT-FAILED',
-      desc: { userData: { studentID, email }, updateCode },
+      desc: { userData: { studentID, email } },
     }
   }
 }

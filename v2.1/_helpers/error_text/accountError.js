@@ -104,7 +104,27 @@ const accountErrors = {
         "shouldContactAdmin": true,
         "shouldTryAgain": false,
     },
-
+    "FORGOT-PASSWORD-EMAIL-SENT-FAILED": {
+        "code": "FORGOT-PASSWORD-EMAIL-SENT-FAILED",
+        "textTH": "การส่งอีเมลยืนยันมีปัญหา",
+        "textEN": "There is an error on sending resetting password email",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "FORGOT-PASSWORD-NOT-ENOUGH-DATA": {
+        "code": "FORGOT-PASSWORD-NOT-ENOUGH-DATA",
+        "textTH": "กรุณากรอกอีเมล",
+        "textEN": "Email is required",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "FORGOT-PASSWORD-NO-EMAIL": {
+        "code": "FORGOT-PASSWORD-NO-EMAIL",
+        "textTH": "กรุณาเช็กอีเมลของคุณ สำหรับรหัสยืนยันการเปลี่ยนรหัสผ่าน",
+        "textEN": "Verification code was sent. Please check your email.",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = accountErrors
