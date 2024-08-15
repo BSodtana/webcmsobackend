@@ -16,6 +16,7 @@ router.get('/', async (req, res) => {
       const affiliation = await prisma.users.findFirst({
         where: { student_id: data.data.student_id },
         select: { affiliation: { include: { orgData: true } } },
+       //ไม่สามารถเพิ่ม select ได้
       })
       res.status(200).json({
         status: 200,

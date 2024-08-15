@@ -2,19 +2,15 @@ require('dotenv').config()
 const prisma = require('../prisma')
 
 const getAnnouncementList = async (project = null) => {
-
+//เพิ่ม select เกิด internal error
     const search = await prisma.cmsoprojectannouncement.findMany({
         where: { projectID: project },
         include: {
             users: {
-                select: {
-                    studentID: true,
-                    titleTH: true,
-                    firstNameTH: true,
-                    lastNameTH: true
-                }
+            
             }
-        }
+        },
+
     })
 
     return search
@@ -127,14 +123,18 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                     }
                 ]
             },
+
+//ใช้ฟังก์ชัน Select ไม่ขึ้น (เพิ่มได้แต่จะเกิด internal error)
             include: {
+                
                 projectdata: {
                     select: {
                         placeInCMU: true,
                         placeOutsideCMU: true
                     }
                 }
-            }
+            },
+
         })
 
         return search

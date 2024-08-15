@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
   try {
     const verifyCode = await prisma.userCodeVerification.findFirst({
       where: { student_id: studentID },
-      select: { code: true, referenceID: true },
+      select: { code: true, referenceID: true , student_id: true, },
     })
     if (verifyCode.code === code && verifyCode.referenceID === referenceID) {
       await prisma.userCredentials.update({

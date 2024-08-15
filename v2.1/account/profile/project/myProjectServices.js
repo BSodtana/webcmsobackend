@@ -6,6 +6,21 @@ const getProjectMyOwn = async (studentID = '') => {
     const searchProject = await prisma.projects.findMany({
         where: {
             studentID: studentID
+        },  
+        select: {
+            projectID: true,
+            studentID: true,
+            orgID: true,
+            projectNameTH:true,
+            projectNickNameTH: true,
+            projectShortDescriptionTH: true,
+            projectNameEN: true,
+            projectNickNameEN:true,
+            projectFullDetail: true,
+            eventDateStart: true,
+            eventDateFinish: true,
+            academicYear: true,
+            isShown: true,
         }
     })
 
@@ -22,11 +37,14 @@ const getProjectIJoinAsPCP = async (studentID = '') => {
                 include: {
                     projects: {
                         select: {
+                            recruitID: true,
+                            studentID: true,
                             projectNameEN: true,
                             projectNameTH: true,
                             projectNickNameEN: true,
                             projectNickNameTH: true,
                             projectID: true,
+                            recruitName: true,
                         }
                     }
                 }
@@ -60,6 +78,9 @@ const getProjectIJoinAsSTF = async (studentID = '') => {
                 include: {
                     projects: {
                         select: {
+                            studentID: true,
+                            recruitID: true,
+                            recruitName: true,
                             projectNameEN: true,
                             projectNameTH: true,
                             projectNickNameEN: true,

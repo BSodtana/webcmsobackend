@@ -20,6 +20,7 @@ const getAllPCPInProject = async (projectID = '') => {
                     firstNameEN: true,
                     lastNameEN: true,
                     currentYear: true,
+                    projectID: true,
                 }
             }
         }
@@ -49,6 +50,7 @@ const getAllSTFInProject = async (projectID = '') => {
                     firstNameEN: true,
                     lastNameEN: true,
                     currentYear: true,
+                    projectID: true,
                 }
             },
             projectstaffrecruitposition: {

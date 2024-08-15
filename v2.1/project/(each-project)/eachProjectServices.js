@@ -93,7 +93,8 @@ const getProjectFullData = async (projectID) => {
     const search = await prisma.projectdata.findUnique({
         where: {
             projectID: projectID
-        }
+        },
+
     })
 
     // if search = 0

@@ -3,7 +3,7 @@ const prisma = require('../../prisma')
 require('dotenv').config()
 
 const getUserBriefPersonalData = async (studentID) => {
-
+// prelim data
     const data = await prisma.users.findUnique({
         where: {
             studentID: studentID
@@ -18,6 +18,7 @@ const getUserBriefPersonalData = async (studentID) => {
             firstNameEN: true,
             lastNameEN: true,
             currentYear: true,
+            
         }
     })
 
@@ -33,10 +34,28 @@ const getUserBriefPersonalData = async (studentID) => {
 }
 
 const getUserFullPersonalData = async (studentID) => {
-
+// profile personal data
     const data = await prisma.users.findUnique({
         where: {
             studentID: studentID
+        },
+        select: {
+            studentID: true,
+            titleTH: true,
+            firstNameTH: true,
+            lastNameTH: true,
+            nickNameTH: true,
+            titleEN: true,
+            firstNameEN: true,
+            lastNameEN: true,
+            currentYear: true,
+            admissionCategory: true,
+            phoneNumber: true,
+            lineID: true,
+            facebook: true,
+            instagram: true,
+            medicalCondition: true,
+            allergy: true,
         }
     })
 
@@ -52,7 +71,7 @@ const getUserFullPersonalData = async (studentID) => {
 }
 
 const putUserFullPersonalData = async (studentID, data) => {
-
+//put personal data
     const updatedResults = await prisma.users.upsert({
         where: {
             studentID: studentID
@@ -61,7 +80,25 @@ const putUserFullPersonalData = async (studentID, data) => {
             ...data,
             updatedDateTime: new Date()
         },
-        create: {}
+        create: {},
+        select: {
+            studentID: true,
+            titleTH: true,
+            firstNameTH: true,
+            lastNameTH: true,
+            nickNameTH: true,
+            titleEN: true,
+            firstNameEN: true,
+            lastNameEN: true,
+            currentYear: true,
+            admissionCategory: true,
+            phoneNumber: true,
+            lineID: true,
+            facebook: true,
+            instagram: true,
+            medicalCondition: true,
+            allergy: true,
+        }
     })
 
     return updatedResults
@@ -73,7 +110,7 @@ const getUserFullCredentialData = async (studentID) => {
     const data = await prisma.usercredentials.findUnique({
         where: {
             studentID: studentID
-        }
+        },
     })
 
     if (!data) {

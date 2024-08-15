@@ -41,8 +41,6 @@ app.get('/', (req, res) => {
     ENV_PORT: process.env.PORT,
   })
 })
- 
-
 
 app.listen(port, () => {
   console.log(`Server NODE CMSO BACKEND is up and running at port ${port}`)
