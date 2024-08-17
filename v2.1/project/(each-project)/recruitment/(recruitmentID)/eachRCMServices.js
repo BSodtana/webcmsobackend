@@ -2,7 +2,7 @@ const prisma = require('../../../../prisma')
 
 require('dotenv').config()
 
-const getDataSpecificPCPRecruitID = async (recruitmentID = '') => {
+const getDataSpecificPCPRecruitID = async (recruitmentID = '', showPassword = false) => {
 
     const search = await prisma.projectparticipantrecruit.findUnique({
         where: {
@@ -19,14 +19,15 @@ const getDataSpecificPCPRecruitID = async (recruitmentID = '') => {
             createdDateTime: true,
             updatedDateTime: true,
             isAllowed: true,
-            yearAllowed: true
+            yearAllowed: true,
+            password: showPassword
         }
     })
 
     return search
 }
 
-const getDataSpecificSTFRecruitID = async (recruitmentID = '') => {
+const getDataSpecificSTFRecruitID = async (recruitmentID = '', showPassword = false) => {
 
     const search = await prisma.projectstaffrecruit.findUnique({
         where: {
@@ -43,6 +44,7 @@ const getDataSpecificSTFRecruitID = async (recruitmentID = '') => {
             updatedDateTime: true,
             isAllowed: true,
             yearAllowed: true,
+            password: showPassword,
             projectstaffrecruitposition: {
                 select: {
                     staffPositionID: true,
@@ -61,18 +63,18 @@ const getDataSpecificSTFRecruitID = async (recruitmentID = '') => {
 }
 
 
-const getDataSpecificRecruitID = async (recruitmentID = '') => {
+const getDataSpecificRecruitID = async (recruitmentID = '', showPassword = false) => {
 
     // check if this id was PCP or STF
     const isPCP = recruitmentID.includes('PCP')
 
     if (isPCP) {
         // participant recruit id
-        return getDataSpecificPCPRecruitID(recruitmentID)
+        return getDataSpecificPCPRecruitID(recruitmentID, showPassword)
 
     } else {
         // STF id
-        return getDataSpecificSTFRecruitID(recruitmentID)
+        return getDataSpecificSTFRecruitID(recruitmentID, showPassword)
 
     }
 
