@@ -9,6 +9,19 @@ const getParticipantRecruitmentList = async (projectID) => {
     const search = await prisma.projectparticipantrecruit.findMany({
         where: {
             projectID: projectID
+        },
+        select: {
+            participantRecruitID: true,
+            projectID: true,
+            recruitName: true,
+            recruitDescription: true,
+            registerFrom: true,
+            registerUntil: true,
+            maxNumber: true,
+            createdDateTime: true,
+            updatedDateTime: true,
+            isAllowed: true,
+            yearAllowed: true,
         }
     })
 
