@@ -119,7 +119,19 @@ const newStaffRecruitment = async (projectID, data) => {
         }
     })
 
-    return newRecruit
+    return {
+        staffRecruitID: newRecruit.staffRecruitID,
+        projectID: newRecruit.projectID,
+        recruitName: newRecruit.recruitName,
+        recruitDescription: newRecruit.recruitDescription,
+        registerFrom: newRecruit.registerFrom,
+        registerUntil: newRecruit.registerUntil,
+        createdDateTime: newRecruit.createdDateTime,
+        updatedDateTime: newRecruit.updatedDateTime,
+        isAllowed: newRecruit.isAllowed,
+        yearAllowed: newRecruit.yearAllowed,
+        password: newRecruit.password
+    }
 }
 
 
