@@ -67,7 +67,7 @@ const verifiedEmailStudentCon = async (req, res) => {
 
 
             // check password requirement (RegEx)
-            const condition = /^(?=.*[A-Z]{1,})(?=.*[!@#$&%^*_=()]{1,})(?=.*[0-9]{1,})(?=.*[a-z]).{8,}$/;
+            const condition = /^(?=.*[A-Z])(?=.*[^A-Za-z\d])(?=.*[0-9])(?=.*[a-z]).{8,}$/;
             const check = condition.exec(password)
 
             if (!check) {
