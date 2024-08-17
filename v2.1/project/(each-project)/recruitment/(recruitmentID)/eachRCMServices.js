@@ -2,6 +2,64 @@ const prisma = require('../../../../prisma')
 
 require('dotenv').config()
 
+const getDataSpecificPCPRecruitID = async (recruitmentID = '') => {
+
+    const search = await prisma.projectparticipantrecruit.findUnique({
+        where: {
+            participantRecruitID: recruitmentID
+        },
+        select: {
+            participantRecruitID: true,
+            projectID: true,
+            recruitName: true,
+            recruitDescription: true,
+            registerFrom: true,
+            registerUntil: true,
+            maxNumber: true,
+            createdDateTime: true,
+            updatedDateTime: true,
+            isAllowed: true,
+            yearAllowed: true
+        }
+    })
+
+    return search
+}
+
+const getDataSpecificSTFRecruitID = async (recruitmentID = '') => {
+
+    const search = await prisma.projectstaffrecruit.findUnique({
+        where: {
+            staffRecruitID: recruitmentID
+        },
+        select: {
+            staffRecruitID: true,
+            projectID: true,
+            recruitName: true,
+            recruitDescription: true,
+            registerFrom: true,
+            registerUntil: true,
+            createdDateTime: true,
+            updatedDateTime: true,
+            isAllowed: true,
+            yearAllowed: true,
+            projectstaffrecruitposition: {
+                select: {
+                    staffPositionID: true,
+                    recruitID: true,
+                    positionName: true,
+                    maxNumber: true,
+                    createdDateTime: true,
+                    updatedDateTime: true,
+                    isAllowed: true
+                }
+            }
+        }
+    })
+
+    return search
+}
+
 
 const getDataSpecificRecruitID = async (recruitmentID = '') => {
 
@@ -10,29 +68,11 @@ const getDataSpecificRecruitID = async (recruitmentID = '') => {
 
     if (isPCP) {
         // participant recruit id
-
-        const search = await prisma.projectparticipantrecruit.findUnique({
-            where: {
-                participantRecruitID: recruitmentID
-            }
-        })
-
-        return search
-
+        return getDataSpecificPCPRecruitID(recruitmentID)
 
     } else {
-
         // STF id
-        const search = await prisma.projectstaffrecruit.findUnique({
-            where: {
-                staffRecruitID: recruitmentID
-            },
-            include: {
-                projectstaffrecruitposition: true
-            }
-        })
-
-        return search
+        return getDataSpecificSTFRecruitID(recruitmentID)
 
     }
 
