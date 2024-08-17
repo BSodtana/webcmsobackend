@@ -35,8 +35,28 @@ const getStaffRecruitmentList = async (projectID) => {
         where: {
             projectID: projectID
         },
-        include: {
-            projectstaffrecruitposition: true
+        select: {
+            staffRecruitID: true,
+            projectID: true,
+            recruitName: true,
+            recruitDescription: true,
+            registerFrom: true,
+            registerUntil: true,
+            createdDateTime: true,
+            updatedDateTime: true,
+            isAllowed: true,
+            yearAllowed: true,
+            projectstaffrecruitposition: {
+                select: {
+                    staffPositionID: true,
+                    recruitID: true,
+                    positionName: true,
+                    maxNumber: true,
+                    createdDateTime: true,
+                    updatedDateTime: true,
+                    isAllowed: true
+                }
+            }
         }
     })
 
