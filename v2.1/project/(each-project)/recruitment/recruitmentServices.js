@@ -84,7 +84,20 @@ const newParticipantRecruitment = async (projectID, data) => {
         }
     })
 
-    return newRecruit
+    return {
+        participantRecruitID: newRecruit.participantRecruitID,
+        projectID: newRecruit.projectID,
+        recruitName: newRecruit.recruitName,
+        recruitDescription: newRecruit.recruitDescription,
+        registerFrom: newRecruit.registerFrom,
+        registerUntil: newRecruit.registerUntil,
+        maxNumber: newRecruit.maxNumber,
+        createdDateTime: newRecruit.createdDateTime,
+        updatedDateTime: newRecruit.updatedDateTime,
+        isAllowed: newRecruit.isAllowed,
+        yearAllowed: newRecruit.yearAllowed,
+        password: newRecruit.password
+    }
 }
 
 const newStaffRecruitment = async (projectID, data) => {
