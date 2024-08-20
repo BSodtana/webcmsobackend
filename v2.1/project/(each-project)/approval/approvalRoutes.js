@@ -7,10 +7,10 @@ const router = express.Router({ mergeParams: true });
 
 
 router.get('/data', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalData)
-// router.put('/data', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalData)
+router.put('/data', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalData)
 
-// router.get('/status', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalData)
-// router.put('/status', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalData)
+router.get('/status', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalData)
+router.put('/status', [isLoggedIn(), isProjectOwner()], approvalControllers.getProjectApprovalDataOnlyStatus)
 
 
 

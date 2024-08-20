@@ -33,8 +33,25 @@ const getProjectConsiderationData = async (projectID) => {
     return data2
 }
 
+const getProjectConsiderationDataOnlyStatus = async (projectID) => {
 
+    const data2 = await prisma.projectconsiderationstatus.findFirst({
+        where: {
+            projectID: projectID
+        },
+        select: {
+            projectID: true,
+            statusVP: true,
+            statusFinance: true,
+            statusSec: true,
+            statusPresent: true,
+            comment: true,
+        }
+
+    })
+    return data2
+}
 
 module.exports = {
-    getProjectConsiderationData
+    getProjectConsiderationData, getProjectConsiderationDataOnlyStatus
 }

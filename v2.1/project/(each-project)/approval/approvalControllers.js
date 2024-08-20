@@ -20,6 +20,23 @@ const getProjectApprovalData = async (req, res) => {
     }
 }
 
+const getProjectApprovalDataOnlyStatus = async (req, res) => {
+    try {
+
+        const { projectID } = req.params
+
+        if (!projectID) {
+            res.status(400).json(errorCodeToResponse('GET-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED'))
+        } else {
+            const results = await approvalServices.getProjectConsiderationDataOnlyStatus(projectID)
+            res.status(200).json(successCodeToResponse(results, 'GET-PROJECT-CONSIDER-DATA-SUCCESS', projectID))
+        }
+
+    } catch (error) {
+        console.log('getProjectApprovalData', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc))
+    }
+}
 module.exports = {
-    getProjectApprovalData
+    getProjectApprovalData, getProjectApprovalDataOnlyStatus
 }
