@@ -48,6 +48,13 @@ const recruitmentSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "GET-RECRUITMENT-STF-POS-LIST-SUCCESS": {
+        "code": "GET-RECRUITMENT-STF-POS-LIST-SUCCESS",
+        "textTH": "ดึงข้อมูลผู้จัดกิจกรรมจากเลขที่ตำแหน่งสำเร็จ",
+        "textEN": "Get recruitment information success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "DELETE-RECRUITMENT-DATA-SUCCESS": {
         "code": "DELETE-RECRUITMENT-DATA-SUCCESS",
         "textTH": "ลบข้อมูลประกาศรับสมัครสำเร็จ",

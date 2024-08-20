@@ -143,6 +143,36 @@ const getDataStaffSpecificPositionID = async (positionID = '') => {
     return search
 }
 
+const getStaffListSpecificPositionID = async (positionID = '') => {
+    const search = await prisma.projectstaffs.findMany({
+        where: {
+            positionID: positionID
+        },
+        select: {
+            staffApplicationID: true,
+            recruitID: true,
+            positionID: true,
+            studentID: true,
+            users: {
+                select: {
+                    studentID: true,
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true,
+                    nickNameTH: true,
+                    titleEN: true,
+                    firstNameEN: true,
+                    lastNameEN: true,
+                    currentYear: true
+                }
+            }
+
+        }
+    })
+
+    return search
+}
+
 const createNewStaffPosition = async (recruitID, positionName = 'ชื่อหน้าที่ใหม่', maxNumber = 1, isAllowed = 0) => {
 
 
@@ -233,8 +263,9 @@ const editStaffPositionData = async (positionID, data) => {
         "staffPositionID": edited.staffPositionID,
         "positionName": edited.positionName,
         "maxNumber": edited.maxNumber,
+        "isAllowed": edited.isAllowed,
         "updatedDateTime": edited.updatedDateTime,
-        "isAllowed": edited.isAllowed
+
     }
 
 }
@@ -268,5 +299,7 @@ module.exports = {
     getDataStaffSpecificPositionID,
     createNewStaffPosition,
     editStaffPositionData,
-    deleteStaffPositionData
+    deleteStaffPositionData,
+
+    getStaffListSpecificPositionID
 }

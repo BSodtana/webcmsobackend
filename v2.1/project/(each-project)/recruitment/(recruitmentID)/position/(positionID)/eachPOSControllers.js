@@ -21,10 +21,29 @@ const getDataStaffSpecificPositionIDCon = async (req, res) => {
     }
 }
 
+const getStaffListSpecificPositionIDCon = async (req, res) => {
+    try {
+
+        const { recruitmentID, positionID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+
+        // todo: check recruitmentID match positionID
+
+        const results = await eachPOSServices.getStaffListSpecificPositionID(positionID)
+        res.status(200).json(successCodeToResponse(results, 'GET-RECRUITMENT-STF-POS-LIST-SUCCESS', recruitmentID, studentID))
+
+
+
+    } catch (error) {
+        console.log('getStaffListSpecificPositionIDCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getStaffListSpecificPositionIDCon'))
+    }
+}
+
 const createNewStaffPositionCon = async (req, res) => {
     try {
 
-        const { projectID, recruitmentID, positionID } = req.params
+        const { recruitmentID } = req.params
         const { studentID = 'NO-STD-ID' } = await req?.userData
         const data = req.body
 
@@ -96,5 +115,7 @@ module.exports = {
     getDataStaffSpecificPositionIDCon,
     createNewStaffPositionCon,
     editStaffPositionCon,
-    deleteStaffPositionCon
+    deleteStaffPositionCon,
+
+    getStaffListSpecificPositionIDCon
 }
