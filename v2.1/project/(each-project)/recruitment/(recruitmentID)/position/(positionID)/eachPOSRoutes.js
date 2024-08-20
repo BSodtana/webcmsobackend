@@ -13,8 +13,6 @@ router.get('/data', [isLoggedIn()], eachPOSControllers.getDataStaffSpecificPosit
 router.put('/data', [isLoggedIn(), isProjectOwner()], eachPOSControllers.editStaffPositionCon)
 router.delete('/data', [isLoggedIn(), isProjectOwner()], eachPOSControllers.deleteStaffPositionCon)
 
-router.post('/new', [isLoggedIn(), isProjectOwner()], eachPOSControllers.createNewStaffPositionCon)
-
 
 
 //---------- default -----------------
