@@ -104,6 +104,13 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EDIT-PROJECT-CONSIDER-DATA-SUCCESS": {
+        "code": "EDIT-PROJECT-CONSIDER-DATA-SUCCESS",
+        "textTH": "แก้ไขข้อมูลพิจารณาโครงการสำเร็จ",
+        "textEN": "Edit project consideration data success!",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = projectSuccess

@@ -104,6 +104,13 @@ const projectError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "EDIT-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED": {
+        "code": "EDIT-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED",
+        "textTH": "ไม่สามารถแก้ไขข้อมูลพิจารณากิจกรรมเนื่องจากไม่ได้ให้รหัสกิจกรรม",
+        "textEN": "No project ID was provided",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = projectError
