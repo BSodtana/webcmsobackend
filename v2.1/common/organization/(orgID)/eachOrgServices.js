@@ -75,6 +75,14 @@ const getSpecificOrgDetails = async (orgID) => {
     const data = await prisma.organizations.findUnique({
         where: {
             orgID: orgID
+        },
+        select: {
+            orgID: true,
+            orgName: true,
+            orgDesc: true,
+            orgImageID: true,
+            orgType: true,
+            parentOrg: true
         }
     })
 
@@ -86,6 +94,14 @@ const getSubOrgList = async (orgID) => {
     const data = await prisma.organizations.findMany({
         where: {
             parentOrg: orgID
+        },
+        select: {
+            orgID: true,
+            orgName: true,
+            orgDesc: true,
+            orgImageID: true,
+            orgType: true,
+            parentOrg: true
         }
     })
 
