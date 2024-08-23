@@ -122,11 +122,24 @@ const deleteDataSpecificRecruitID = async (recruitmentID = '', confirmed = false
 }
 
 const getDataStaffSpecificPositionID = async (positionID = '') => {
-    const search = await prisma.projectstaffrecruitposition.findUnique({
+    const search = await prisma.projectstaffrecruitposition.findUniqueOrThrow({
         where: {
             staffPositionID: positionID
+        },
+        select: {
+            staffPositionID: true,
+            recruitID: true,
+            positionName: true,
+            maxNumber: true,
+            isAllowed: true,
+
+            createdDateTime: true,
+            updatedDateTime: true,
+
         }
     })
+
+
 
     return search
 }

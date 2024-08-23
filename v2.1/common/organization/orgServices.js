@@ -6,6 +6,7 @@ const listAllOrgCMSO = async () => {
         select: {
             orgID: true,
             orgName: true,
+            orgDesc: true,
             orgImageID: true,
             orgType: true,
             parentOrg: true
