@@ -88,7 +88,7 @@ const checkIfMaxNumberPositionExceed = async (positionID = '') => {
 const checkIfPasswordIsTrue = async (recruitID = '', password = null) => {
 
     // get recruit data
-    const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID)
+    const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID, true)
 
     if (password === recruitData.password) {
         return true

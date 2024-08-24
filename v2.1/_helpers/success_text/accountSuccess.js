@@ -89,7 +89,21 @@ const accountSuccess = {
         "textEN": "Get list of project (as staff) success",
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
-    }
+    },
+    "FORGOT-PASSWORD-GENERATE-EMAIL-SUCCESS": {
+        "code": "FORGOT-PASSWORD-GENERATE-EMAIL-SUCCESS",
+        "textTH": "กรุณาเช็กอีเมลของคุณ สำหรับรหัสยืนยันการเปลี่ยนรหัสผ่าน",
+        "textEN": "Verification code was sent. Please check your email.",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FORGOT-PASSWORD-RESET-SUCCESS": {
+        "code": "FORGOT-PASSWORD-RESET-SUCCESS",
+        "textTH": "สร้างรหัสผ่านเรียบร้อย คุณสามารถเข้าสู่ระบบได้ทันที",
+        "textEN": "Reset password successfully! You can now login using new password",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 

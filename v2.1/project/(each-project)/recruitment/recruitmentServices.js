@@ -9,6 +9,19 @@ const getParticipantRecruitmentList = async (projectID) => {
     const search = await prisma.projectparticipantrecruit.findMany({
         where: {
             projectID: projectID
+        },
+        select: {
+            participantRecruitID: true,
+            projectID: true,
+            recruitName: true,
+            recruitDescription: true,
+            registerFrom: true,
+            registerUntil: true,
+            maxNumber: true,
+            createdDateTime: true,
+            updatedDateTime: true,
+            isAllowed: true,
+            yearAllowed: true,
         }
     })
 
@@ -22,8 +35,28 @@ const getStaffRecruitmentList = async (projectID) => {
         where: {
             projectID: projectID
         },
-        include: {
-            projectstaffrecruitposition: true
+        select: {
+            staffRecruitID: true,
+            projectID: true,
+            recruitName: true,
+            recruitDescription: true,
+            registerFrom: true,
+            registerUntil: true,
+            createdDateTime: true,
+            updatedDateTime: true,
+            isAllowed: true,
+            yearAllowed: true,
+            projectstaffrecruitposition: {
+                select: {
+                    staffPositionID: true,
+                    recruitID: true,
+                    positionName: true,
+                    maxNumber: true,
+                    createdDateTime: true,
+                    updatedDateTime: true,
+                    isAllowed: true
+                }
+            }
         }
     })
 
@@ -49,7 +82,20 @@ const newParticipantRecruitment = async (projectID, data) => {
         }
     })
 
-    return newRecruit
+    return {
+        participantRecruitID: newRecruit.participantRecruitID,
+        projectID: newRecruit.projectID,
+        recruitName: newRecruit.recruitName,
+        recruitDescription: newRecruit.recruitDescription,
+        registerFrom: newRecruit.registerFrom,
+        registerUntil: newRecruit.registerUntil,
+        maxNumber: newRecruit.maxNumber,
+        createdDateTime: newRecruit.createdDateTime,
+        updatedDateTime: newRecruit.updatedDateTime,
+        isAllowed: newRecruit.isAllowed,
+        yearAllowed: newRecruit.yearAllowed,
+        password: newRecruit.password
+    }
 }
 
 const generateNewPCPRecruitID = async (projectID) => {
@@ -102,7 +148,19 @@ const newStaffRecruitment = async (projectID, data) => {
         }
     })
 
-    return newRecruit
+    return {
+        staffRecruitID: newRecruit.staffRecruitID,
+        projectID: newRecruit.projectID,
+        recruitName: newRecruit.recruitName,
+        recruitDescription: newRecruit.recruitDescription,
+        registerFrom: newRecruit.registerFrom,
+        registerUntil: newRecruit.registerUntil,
+        createdDateTime: newRecruit.createdDateTime,
+        updatedDateTime: newRecruit.updatedDateTime,
+        isAllowed: newRecruit.isAllowed,
+        yearAllowed: newRecruit.yearAllowed,
+        password: newRecruit.password
+    }
 }
 
 const generateNewSTFRecruitID = async (projectID) => {

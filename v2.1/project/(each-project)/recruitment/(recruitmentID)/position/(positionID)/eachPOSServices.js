@@ -121,9 +121,52 @@ const prisma = require('../../../../../../prisma')
 // }
 
 const getDataStaffSpecificPositionID = async (positionID = '') => {
-    const search = await prisma.projectstaffrecruitposition.findUnique({
+    const search = await prisma.projectstaffrecruitposition.findUniqueOrThrow({
         where: {
             staffPositionID: positionID
+        },
+        select: {
+            staffPositionID: true,
+            recruitID: true,
+            positionName: true,
+            maxNumber: true,
+            isAllowed: true,
+
+            createdDateTime: true,
+            updatedDateTime: true,
+
+        }
+    })
+
+
+
+    return search
+}
+
+const getStaffListSpecificPositionID = async (positionID = '') => {
+    const search = await prisma.projectstaffs.findMany({
+        where: {
+            positionID: positionID
+        },
+        select: {
+            staffApplicationID: true,
+            recruitID: true,
+            positionID: true,
+            studentID: true,
+            users: {
+                select: {
+                    studentID: true,
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true,
+                    nickNameTH: true,
+                    titleEN: true,
+                    firstNameEN: true,
+                    lastNameEN: true,
+                    currentYear: true
+                }
+            }
+
         }
     })
 
@@ -220,8 +263,9 @@ const editStaffPositionData = async (positionID, data) => {
         "staffPositionID": edited.staffPositionID,
         "positionName": edited.positionName,
         "maxNumber": edited.maxNumber,
+        "isAllowed": edited.isAllowed,
         "updatedDateTime": edited.updatedDateTime,
-        "isAllowed": edited.isAllowed
+
     }
 
 }
@@ -255,5 +299,7 @@ module.exports = {
     getDataStaffSpecificPositionID,
     createNewStaffPosition,
     editStaffPositionData,
-    deleteStaffPositionData
+    deleteStaffPositionData,
+
+    getStaffListSpecificPositionID
 }

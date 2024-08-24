@@ -23,8 +23,6 @@ const getPrelimDataFromStudentID = async (studentID) => {
 }
 
 const generateVerificationEmail = async (studentID, email) => {
-  // check if this user exist
-  const userData = await getPrelimDataFromStudentID(studentID)
 
   // revoke all existing verification email of this user by changing verification code
   const code = sixDigitToken()
@@ -45,7 +43,6 @@ const generateVerificationEmail = async (studentID, email) => {
   })
 
   // check if this uuid was used
-
   let uuid = ''
   let uniqueUUID = false
   while (!uniqueUUID) {
@@ -55,12 +52,10 @@ const generateVerificationEmail = async (studentID, email) => {
         uuid: uuid,
       },
     })
-    console.log('checkUUID', checkUUID)
     if (!checkUUID) break
   }
 
   //code match, update email to database
-
   const userData2 = await prisma.usercredentials.upsert({
     where: {
       studentID: studentID,
@@ -91,7 +86,7 @@ const generateVerificationEmail = async (studentID, email) => {
   } else {
     throw {
       code: 'REGISTER-GENERATE-EMAIL-SENT-FAILED',
-      desc: { userData: { studentID, email }, updateCode },
+      desc: { userData: { studentID, email } },
     }
   }
 }
@@ -184,9 +179,44 @@ const createPasswordForUser = async (studentID, email, password) => {
   }
 }
 
+const checkIfStdIDWasRegistered = async (studentID = '') => {
+  const search = await prisma.usercredentials.findMany({
+    where: {
+      studentID: studentID
+    }
+  })
+
+  if (search.length !== 0) {
+    // this student id was already used for register
+    return true
+  } else {
+    return false
+  }
+
+}
+
+const checkIfEmailWasRegistered = async (email = '') => {
+  const search = await prisma.usercredentials.findMany({
+    where: {
+      email: email
+    }
+  })
+
+  if (search.length !== 0) {
+    // this email was already used for register
+    return true
+  } else {
+    return false
+  }
+
+}
+
 module.exports = {
   getPrelimDataFromStudentID,
   generateVerificationEmail,
   verifiedEmailStudent,
   createPasswordForUser,
+
+  checkIfStdIDWasRegistered,
+  checkIfEmailWasRegistered
 }

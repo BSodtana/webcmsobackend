@@ -90,6 +90,13 @@ const commonErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    'RATE-LIMITED': {
+        "code": "RATE-LIMITED",
+        "textTH": "กรุณารอสักครู่ก่อนทำรายการใหม่อีกครั้ง",
+        "textEN": "Rate limited. Please wait before try again",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "INTERNAL-ERROR": {
         "code": "INTERNAL-ERROR",
         "textTH": "ระบบทำงานผิดพลาด",
