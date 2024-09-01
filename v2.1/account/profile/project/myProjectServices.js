@@ -6,16 +6,16 @@ const getProjectMyOwn = async (studentID = '') => {
     const searchProject = await prisma.projects.findMany({
         where: {
             studentID: studentID
-        },  
+        },
         select: {
             projectID: true,
             studentID: true,
             orgID: true,
-            projectNameTH:true,
+            projectNameTH: true,
             projectNickNameTH: true,
             projectShortDescriptionTH: true,
             projectNameEN: true,
-            projectNickNameEN:true,
+            projectNickNameEN: true,
             projectFullDetail: true,
             eventDateStart: true,
             eventDateFinish: true,
@@ -32,38 +32,44 @@ const getProjectIJoinAsPCP = async (studentID = '') => {
         where: {
             studentID: studentID
         },
-        include: {
+        select: {
+            participantApplicationID: true,
+            recruitID: true,
+            studentID: true,
+            createdDateTime: true,
+
             projectparticipantrecruit: {
-                include: {
+                select: {
+                    projectID: true,
+                    recruitName: true,
                     projects: {
                         select: {
-                            recruitID: true,
-                            studentID: true,
-                            projectNameEN: true,
                             projectNameTH: true,
-                            projectNickNameEN: true,
+                            projectNameEN: true,
                             projectNickNameTH: true,
-                            projectID: true,
-                            recruitName: true,
+                            projectNickNameEN: true
                         }
                     }
                 }
             }
+
+
         }
     })
 
+
     return searchProject.map((each) => {
         return {
-            "participantApplicationID": each.participantApplicationID,
-            "recruitID": each.recruitID,
-            "studentID": each.studentID,
-            "createdDateTime": each.createdDateTime,
-            "projectID": each.projectparticipantrecruit.projectID,
-            "recruitName": each.projectparticipantrecruit.recruitName,
-            "projectNameEN": each.projectparticipantrecruit.projects.projectNameEN,
-            "projectNameTH": each.projectparticipantrecruit.projects.projectNameTH,
-            "projectNickNameEN": each.projectparticipantrecruit.projects.projectNickNameEN,
-            "projectNickNameTH": each.projectparticipantrecruit.projects.projectNickNameTH,
+            participantApplicationID: each.participantApplicationID,
+            recruitID: each.recruitID,
+            studentID: each.studentID,
+            createdDateTime: each.createdDateTime,
+            projectID: each.projectparticipantrecruit.projectID,
+            recruitName: each.projectparticipantrecruit.recruitName,
+            projectNameTH: each.projectparticipantrecruit.projects.projectNameTH,
+            projectNameEN: each.projectparticipantrecruit.projects.projectNameEN,
+            projectNickNameTH: each.projectparticipantrecruit.projects.projectNickNameTH,
+            projectNickNameEN: each.projectparticipantrecruit.projects.projectNickNameEN
         }
     })
 }
@@ -73,47 +79,59 @@ const getProjectIJoinAsSTF = async (studentID = '') => {
         where: {
             studentID: studentID
         },
-        include: {
+
+        select: {
+            staffApplicationID: true,
+            recruitID: true,
+            studentID: true,
+            createdDateTime: true,
+
+            projectstaffrecruitposition: {
+                select: {
+                    positionName: true,
+                    staffPositionID: true
+                }
+            },
+
+
             projectstaffrecruit: {
-                include: {
+                select: {
+                    recruitName: true,
+                    projectID: true,
                     projects: {
                         select: {
-                            studentID: true,
-                            recruitID: true,
-                            recruitName: true,
-                            projectNameEN: true,
                             projectNameTH: true,
-                            projectNickNameEN: true,
+                            projectNameEN: true,
                             projectNickNameTH: true,
-                            projectID: true,
+                            projectNickNameEN: true,
+
                         }
                     }
                 }
             },
-            projectstaffrecruitposition: {
-                select: {
-                    staffPositionID: true,
-                    positionName: true
-                }
-            }
+
+
         }
+
     })
 
     return searchProject.map((each) => {
         return {
-            "staffApplicationID": each.staffApplicationID,
-            "recruitID": each.recruitID,
-            "studentID": each.studentID,
-            "recruitName": each.projectstaffrecruit.recruitName,
-            "staffPositionID": each.projectstaffrecruitposition.staffPositionID,
-            "positionName": each.projectstaffrecruitposition.positionName,
+            staffApplicationID: each.staffApplicationID,
+            recruitID: each.recruitID,
+            studentID: each.studentID,
 
-            "projectID": each.projectstaffrecruit.projectID,
-            "projectNameEN": each.projectstaffrecruit.projects.projectNameEN,
-            "projectNameTH": each.projectstaffrecruit.projects.projectNameTH,
-            "projectNickNameEN": each.projectstaffrecruit.projects.projectNickNameEN,
-            "projectNickNameTH": each.projectstaffrecruit.projects.projectNickNameTH,
-            "createdDateTime": each.createdDateTime,
+            recruitName: each.projectstaffrecruit.recruitName,
+            staffPositionID: each.projectstaffrecruitposition.staffPositionID,
+            positionName: each.projectstaffrecruitposition.positionName,
+
+            projectID: each.projectstaffrecruit.projectID,
+            projectNameEN: each.projectstaffrecruit.projects.projectNameEN,
+            projectNameTH: each.projectstaffrecruit.projects.projectNameTH,
+            projectNickNameTH: each.projectstaffrecruit.projects.projectNickNameTH,
+            projectNickNameEN: each.projectstaffrecruit.projects.projectNickNameEN,
+
+            createdDateTime: each.createdDateTime
 
         }
     })
