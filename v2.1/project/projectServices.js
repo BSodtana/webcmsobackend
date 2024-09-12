@@ -11,11 +11,32 @@ const getAnnouncementList = async (project = null) => {
             announcementTitle: true,
             announcementBody: true,
             announcementCTALink: true,
-            updatedDateTime: true
+            updatedDateTime: true,
+            users: {
+                select: {
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true
+                }
+            }
         }
     })
 
-    return search
+    return search.map((each) => {
+        return {
+            announcementID: each.announcementID,
+            studentID: each.studentID,
+            projectID: each.projectID,
+            announcementTitle: each.announcementTitle,
+            announcementBody: each.announcementBody,
+            announcementCTALink: each.announcementCTALink,
+            updatedDateTime: each.updatedDateTime,
+
+            titleTH: each.users?.titleTH || null,
+            firstNameTH: each.users?.firstNameTH || null,
+            lastNameTH: each.users?.lastNameTH || null,
+        }
+    })
 
 }
 
