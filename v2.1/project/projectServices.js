@@ -2,15 +2,17 @@ require('dotenv').config()
 const prisma = require('../prisma')
 
 const getAnnouncementList = async (project = null) => {
-//เพิ่ม select เกิด internal error
     const search = await prisma.cmsoprojectannouncement.findMany({
         where: { projectID: project },
-        include: {
-            users: {
-            
-            }
-        },
-
+        select: {
+            announcementID: true,
+            studentID: true,
+            projectID: true,
+            announcementTitle: true,
+            announcementBody: true,
+            announcementCTALink: true,
+            updatedDateTime: true
+        }
     })
 
     return search
