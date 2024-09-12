@@ -104,7 +104,7 @@ const newAnnouncement = async (studentID, isGlobal = false, projectID = null, da
 
 }
 
-const searchListProjectByNamePage = async (searchByName = '', language = 'TH', page = 1) => {
+const searchListProjectByNamePage = async (searchByName = '', language = 'TH', page = 1, ended = false) => {
 
     if (language === 'EN') {
         // if language is en -> search en
@@ -123,23 +123,69 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                             contains: searchByName
                         }
                     }
-                ]
-            },
+                ],
+                AND: ended ? {} : {
+                    eventDateFinish: {
+                        gte: new Date()
+                    }
+                }
 
-//ใช้ฟังก์ชัน Select ไม่ขึ้น (เพิ่มได้แต่จะเกิด internal error)
-            include: {
-                
+            },
+            orderBy: {
+                eventDateFinish: {
+                    sort: 'asc',
+                    nulls: 'last'
+                }
+            },
+            select: {
+                projectID: true,
+                studentID: true,
+                orgID: true,
+
+                projectNameTH: true,
+                projectNickNameTH: true,
+                projectShortDescriptionTH: true,
+
+                projectNameEN: true,
+                projectNickNameEN: true,
+
+                eventDateStart: true,
+                eventDateFinish: true,
+
+                academicYear: true,
                 projectdata: {
                     select: {
                         placeInCMU: true,
                         placeOutsideCMU: true
                     }
                 }
-            },
+            }
 
         })
 
-        return search
+        return search.map((each) => {
+            return {
+                projectID: each.projectID,
+                studentID: each.studentID,
+                orgID: each.orgID,
+
+                projectNameTH: each.projectNameTH,
+                projectNickNameTH: each.projectNickNameTH,
+                projectShortDescriptionTH: each.projectShortDescriptionTH,
+
+                projectNameEN: each.projectNameEN,
+                projectNickNameEN: each.projectNickNameEN,
+
+                eventDateStart: each.eventDateStart,
+                eventDateFinish: each.eventDateFinish,
+
+                academicYear: each.academicYear,
+
+                placeInCMU: each.projectdata?.placeInCMU || null,
+                placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
+
+            }
+        })
 
 
     } else {
@@ -160,9 +206,35 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                             contains: searchByName
                         }
                     }
-                ]
+                ],
+                AND: ended ? {} : {
+                    eventDateFinish: {
+                        gte: new Date()
+                    }
+                }
             },
-            include: {
+            orderBy: {
+                eventDateFinish: {
+                    sort: 'asc',
+                    nulls: 'last'
+                }
+            },
+            select: {
+                projectID: true,
+                studentID: true,
+                orgID: true,
+
+                projectNameTH: true,
+                projectNickNameTH: true,
+                projectShortDescriptionTH: true,
+
+                projectNameEN: true,
+                projectNickNameEN: true,
+
+                eventDateStart: true,
+                eventDateFinish: true,
+
+                academicYear: true,
                 projectdata: {
                     select: {
                         placeInCMU: true,
@@ -172,7 +244,29 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
             }
         })
 
-        return search
+        return search.map((each) => {
+            return {
+                projectID: each.projectID,
+                studentID: each.studentID,
+                orgID: each.orgID,
+
+                projectNameTH: each.projectNameTH,
+                projectNickNameTH: each.projectNickNameTH,
+                projectShortDescriptionTH: each.projectShortDescriptionTH,
+
+                projectNameEN: each.projectNameEN,
+                projectNickNameEN: each.projectNickNameEN,
+
+                eventDateStart: each.eventDateStart,
+                eventDateFinish: each.eventDateFinish,
+
+                academicYear: each.academicYear,
+
+                placeInCMU: each.projectdata?.placeInCMU || null,
+                placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
+
+            }
+        })
 
     }
 
