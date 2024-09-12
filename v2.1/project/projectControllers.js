@@ -21,10 +21,10 @@ const searchListProjectByNamePageController = async (req, res) => {
     try {
 
         // const { studentID = 'NO-STD-ID' } = await req?.userData
-        const { name = '', language = 'TH', page = 1 } = req.query
+        const { name = '', language = 'TH', page = 1, ended = false } = req.query
 
 
-        const results = await projectServices.searchListProjectByNamePage(name.toString(), language.toString(), parseInt(page) || 1)
+        const results = await projectServices.searchListProjectByNamePage(name.toString(), language.toString(), parseInt(page) || 1, !!parseInt(ended))
         res.status(200).json(successCodeToResponse(results, 'SEARCH-PROJECT-BY-NAME-PAGE-SUCCESS', `${name}-${language}-${page}`))
 
 

@@ -35,7 +35,10 @@ router.post('/', async (req, res) => {
             },
             select: {
               student_id: true,
+              titleTH: true,
+              titleEN: true,
               first_name: true,
+              nickNameTH: true,
               last_name: true,
               first_name_en: true,
               last_name_en: true,

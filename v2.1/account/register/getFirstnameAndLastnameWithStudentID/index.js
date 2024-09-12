@@ -14,7 +14,7 @@ router.get('/:studentID', async (req, res) => {
   if (count) {
     const data = await prisma.users.findFirst({
       where: { student_id: { equals: parseInt(studentID) } },
-      select: { first_name: true, last_name: true, current_year: true },
+      select: { first_name: true, last_name: true, current_year: true, student_id: true },
     })
     if (userExist)
       res.status(200).json({

@@ -97,6 +97,12 @@ const verifiedEmailStudent = async (studentID, code, ref) => {
       studentID: studentID,
       AND: [{ code: code }, { referenceID: ref }],
     },
+    select: {
+      studentID: true,
+      referenceID: true,
+      code: true,
+      
+    }
   })
 
   if (!updateCode) {
