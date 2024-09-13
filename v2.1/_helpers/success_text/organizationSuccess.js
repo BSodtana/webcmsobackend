@@ -13,7 +13,13 @@ const organizationSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
-
+    "GET-USER-LIST-IN-ORG-SUCCESS": {
+        "code": "GET-USER-LIST-IN-ORG-SUCCESS",
+        "textTH": "รับข้อมูลสมาชิกองค์กรในสโมสรนักศึกษาสำเร็จ",
+        "textEN": "Get list of members associated to an organization successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = organizationSuccess
