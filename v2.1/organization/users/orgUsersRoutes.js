@@ -8,6 +8,8 @@ const router = express.Router({ mergeParams: true });
 
 router.get('/list', [isLoggedIn(), isOrgOwner()], orgUsersControllers.getUsersInSpecifigOrgCon)
 
+router.post('/manage/new', [isLoggedIn(), isOrgOwner()], orgUsersControllers.addUserToOrgCon)
+
 
 //---------- default -----------------
 

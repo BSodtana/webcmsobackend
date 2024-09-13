@@ -30,9 +30,6 @@ module.exports = function (options = {
                     const { orgID } = req.params
                     req.userData = data?.data
 
-                    console.log('req.userData', req.userData);
-
-
 
                     // check project owner
                     const check = await prisma.useraffiliation.findFirst({

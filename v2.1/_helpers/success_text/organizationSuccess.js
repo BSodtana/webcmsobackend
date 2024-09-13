@@ -20,6 +20,13 @@ const organizationSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "ADD-USER-TO-ORG-SUCCESS": {
+        "code": "ADD-USER-TO-ORG-SUCCESS",
+        "textTH": "เพิ่มสมาชิกองค์กรในสโมสรนักศึกษาสำเร็จ",
+        "textEN": "Add new member to an organization successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = organizationSuccess

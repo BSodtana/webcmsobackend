@@ -1,4 +1,5 @@
 require('dotenv').config()
+const { newAffiliationID } = require('../../_helpers/id_generator/affiliationIDGen')
 const prisma = require('../../prisma')
 
 const getUsersInSpecifigOrg = async (orgID) => {
@@ -60,7 +61,45 @@ const getUsersInSpecifigOrg = async (orgID) => {
     })
 }
 
+const addUserToOrg = async (studentID, orgID, affiliationType = 'MEMBER') => {
+
+    // check if this user already in org
+    const searchList = await getUsersInSpecifigOrg(orgID)
+    const search = searchList.filter((member) => member.studentID == studentID)
+
+    if (search.length !== 0) {
+
+        // this user is already exists in org
+        throw {
+            code: 'ADD-USER-TO-ORG-ALREADY-JOINED-ERROR',
+            desc: { userData: { studentID, orgID } },
+        }
+
+    } else {
+
+        const newID = await newAffiliationID(orgID)
+
+        const addData = await prisma.useraffiliation.create({
+            data: {
+                affiliationID: newID,
+                affiliatedOrg: orgID,
+                studentID: studentID,
+                affiliationType: affiliationType
+            }
+        })
+
+
+        // craft response
+        const searchList = await getUsersInSpecifigOrg(orgID)
+        const search = searchList.filter((member) => member.studentID == studentID)
+        return search[0]
+
+    }
+
+}
+
 
 module.exports = {
-    getUsersInSpecifigOrg
+    getUsersInSpecifigOrg,
+    addUserToOrg
 }

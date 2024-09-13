@@ -1,3 +1,4 @@
+const { errorCodeToResponse } = require("../../_helpers/errorCodeToResponse")
 const { successCodeToResponse } = require("../../_helpers/successCodeToResponse")
 const orgUsersServices = require("./orgUsersServices")
 
@@ -18,6 +19,34 @@ const getUsersInSpecifigOrgCon = async (req, res) => {
     }
 }
 
+const addUserToOrgCon = async (req, res) => {
+    try {
+
+        const { orgID } = req.params
+        const { studentID, affiliationType = 'MEMBER' } = req.body
+        const { accountStdID } = await req?.userData?.studentID || 'NO-STD-ID'
+
+        // check affiliationType
+        const foundType = ['PRESIDENT', 'VICE_PRESIDENT', 'SECRETARY', 'MEMBER'].includes(affiliationType)
+
+        if ((!foundType)) {
+            res.status(400).json(errorCodeToResponse("ADD-USER-TO-ORG-WRONG-TYPE-ERROR", orgID, studentID, affiliationType))
+        } else if ((studentID == 0)) {
+            res.status(400).json(errorCodeToResponse("NOT-ENOUGH-DATA", orgID, studentID, affiliationType))
+        } else {
+            const results = await orgUsersServices.addUserToOrg(studentID, orgID, affiliationType)
+            res.status(200).json(successCodeToResponse(results, 'ADD-USER-TO-ORG-SUCCESS', accountStdID))
+        }
+
+
+    } catch (error) {
+        console.log('getUsersInSpecifigOrgCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getUsersInSpecifigOrgCon'))
+
+    }
+}
+
 module.exports = {
-    getUsersInSpecifigOrgCon
+    getUsersInSpecifigOrgCon,
+    addUserToOrgCon
 }
