@@ -9,12 +9,12 @@ const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors, projec
 
 
 
-const errorCodeToResponse = (errcode, desc = '', desc2 = '') => {
-    console.log('[Error]', errcode, desc, desc2);
+const errorCodeToResponse = (errcode, desc = '', desc2 = '', desc3 = '') => {
+    console.log('[Error]', errcode, desc, desc2, desc3);
 
     return {
         status: "failed",
-        payload: { desc, desc2 },
+        payload: { desc, desc2, desc3 },
         description: fullErrors[errcode] || fullErrors['INTERNAL-ERROR']
     }
 
