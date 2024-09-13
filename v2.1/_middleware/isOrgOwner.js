@@ -30,13 +30,18 @@ module.exports = function (options = {
                     const { orgID } = req.params
                     req.userData = data?.data
 
+                    console.log('req.userData', req.userData);
+
+
 
                     // check project owner
-                    const check = await prisma.organizations.findUnique({
+                    const check = await prisma.useraffiliation.findFirst({
                         where: {
-                            orgID: orgID
+                            affiliatedOrg: orgID,
+                            studentID: req.userData?.studentID
                         }
                     })
+
 
 
                     // ---------- implement role here ------
@@ -48,7 +53,7 @@ module.exports = function (options = {
                             desc: { userData: { orgID } }
                         }
                     } else {
-                        if (check.studentID === req.userData?.studentID) {
+                        if (check.affiliationType === 'PRESIDENT') {
                             next()
                         } else {
                             // not an org owner
