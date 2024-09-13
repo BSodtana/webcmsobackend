@@ -71,8 +71,7 @@ const prisma = require('../../../prisma')
 // }
 
 const getSpecificOrgDetails = async (orgID) => {
-
-    const data = await prisma.organizations.findUnique({
+    const data = await prisma.organizations.findUniqueOrThrow({
         where: {
             orgID: orgID
         },
@@ -82,7 +81,8 @@ const getSpecificOrgDetails = async (orgID) => {
             orgDesc: true,
             orgImageID: true,
             orgType: true,
-            parentOrg: true
+            parentOrg: true,
+            studentID: true
         }
     })
 
