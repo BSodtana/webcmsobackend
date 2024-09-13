@@ -7,10 +7,12 @@ const router = express.Router({ mergeParams: true });
 const eachOrgControllers = require('./eachOrgControllers');
 
 const isLoggedIn = require("../../../_middleware/isLoggedIn");
-// const isLoggedIn = require("../../_middleware/isLoggedIn");
-// const isProjectOwner = require("../../_middleware/isProjectOwner");
+const isOrgOwner = require("../../../_middleware/isOrgOwner");
+
 
 router.get('/data', [isLoggedIn()], eachOrgControllers.getSpecificOrgDetailsCon)
+router.put('/data', [isLoggedIn(), isOrgOwner()], eachOrgControllers.editOrgSpecificCon)
+
 router.get('/sub-org', [isLoggedIn()], eachOrgControllers.getSubOrgListCon)
 
 

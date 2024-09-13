@@ -89,6 +89,34 @@ const getSpecificOrgDetails = async (orgID) => {
     return data
 }
 
+
+const editOrgSpecific = async (orgID = '', orgName, orgDesc, orgImageID, orgType, parentOrg) => {
+    const edited = await prisma.organizations.update({
+        where: {
+            orgID: orgID
+        },
+        data: {
+            updatedDateTime: new Date(),
+            orgName: orgName,
+            orgDesc: orgDesc,
+            orgImageID: orgImageID,
+            orgType: orgType,
+            parentOrg: parentOrg
+        },
+        select: {
+            orgID: true,
+            orgName: true,
+            orgDesc: true,
+            orgImageID: true,
+            orgType: true,
+            parentOrg: true,
+            studentID: true
+        }
+    })
+    return edited
+}
+
+
 const getSubOrgList = async (orgID) => {
 
     const data = await prisma.organizations.findMany({
