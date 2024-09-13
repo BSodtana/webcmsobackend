@@ -45,12 +45,16 @@ model organizations {
   orgImageID          String?               @db.VarChar(50)
   orgType             organizations_orgType @default(DIVISION)
   parentOrg           String?               @db.VarChar(15)
+  studentID           String?               @db.VarChar(10)
+  updatedDateTime     DateTime?             @default(now()) @db.DateTime(0)
   organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
   other_organizations organizations[]       @relation("organizationsToorganizations")
+  users               users?                @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_organizations_users")
   projects            projects[]
   useraffiliation     useraffiliation[]
 
   @@index([parentOrg], map: "parentOrg")
+  @@index([studentID], map: "FK_organizations_users")
 }
 
 model projectconsiderationstatus {
@@ -67,7 +71,7 @@ model projectconsiderationstatus {
   dateReceipt              DateTime?                                           @db.Date
   dateFinalize             DateTime?                                           @db.Date
   projectType              projectconsiderationstatus_projectType              @default(OLD)
-  comment                  String?                                             @default("") @db.MediumText
+  comment                  String?                                             @db.LongText
   projects                 projects                                            @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectconsiderationstatus_projects")
 
   @@index([projectID], map: "projectID")
@@ -346,6 +350,7 @@ model users {
   createdDateTime         DateTime?                 @default(now()) @db.DateTime(0)
   updatedDateTime         DateTime?                 @default(now()) @db.DateTime(0)
   cmsoprojectannouncement cmsoprojectannouncement[]
+  organizations           organizations[]
   projectparticipants     projectparticipants[]
   projects                projects[]
   projectstaffs           projectstaffs[]
@@ -373,7 +378,7 @@ model cmsoprojectannouncement {
   projectID           String?   @db.VarChar(50)
   announcementTitle   String?   @default("New Announcement") @db.VarChar(250)
   announcementBody    String?   @db.MediumText
-  announcementCTALink String?   @db.Text
+  announcementCTALink String?   @db.MediumText
   updatedDateTime     DateTime  @default(now()) @db.DateTime(0)
   projects            projects? @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_cmsoprojectannouncement_projects")
   users               users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
