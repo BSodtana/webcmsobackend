@@ -45,16 +45,13 @@ model organizations {
   orgImageID          String?               @db.VarChar(50)
   orgType             organizations_orgType @default(DIVISION)
   parentOrg           String?               @db.VarChar(15)
-  studentID           String?               @db.VarChar(10)
   updatedDateTime     DateTime?             @default(now()) @db.DateTime(0)
   organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
   other_organizations organizations[]       @relation("organizationsToorganizations")
-  users               users?                @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_organizations_users")
   projects            projects[]
   useraffiliation     useraffiliation[]
 
   @@index([parentOrg], map: "parentOrg")
-  @@index([studentID], map: "FK_organizations_users")
 }
 
 model projectconsiderationstatus {
@@ -293,15 +290,14 @@ model projectstaffs {
 }
 
 model useraffiliation {
-  studentID       String                          @default("") @db.VarChar(10)
+  affiliationID   String                          @id @default("") @db.VarChar(50)
   affiliatedOrg   String                          @db.VarChar(50)
-  affiliationID   String                          @default("") @db.VarChar(50)
+  studentID       String                          @default("") @db.VarChar(10)
   affiliationType useraffiliation_affiliationType @default(MEMBER)
-  createdDateTime DateTime?                       @default(now())
+  updatedDateTime DateTime?                       @default(now()) @db.DateTime(0)
   organizations   organizations                   @relation(fields: [affiliatedOrg], references: [orgID], onDelete: Cascade, map: "organizations-useraffiliation-affiliatedOrg")
   users           users                           @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "users-userafiliation-studentID")
 
-  @@id([affiliatedOrg, affiliationID])
   @@index([affiliatedOrg], map: "affiliatedOrg")
   @@index([studentID], map: "studentID")
 }
@@ -350,7 +346,6 @@ model users {
   createdDateTime         DateTime?                 @default(now()) @db.DateTime(0)
   updatedDateTime         DateTime?                 @default(now()) @db.DateTime(0)
   cmsoprojectannouncement cmsoprojectannouncement[]
-  organizations           organizations[]
   projectparticipants     projectparticipants[]
   projects                projects[]
   projectstaffs           projectstaffs[]
