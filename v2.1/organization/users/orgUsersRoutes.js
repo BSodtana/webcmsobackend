@@ -10,6 +10,8 @@ router.get('/list', [isLoggedIn(), isOrgOwner()], orgUsersControllers.getUsersIn
 
 router.post('/manage/new', [isLoggedIn(), isOrgOwner()], orgUsersControllers.addUserToOrgCon)
 
+router.get('/manage/:affiliationID', [isLoggedIn(), isOrgOwner()], orgUsersControllers.getDataFromAffIDCon)
+router.get('/manage/:affiliationID/data', [isLoggedIn(), isOrgOwner()], orgUsersControllers.getDataFromAffIDCon)
 
 //---------- default -----------------
 

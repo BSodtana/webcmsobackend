@@ -46,7 +46,31 @@ const addUserToOrgCon = async (req, res) => {
     }
 }
 
+const getDataFromAffIDCon = async (req, res) => {
+    try {
+        const { orgID, affiliationID = '' } = req.params
+        const { accountStdID } = await req?.userData?.studentID || 'NO-STD-ID'
+
+        // check if org match affID
+        const extAff = affiliationID.toString().split('-')[0]
+
+        if (orgID !== extAff) {
+            res.status(400).json(errorCodeToResponse("ORG-ID-NOT-MATCH-ERROR", orgID, affiliationID, accountStdID))
+        } else {
+            const results = await orgUsersServices.getDataFromAffID(affiliationID)
+            res.status(200).json(successCodeToResponse(results, 'GET-DETAIL-FROM-AFFILIATION-ID-SUCCESS', affiliationID, accountStdID))
+
+        }
+
+
+    } catch (error) {
+        console.log('getDataFromAffIDCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getDataFromAffIDCon'))
+    }
+}
+
 module.exports = {
     getUsersInSpecifigOrgCon,
-    addUserToOrgCon
+    addUserToOrgCon,
+    getDataFromAffIDCon,
 }

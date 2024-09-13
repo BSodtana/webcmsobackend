@@ -30,7 +30,7 @@ const getUsersInSpecifigOrg = async (orgID) => {
                     currentYear: true,
                 }
             },
-            createdDateTime: true
+            updatedDateTime: true
         },
         orderBy: {
             studentID: 'asc'
@@ -57,7 +57,7 @@ const getUsersInSpecifigOrg = async (orgID) => {
 
             currentYear: each.users?.currentYear || null,
 
-            createdDateTime: each.createdDateTime
+            updatedDateTime: each.updatedDateTime
 
         }
     })
@@ -100,8 +100,66 @@ const addUserToOrg = async (studentID, orgID, affiliationType = 'MEMBER') => {
 
 }
 
+const getDataFromAffID = async (affiliationID) => {
 
+    const search = await prisma.useraffiliation.findFirstOrThrow({
+        where: {
+            affiliationID: affiliationID
+        },
+        select: {
+            affiliationID: true,
+            affiliationType: true,
+            organizations: {
+                select: {
+                    orgID: true,
+                    orgName: true,
+
+                }
+            },
+            users: {
+                select: {
+                    studentID: true,
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true,
+                    nickNameTH: true,
+                    titleEN: true,
+                    firstNameEN: true,
+                    lastNameEN: true,
+                    currentYear: true,
+                }
+            },
+            updatedDateTime: true
+        },
+    })
+
+
+    return {
+        affiliationID: search.affiliationID,
+        affiliationType: search.affiliationType,
+
+        orgID: search.organizations?.orgID || null,
+        orgName: search.organizations?.orgName || null,
+
+        studentID: search.users?.studentID || null,
+        titleTH: search.users?.titleTH || null,
+        firstNameTH: search.users?.firstNameTH || null,
+        lastNameTH: search.users?.lastNameTH || null,
+        nickNameTH: search.users?.nickNameTH || null,
+
+        titleEN: search.users?.titleEN || null,
+        firstNameEN: search.users?.firstNameEN || null,
+        lastNameEN: search.users?.lastNameEN || null,
+
+        currentYear: search.users?.currentYear || null,
+
+        updatedDateTime: search.updatedDateTime
+
+    }
+
+}
 module.exports = {
     getUsersInSpecifigOrg,
-    addUserToOrg
+    addUserToOrg,
+    getDataFromAffID,
 }
