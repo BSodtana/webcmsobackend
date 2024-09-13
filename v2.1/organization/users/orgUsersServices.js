@@ -9,6 +9,7 @@ const getUsersInSpecifigOrg = async (orgID) => {
         },
         select: {
             affiliationID: true,
+            affiliationType: true,
             organizations: {
                 select: {
                     orgID: true,
@@ -39,6 +40,7 @@ const getUsersInSpecifigOrg = async (orgID) => {
     return search.map((each) => {
         return {
             affiliationID: each.affiliationID,
+            affiliationType: each.affiliationType,
 
             orgID: each.organizations?.orgID || null,
             orgName: each.organizations?.orgName || null,
