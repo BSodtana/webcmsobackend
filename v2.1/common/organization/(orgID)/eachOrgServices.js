@@ -129,7 +129,8 @@ const getSubOrgList = async (orgID) => {
             orgDesc: true,
             orgImageID: true,
             orgType: true,
-            parentOrg: true
+            parentOrg: true,
+            studentID: true
         }
     })
 
@@ -139,5 +140,6 @@ const getSubOrgList = async (orgID) => {
 
 module.exports = {
     getSpecificOrgDetails,
+    editOrgSpecific,
     getSubOrgList
 }

@@ -160,5 +160,6 @@ const getSubOrgListCon = async (req, res) => {
 
 module.exports = {
     getSpecificOrgDetailsCon,
+    editOrgSpecificCon,
     getSubOrgListCon
 }
