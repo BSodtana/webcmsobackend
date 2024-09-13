@@ -34,6 +34,13 @@ const organizationSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EDIT-DETAIL-FROM-AFFILIATION-ID-SUCCESS": {
+        "code": "EDIT-DETAIL-FROM-AFFILIATION-ID-SUCCESS",
+        "textTH": "แก้ไขรายละเอียดสมาชิกองค์กรในสโมสรนักศึกษาสำเร็จ",
+        "textEN": "Edit member information from organization successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = organizationSuccess

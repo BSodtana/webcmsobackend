@@ -69,8 +69,40 @@ const getDataFromAffIDCon = async (req, res) => {
     }
 }
 
+const editDataFromAffIDCon = async (req, res) => {
+    try {
+        const { orgID, affiliationID = '' } = req.params
+        const { affiliationType } = req.body
+        const { accountStdID } = await req?.userData?.studentID || 'NO-STD-ID'
+
+        // check if org match affID
+        const extAff = affiliationID.toString().split('-')[0]
+
+        // check affiliationType
+        const foundType = ['PRESIDENT', 'VICE_PRESIDENT', 'SECRETARY', 'MEMBER'].includes(affiliationType)
+
+
+        if (orgID !== extAff) {
+            res.status(400).json(errorCodeToResponse("ORG-ID-NOT-MATCH-ERROR", orgID, affiliationID, accountStdID))
+        } else if ((!foundType) || (affiliationType == "")) {
+            res.status(400).json(errorCodeToResponse("EDIT-USER-TO-ORG-WRONG-TYPE-ERROR", orgID, affiliationID, affiliationType))
+
+        } else {
+            const results = await orgUsersServices.editDataFromAffID(affiliationID, affiliationType)
+            res.status(200).json(successCodeToResponse(results, 'EDIT-DETAIL-FROM-AFFILIATION-ID-SUCCESS', affiliationID, accountStdID))
+
+        }
+
+
+    } catch (error) {
+        console.log('getDataFromAffIDCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getDataFromAffIDCon'))
+    }
+}
+
 module.exports = {
     getUsersInSpecifigOrgCon,
     addUserToOrgCon,
     getDataFromAffIDCon,
+    editDataFromAffIDCon
 }

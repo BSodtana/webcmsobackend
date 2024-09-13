@@ -158,8 +158,73 @@ const getDataFromAffID = async (affiliationID) => {
     }
 
 }
+
+const editDataFromAffID = async (affiliationID, affiliationType = 'MEMBER') => {
+
+    const update = await prisma.useraffiliation.update({
+        where: {
+            affiliationID: affiliationID
+        },
+        data: {
+            affiliationType: affiliationType,
+            updatedDateTime: new Date()
+        },
+        select: {
+            affiliationID: true,
+            affiliationType: true,
+            organizations: {
+                select: {
+                    orgID: true,
+                    orgName: true,
+
+                }
+            },
+            users: {
+                select: {
+                    studentID: true,
+                    titleTH: true,
+                    firstNameTH: true,
+                    lastNameTH: true,
+                    nickNameTH: true,
+                    titleEN: true,
+                    firstNameEN: true,
+                    lastNameEN: true,
+                    currentYear: true,
+                }
+            },
+            updatedDateTime: true
+        },
+    })
+
+    return {
+        affiliationID: update.affiliationID,
+        affiliationType: update.affiliationType,
+
+        orgID: update.organizations?.orgID || null,
+        orgName: update.organizations?.orgName || null,
+
+        studentID: update.users?.studentID || null,
+        titleTH: update.users?.titleTH || null,
+        firstNameTH: update.users?.firstNameTH || null,
+        lastNameTH: update.users?.lastNameTH || null,
+        nickNameTH: update.users?.nickNameTH || null,
+
+        titleEN: update.users?.titleEN || null,
+        firstNameEN: update.users?.firstNameEN || null,
+        lastNameEN: update.users?.lastNameEN || null,
+
+        currentYear: update.users?.currentYear || null,
+
+        updatedDateTime: update.updatedDateTime
+
+    }
+
+}
+
+
 module.exports = {
     getUsersInSpecifigOrg,
     addUserToOrg,
     getDataFromAffID,
+    editDataFromAffID
 }

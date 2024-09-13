@@ -12,6 +12,8 @@ router.post('/manage/new', [isLoggedIn(), isOrgOwner()], orgUsersControllers.add
 
 router.get('/manage/:affiliationID', [isLoggedIn(), isOrgOwner()], orgUsersControllers.getDataFromAffIDCon)
 router.get('/manage/:affiliationID/data', [isLoggedIn(), isOrgOwner()], orgUsersControllers.getDataFromAffIDCon)
+router.put('/manage/:affiliationID/data', [isLoggedIn(), isOrgOwner()], orgUsersControllers.editDataFromAffIDCon)
+
 
 //---------- default -----------------
 

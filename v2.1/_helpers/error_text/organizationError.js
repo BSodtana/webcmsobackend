@@ -20,6 +20,20 @@ const organizationError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "EDIT-USER-TO-ORG-WRONG-TYPE-ERROR": {
+        "code": "EDIT-USER-TO-ORG-WRONG-TYPE-ERROR",
+        "textTH": "ไม่สามารถแก้ไขสมาชิกได้เนื่องจากไม่มีบทบาทนี้",
+        "textEN": "This role does\'t exist",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "ORG-ID-NOT-MATCH-ERROR": {
+        "code": "ORG-ID-NOT-MATCH-ERROR",
+        "textTH": "ไม่อนุญาตเข้าถึงข้อมูลสมาชิกคนนี้จากฝ่ายอื่น",
+        "textEN": "Access denied from other organizations",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = organizationError
