@@ -71,8 +71,7 @@ const prisma = require('../../../prisma')
 // }
 
 const getSpecificOrgDetails = async (orgID) => {
-
-    const data = await prisma.organizations.findUnique({
+    const data = await prisma.organizations.findUniqueOrThrow({
         where: {
             orgID: orgID
         },
@@ -82,12 +81,41 @@ const getSpecificOrgDetails = async (orgID) => {
             orgDesc: true,
             orgImageID: true,
             orgType: true,
-            parentOrg: true
+            parentOrg: true,
+            studentID: true
         }
     })
 
     return data
 }
+
+
+const editOrgSpecific = async (orgID = '', orgName, orgDesc, orgImageID, orgType, parentOrg) => {
+    const edited = await prisma.organizations.update({
+        where: {
+            orgID: orgID
+        },
+        data: {
+            updatedDateTime: new Date(),
+            orgName: orgName,
+            orgDesc: orgDesc,
+            orgImageID: orgImageID,
+            orgType: orgType,
+            parentOrg: parentOrg
+        },
+        select: {
+            orgID: true,
+            orgName: true,
+            orgDesc: true,
+            orgImageID: true,
+            orgType: true,
+            parentOrg: true,
+            studentID: true
+        }
+    })
+    return edited
+}
+
 
 const getSubOrgList = async (orgID) => {
 
@@ -101,15 +129,75 @@ const getSubOrgList = async (orgID) => {
             orgDesc: true,
             orgImageID: true,
             orgType: true,
-            parentOrg: true
+            parentOrg: true,
+            studentID: true
         }
     })
 
     return data
 }
 
+const getProjectOrgOwned = async (orgID) => {
+    const search = await prisma.projects.findMany({
+        where: {
+            orgID: orgID
+        },
+        select: {
+            projectID: true,
+            studentID: true,
+            orgID: true,
+
+            projectNameTH: true,
+            projectNickNameTH: true,
+            projectShortDescriptionTH: true,
+
+            projectNameEN: true,
+            projectNickNameEN: true,
+
+            eventDateStart: true,
+            eventDateFinish: true,
+
+            academicYear: true,
+            projectdata: {
+                select: {
+                    placeInCMU: true,
+                    placeOutsideCMU: true
+                }
+            }
+        }
+    })
+
+    return search.map((each) => {
+        return {
+            projectID: each.projectID,
+            studentID: each.studentID,
+            orgID: each.orgID,
+
+            projectNameTH: each.projectNameTH,
+            projectNickNameTH: each.projectNickNameTH,
+            projectShortDescriptionTH: each.projectShortDescriptionTH,
+
+            projectNameEN: each.projectNameEN,
+            projectNickNameEN: each.projectNickNameEN,
+
+            eventDateStart: each.eventDateStart,
+            eventDateFinish: each.eventDateFinish,
+
+            academicYear: each.academicYear,
+
+            placeInCMU: each.projectdata?.placeInCMU || null,
+            placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
+
+        }
+    })
+
+}
+
 
 module.exports = {
     getSpecificOrgDetails,
+    editOrgSpecific,
+    getProjectOrgOwned,
+
     getSubOrgList
 }

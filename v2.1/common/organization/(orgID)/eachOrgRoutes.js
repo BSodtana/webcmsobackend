@@ -7,12 +7,19 @@ const router = express.Router({ mergeParams: true });
 const eachOrgControllers = require('./eachOrgControllers');
 
 const isLoggedIn = require("../../../_middleware/isLoggedIn");
-// const isLoggedIn = require("../../_middleware/isLoggedIn");
-// const isProjectOwner = require("../../_middleware/isProjectOwner");
+const isOrgOwner = require("../../../_middleware/isOrgOwner");
+
+const eachOrgUsersRoutes = require('../../../organization/users/orgUsersRoutes')
+
 
 router.get('/data', [isLoggedIn()], eachOrgControllers.getSpecificOrgDetailsCon)
+router.put('/data', [isLoggedIn(), isOrgOwner()], eachOrgControllers.editOrgSpecificCon)
+
 router.get('/sub-org', [isLoggedIn()], eachOrgControllers.getSubOrgListCon)
 
+router.get('/projects', [isLoggedIn()], eachOrgControllers.getProjectOrgOwnedCon)
+
+router.use('/users', eachOrgUsersRoutes)
 
 //---------- default -----------------
 router.get('/', [isLoggedIn()], eachOrgControllers.getSpecificOrgDetailsCon)
