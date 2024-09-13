@@ -15,6 +15,9 @@ router.put('/data', [isLoggedIn(), isOrgOwner()], eachOrgControllers.editOrgSpec
 
 router.get('/sub-org', [isLoggedIn()], eachOrgControllers.getSubOrgListCon)
 
+router.get('/projects', [isLoggedIn()], eachOrgControllers.getProjectOrgOwnedCon)
+
+
 
 //---------- default -----------------
 router.get('/', [isLoggedIn()], eachOrgControllers.getSpecificOrgDetailsCon)

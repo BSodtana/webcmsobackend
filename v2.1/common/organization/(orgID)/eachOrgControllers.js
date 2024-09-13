@@ -141,6 +141,22 @@ const editOrgSpecificCon = async (req, res) => {
 }
 
 
+const getProjectOrgOwnedCon = async (req, res) => {
+    try {
+        const { orgID } = req.params
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+
+        const results = await eachOrgServices.getProjectOrgOwned(orgID)
+        res.status(200).json(successCodeToResponse(results, 'GET-PROJECT-ORG-OWN-SUCCESS', studentID))
+
+    } catch (error) {
+        console.log('getProjectOrgOwnedCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getProjectOrgOwnedCon'))
+
+    }
+}
+
+
 const getSubOrgListCon = async (req, res) => {
     try {
 
@@ -161,5 +177,7 @@ const getSubOrgListCon = async (req, res) => {
 module.exports = {
     getSpecificOrgDetailsCon,
     editOrgSpecificCon,
+    getProjectOrgOwnedCon,
+
     getSubOrgListCon
 }
