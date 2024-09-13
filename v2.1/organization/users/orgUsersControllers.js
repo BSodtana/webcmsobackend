@@ -81,18 +81,14 @@ const editDataFromAffIDCon = async (req, res) => {
         // check affiliationType
         const foundType = ['PRESIDENT', 'VICE_PRESIDENT', 'SECRETARY', 'MEMBER'].includes(affiliationType)
 
-
         if (orgID !== extAff) {
             res.status(400).json(errorCodeToResponse("ORG-ID-NOT-MATCH-ERROR", orgID, affiliationID, accountStdID))
         } else if ((!foundType) || (affiliationType == "")) {
             res.status(400).json(errorCodeToResponse("EDIT-USER-TO-ORG-WRONG-TYPE-ERROR", orgID, affiliationID, affiliationType))
-
         } else {
             const results = await orgUsersServices.editDataFromAffID(affiliationID, affiliationType)
             res.status(200).json(successCodeToResponse(results, 'EDIT-DETAIL-FROM-AFFILIATION-ID-SUCCESS', affiliationID, accountStdID))
-
         }
-
 
     } catch (error) {
         console.log('getDataFromAffIDCon', error)
@@ -100,9 +96,35 @@ const editDataFromAffIDCon = async (req, res) => {
     }
 }
 
+const deleteDataFromAffIDCon = async (req, res) => {
+    try {
+
+        const { orgID, affiliationID = '' } = req.params
+        const { confirmDeleted = false } = req.body
+        const { accountStdID } = await req?.userData?.studentID || 'NO-STD-ID'
+
+        // check if org match affID
+        const extAff = affiliationID.toString().split('-')[0]
+
+
+        if (orgID !== extAff) {
+            res.status(400).json(errorCodeToResponse("ORG-ID-NOT-MATCH-ERROR", orgID, affiliationID, accountStdID))
+        } else {
+            const results = await orgUsersServices.deleteDataFromAffID(affiliationID, confirmDeleted)
+            res.status(200).json(successCodeToResponse(results, 'DELETE-AFFILIATION-ID-SUCCESS', affiliationID, accountStdID))
+        }
+
+    } catch (error) {
+        console.log('deleteDataFromAffIDCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'deleteDataFromAffIDCon'))
+
+    }
+}
+
 module.exports = {
     getUsersInSpecifigOrgCon,
     addUserToOrgCon,
     getDataFromAffIDCon,
-    editDataFromAffIDCon
+    editDataFromAffIDCon,
+    deleteDataFromAffIDCon
 }

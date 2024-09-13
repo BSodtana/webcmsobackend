@@ -221,10 +221,31 @@ const editDataFromAffID = async (affiliationID, affiliationType = 'MEMBER') => {
 
 }
 
+const deleteDataFromAffID = async (affiliationID, confirm = false) => {
+
+
+    if (confirm) {
+        const deletedData = await prisma.useraffiliation.delete({
+            where: {
+                affiliationID: affiliationID
+            }
+        })
+        return {}
+    } else {
+        throw {
+            code: 'DECLINED-CONFIRM-DELETE',
+            desc: { userData: { affiliationID, confirm } },
+        }
+    }
+
+
+}
+
 
 module.exports = {
     getUsersInSpecifigOrg,
     addUserToOrg,
     getDataFromAffID,
-    editDataFromAffID
+    editDataFromAffID,
+    deleteDataFromAffID
 }

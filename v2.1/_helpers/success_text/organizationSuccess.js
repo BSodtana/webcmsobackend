@@ -41,6 +41,13 @@ const organizationSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "DELETE-AFFILIATION-ID-SUCCESS": {
+        "code": "DELETE-AFFILIATION-ID-SUCCESS",
+        "textTH": "ลบสมาชิกองค์กรในสโมสรนักศึกษาสำเร็จ",
+        "textEN": "Delete member from organization successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = organizationSuccess
