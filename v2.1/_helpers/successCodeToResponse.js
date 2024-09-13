@@ -8,8 +8,8 @@ const organizationSuccess = require('./success_text/organizationSuccess')
 const fullSuccess = Object.assign(commonSuccess, demoSuccess, accountSuccess, projectSuccess, recruitmentSuccess, organizationSuccess)
 
 
-const successCodeToResponse = (data = {}, successCode, desc = '', desc2 = '') => {
-    console.log('[Success]', successCode, desc, desc2);
+const successCodeToResponse = (data = {}, successCode, desc = '', desc2 = '', desc3 = '') => {
+    console.log('[Success]', successCode, desc, desc2, desc3);
 
     return {
         status: "success",
