@@ -332,35 +332,36 @@ model usercredentials {
 }
 
 model users {
-  studentID               String                    @id @default("") @db.VarChar(10)
-  titleTH                 String?                   @db.Text
-  firstNameTH             String?                   @db.Text
-  lastNameTH              String?                   @db.Text
-  nickNameTH              String?                   @db.Text
-  titleEN                 String?                   @db.Text
-  firstNameEN             String?                   @db.Text
-  lastNameEN              String?                   @db.Text
-  currentYear             Int?
-  admissionCategory       String?                   @db.VarChar(10)
-  phoneNumber             String?                   @db.VarChar(11)
-  lineID                  String?                   @db.VarChar(100)
-  facebook                String?                   @db.VarChar(100)
-  instagram               String?                   @db.VarChar(100)
-  medicalCondition        String?                   @db.Text
-  allergy                 String?                   @db.Text
-  specialNeed             String?                   @db.Text
-  createdDateTime         DateTime?                 @default(now()) @db.DateTime(0)
-  updatedDateTime         DateTime?                 @default(now()) @db.DateTime(0)
-  cmsoprojectannouncement cmsoprojectannouncement[]
-  projectcertificate      projectcertificate[]
-  projectparticipants     projectparticipants[]
-  projectparticipation    projectparticipation[]
-  projects                projects[]
-  projectstaffs           projectstaffs[]
-  uploadedfiledraft       uploadedfiledraft[]
-  useraffiliation         useraffiliation[]
-  usercodeverification    usercodeverification?
-  usercredentials         usercredentials?
+  studentID                   String                        @id @default("") @db.VarChar(10)
+  titleTH                     String?                       @db.Text
+  firstNameTH                 String?                       @db.Text
+  lastNameTH                  String?                       @db.Text
+  nickNameTH                  String?                       @db.Text
+  titleEN                     String?                       @db.Text
+  firstNameEN                 String?                       @db.Text
+  lastNameEN                  String?                       @db.Text
+  currentYear                 Int?
+  admissionCategory           String?                       @db.VarChar(10)
+  phoneNumber                 String?                       @db.VarChar(11)
+  lineID                      String?                       @db.VarChar(100)
+  facebook                    String?                       @db.VarChar(100)
+  instagram                   String?                       @db.VarChar(100)
+  medicalCondition            String?                       @db.Text
+  allergy                     String?                       @db.Text
+  specialNeed                 String?                       @db.Text
+  createdDateTime             DateTime?                     @default(now()) @db.DateTime(0)
+  updatedDateTime             DateTime?                     @default(now()) @db.DateTime(0)
+  cmsoprojectannouncement     cmsoprojectannouncement[]
+  projectcertificate          projectcertificate[]
+  projectevaluateformresponse projectevaluateformresponse[]
+  projectparticipants         projectparticipants[]
+  projectparticipation        projectparticipation[]
+  projects                    projects[]
+  projectstaffs               projectstaffs[]
+  uploadedfiledraft           uploadedfiledraft[]
+  useraffiliation             useraffiliation[]
+  usercodeverification        usercodeverification?
+  usercredentials             usercredentials?
 
   @@index([studentID], map: "studentID")
 }
@@ -442,8 +443,10 @@ model projectevaluateformstatus {
   formStatus      projectevaluateformstatus_formStatus @default(INACTIVE)
   maxNumberPCP    Int                                  @default(0)
   joinedNumberPCP Int                                  @default(0)
+  submitNumberPCP Int                                  @default(0)
   maxNumberSTF    Int                                  @default(0)
   joinedNumberSTF Int                                  @default(0)
+  submitNumberSTF Int                                  @default(0)
   updatedDatetime DateTime?                            @default(now()) @db.DateTime(0)
   projects        projects                             @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectevaluateformstatus_projects")
 }
@@ -484,6 +487,7 @@ model projectevaluateformresponse {
   comment                            String?   @db.LongText
   createdDatetime                    DateTime? @default(now()) @db.DateTime(0)
   projects                           projects  @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectevaluateformresponse_projects")
+  users                              users     @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_projectevaluateformresponse_users")
 
   @@id([studentID, projectID])
   @@index([projectID], map: "FK_projectevaluateformresponse_projects")
