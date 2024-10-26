@@ -20,7 +20,11 @@ const getAllPCPInProject = async (projectID = '') => {
                     firstNameEN: true,
                     lastNameEN: true,
                     currentYear: true,
-                    projectID: true,
+                }
+            },
+            projectparticipantrecruit: {
+                select: {
+                    projectID: true
                 }
             }
         }
@@ -50,7 +54,6 @@ const getAllSTFInProject = async (projectID = '') => {
                     firstNameEN: true,
                     lastNameEN: true,
                     currentYear: true,
-                    projectID: true,
                 }
             },
             projectstaffrecruitposition: {
