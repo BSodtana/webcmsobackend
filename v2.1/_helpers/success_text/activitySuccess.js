@@ -20,6 +20,20 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EVALUATION-FORM-EDIT-STATUS-SUCCESS": {
+        "code": "EVALUATION-FORM-EDIT-STATUS-SUCCESS",
+        "textTH": "แก้ไขข้อมูลสถานะของแบบประเมินกิจกรรมสำเร็จ",
+        "textEN": "Edit status of an evaluation form success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "EVALUATION-FORM-COUNT-SUCCESS": {
+        "code": "EVALUATION-FORM-COUNT-SUCCESS",
+        "textTH": "นับจำนวนข้อมูลของแบบประเมินกิจกรรมสำเร็จ",
+        "textEN": "Count an evaluation form success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activitySuccess

@@ -162,6 +162,156 @@ const getEvaluationFormStatus = async (projectID) => {
     }
 }
 
+const editEvaluationFormStatus = async (projectID, formStatus) => {
+
+    // check if form is exist?
+    let previous
+    try {
+        previous = await getEvaluationFormStatus(projectID)
+
+        const edited = await prisma.projectevaluateformstatus.update({
+            where: {
+                projectID: projectID,
+            },
+            data: {
+                formStatus: formStatus
+            }
+        })
+    } catch (error) {
+        // if not exist -> create new
+        const count = await countNumber(projectID)
+        const createNewEvForm = await prisma.projectevaluateformstatus.create({
+            data: {
+                projectID: projectID,
+                formStatus: 'INACTIVE',
+                maxNumberPCP: count.maxNumberPCP,
+                joinedNumberPCP: count.joinedNumberPCP,
+                submitNumberPCP: count.evaluatedNumberPCP,
+                maxNumberSTF: count.maxNumberSTF,
+                joinedNumberSTF: count.joinedNumberSTF,
+                submitNumberSTF: count.evaluatedNumberSTF,
+                updatedDatetime: new Date()
+            },
+
+            select: {
+                projectID: true,
+                formStatus: true,
+                updatedDatetime: true
+            }
+        })
+
+    }
+    return getEvaluationFormStatus(projectID)
+
+}
+
+const countNumber = async (projectID) => {
+    // count number of PCP registered to activity by fx: getallpcp
+    const maxNumberPCP = (await getAllPCPInProject(projectID)).length
+    const maxNumberSTF = (await getAllSTFInProject(projectID)).length
+
+    // count number of join ppl by checking check-in status
+    const joinedNumberPCP = await countCheckInPCP(projectID)
+    const joinedNumberSTF = await countCheckInSTF(projectID)
+
+    // count number of evaluated ppl by checking evaluation db
+    const evaluatedSTF = await countEvaluateFormResponseSTFPCP(projectID)
+
+    console.log('count', maxNumberPCP, maxNumberSTF, joinedNumberPCP, joinedNumberSTF,
+        evaluatedSTF.countPCP,
+        evaluatedSTF.countSTF,);
+
+
+    return {
+        maxNumberPCP, maxNumberSTF, joinedNumberPCP, joinedNumberSTF,
+        evaluatedNumberPCP: evaluatedSTF.evaluatedNumberPCP,
+        evaluatedNumberSTF: evaluatedSTF.evaluatedNumberSTF,
+    }
+}
+
+// to be fixed
+const countCheckInSTF = async (projectID) => {
+    const count = await prisma.projectparticipation.findMany(({
+        where: {
+            AND: [
+                { projectID: projectID },
+                {
+                    applicationID: {
+                        contains: 'STF'
+                    }
+                }
+            ]
+        }
+    }))
+
+    return count.length
+}
+
+// to be fixed
+const countCheckInPCP = async (projectID) => {
+    const count = await prisma.projectparticipation.findMany(({
+        where: {
+            AND: [
+                { projectID: projectID },
+                {
+                    applicationID: {
+                        contains: 'PCP'
+                    }
+                }
+            ]
+        }
+    }))
+
+    return count.length
+}
+
+const countEvaluateFormResponseSTFPCP = async (projectID) => {
+
+    // workaround: filter form response by projID and use stdid to search
+    const filter = await prisma.projectevaluateformresponse.findMany({
+        where: {
+            projectID: projectID
+        }, select: {
+            studentID: true
+        }
+    })
+
+
+    const filterList = filter.map((each) => each.studentID)
+    console.log('filterList', filterList);
+
+
+    let countPCP = 0
+
+    for (const stdID of filterList) {
+
+        const search = await prisma.projectparticipants.findFirst({
+            where: {
+                AND: [
+                    { studentID: stdID },
+                    {
+                        projectparticipantrecruit: {
+                            projectID: projectID
+                        }
+                    }
+                ]
+            }
+        })
+
+        if (search) {
+            countPCP += 1
+        }
+
+    }
+
+    return {
+        evaluatedNumberPCP: countPCP,
+        evaluatedNumberSTF: filterList.length - countPCP
+    }
+
+
+}
+
 module.exports = {
     getCheckInCode,
     checkInActivity,
@@ -169,4 +319,7 @@ module.exports = {
     checkInBulk,
 
     getEvaluationFormStatus,
+    editEvaluationFormStatus,
+
+    countNumber
 }

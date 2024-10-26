@@ -57,12 +57,52 @@ const getEvaluationFormStatusCon = async (req, res) => {
     }
 }
 
+const editEvaluationFormStatusCon = async (req, res) => {
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+
+        const { formStatus } = req.body
+
+        // check formstatus
+        if (!['ACTIVE', 'INACTIVE'].includes(formStatus)) {
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", formStatus))
+        } else {
+            const results = await activityServices.editEvaluationFormStatus(projectID, formStatus)
+            res.status(200).json(successCodeToResponse(results, 'EVALUATION-FORM-EDIT-STATUS-SUCCESS', projectID))
+        }
+
+
+    } catch (error) {
+        console.log('editEvaluationFormStatusCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'editEvaluationFormStatusCon'))
+    }
+}
+
+const countNumberCon = async (req, res) => {
+    try {
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+
+        const results = await activityServices.countNumber(projectID)
+        res.status(200).json(successCodeToResponse(results, 'EVALUATION-FORM-COUNT-SUCCESS', projectID))
+
+
+    } catch (error) {
+        console.log('countNumberCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'countNumberCon'))
+
+    }
+}
 
 
 module.exports = {
     getCheckInCodeCon,
-    checkInBulkCon
     checkInBulkCon,
 
     getEvaluationFormStatusCon,
+    editEvaluationFormStatusCon,
+
+    countNumberCon
 }

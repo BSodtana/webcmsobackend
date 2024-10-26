@@ -20,6 +20,13 @@ const activityError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EVALUATION-FORM-EDIT-STATUS-FAILED-SAME-STATUS": {
+        "code": "EVALUATION-FORM-EDIT-STATUS-FAILED-SAME-STATUS",
+        "textTH": "ไม่สามารถแก้ไขสถานะแบบประเมินเป็นสถานะเดิม",
+        "textEN": "Cannot edit evaluation form status to be the same",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activityError
