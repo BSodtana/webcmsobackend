@@ -41,9 +41,28 @@ const checkInBulkCon = async (req, res) => {
     }
 }
 
+const getEvaluationFormStatusCon = async (req, res) => {
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+
+        const results = await activityServices.getEvaluationFormStatus(projectID)
+        res.status(200).json(successCodeToResponse(results, 'EVALUATION-FORM-RETRIEVE-STATUS-SUCCESS', projectID))
+
+
+    } catch (error) {
+        console.log('getEvaluationFormStatusCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getEvaluationFormStatusCon'))
+    }
+}
+
 
 
 module.exports = {
     getCheckInCodeCon,
     checkInBulkCon
+    checkInBulkCon,
+
+    getEvaluationFormStatusCon,
 }

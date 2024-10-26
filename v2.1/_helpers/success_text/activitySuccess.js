@@ -13,6 +13,13 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EVALUATION-FORM-RETRIEVE-STATUS-SUCCESS": {
+        "code": "EVALUATION-FORM-RETRIEVE-STATUS-SUCCESS",
+        "textTH": "รับข้อมูลสถานะของแบบประเมินกิจกรรมสำเร็จ",
+        "textEN": "Retrieve status of an evaluation form success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activitySuccess

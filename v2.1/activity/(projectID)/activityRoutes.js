@@ -11,6 +11,7 @@ const isProjectOwner = require("../../_middleware/isProjectOwner");
 // router.get('/check-in/data', [isLoggedIn()], activityControllers.getCheckInCodeCon)
 router.post('/check-in/bulk', [isLoggedIn(), isProjectOwner()], activityControllers.checkInBulkCon)
 
+router.get('/evaluation/status', [isLoggedIn()], activityControllers.getEvaluationFormStatusCon)
 
 //---------- default -----------------
 router.get('/', (req, res) => {

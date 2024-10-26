@@ -139,9 +139,34 @@ const checkInStdIDToProject = async (projectID, studentID) => {
     }
 }
 
+// ------------ evaluation ------------------
+
+const getEvaluationFormStatus = async (projectID) => {
+    const search = await prisma.projectevaluateformstatus.findFirst({
+        where: {
+            projectID: projectID
+        },
+        select: {
+            projectID: true,
+            formStatus: true,
+            updatedDatetime: true
+        }
+    })
+
+    if (!search) {
+        throw {
+            code: 'P2025'
+        }
+    } else {
+        return search
+    }
+}
+
 module.exports = {
     getCheckInCode,
     checkInActivity,
 
-    checkInBulk
+    checkInBulk,
+
+    getEvaluationFormStatus,
 }
