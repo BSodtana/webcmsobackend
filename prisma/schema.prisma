@@ -210,28 +210,34 @@ model projectparticipants {
 }
 
 model projects {
-  projectID                  String                      @id @unique(map: "projects_project_id_key") @db.VarChar(50)
-  studentID                  String?                     @db.VarChar(10)
-  orgID                      String                      @db.VarChar(50)
-  projectNameTH              String?                     @db.Text
-  projectNickNameTH          String?                     @db.VarChar(500)
-  projectShortDescriptionTH  String?                     @db.Text
-  projectNameEN              String?                     @db.Text
-  projectNickNameEN          String?                     @db.VarChar(500)
-  projectFullDetail          String?                     @db.MediumText
-  eventDateStart             DateTime?                   @default(dbgenerated("(curdate())")) @db.Date
-  eventDateFinish            DateTime?                   @default(dbgenerated("(curdate())")) @db.Date
-  createdDateTime            DateTime?                   @default(now()) @db.DateTime(0)
-  updatedDateTime            DateTime?                   @default(now()) @db.DateTime(0)
-  isShown                    Int                         @default(0)
-  academicYear               String                      @default("202401") @db.VarChar(50)
-  cmsoprojectannouncement    cmsoprojectannouncement[]
-  projectconsiderationstatus projectconsiderationstatus?
-  projectdata                projectdata?
-  projectparticipantrecruit  projectparticipantrecruit[]
-  organizations              organizations               @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
-  users                      users?                      @relation(fields: [studentID], references: [studentID], map: "users-projects-studentID")
-  projectstaffrecruit        projectstaffrecruit[]
+  projectID                   String                        @id @unique(map: "projects_project_id_key") @db.VarChar(50)
+  studentID                   String?                       @db.VarChar(10)
+  orgID                       String                        @db.VarChar(50)
+  projectNameTH               String?                       @db.Text
+  projectNickNameTH           String?                       @db.VarChar(500)
+  projectShortDescriptionTH   String?                       @db.Text
+  projectNameEN               String?                       @db.Text
+  projectNickNameEN           String?                       @db.VarChar(500)
+  projectFullDetail           String?                       @db.MediumText
+  eventDateStart              DateTime?                     @default(dbgenerated("(curdate())")) @db.Date
+  eventDateFinish             DateTime?                     @default(dbgenerated("(curdate())")) @db.Date
+  createdDateTime             DateTime?                     @default(now()) @db.DateTime(0)
+  updatedDateTime             DateTime?                     @default(now()) @db.DateTime(0)
+  isShown                     Int                           @default(0)
+  academicYear                String                        @default("202401") @db.VarChar(50)
+  cmsoprojectannouncement     cmsoprojectannouncement[]
+  projectcertificate          projectcertificate[]
+  projectcertificatestatus    projectcertificatestatus?
+  projectcheckincode          projectcheckincode?
+  projectconsiderationstatus  projectconsiderationstatus?
+  projectdata                 projectdata?
+  projectevaluateformresponse projectevaluateformresponse[]
+  projectevaluateformstatus   projectevaluateformstatus?
+  projectparticipantrecruit   projectparticipantrecruit[]
+  projectparticipation        projectparticipation[]
+  organizations               organizations                 @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
+  users                       users?                        @relation(fields: [studentID], references: [studentID], map: "users-projects-studentID")
+  projectstaffrecruit         projectstaffrecruit[]
 
   @@index([orgID], map: "orgID")
   @@index([studentID], map: "student_id")
@@ -346,7 +352,9 @@ model users {
   createdDateTime         DateTime?                 @default(now()) @db.DateTime(0)
   updatedDateTime         DateTime?                 @default(now()) @db.DateTime(0)
   cmsoprojectannouncement cmsoprojectannouncement[]
+  projectcertificate      projectcertificate[]
   projectparticipants     projectparticipants[]
+  projectparticipation    projectparticipation[]
   projects                projects[]
   projectstaffs           projectstaffs[]
   uploadedfiledraft       uploadedfiledraft[]
@@ -391,6 +399,95 @@ model uploadedfiledraft {
   users           users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_uploadedfile_draft_users")
 
   @@index([studentID], map: "studentID")
+}
+
+model projectcertificate {
+  certificateID   String                            @id @db.VarChar(50)
+  certDesignType  projectcertificate_certDesignType @default(PCP_TH)
+  studentID       String                            @db.VarChar(10)
+  applicationID   String                            @db.VarChar(50)
+  projectID       String                            @db.VarChar(50)
+  createdDatetime DateTime?                         @default(now()) @db.DateTime(0)
+  projects        projects                          @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcertificate_projects")
+  users           users                             @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_projectcertificate_users")
+
+  @@index([projectID], map: "FK_projectcertificate_projects")
+  @@index([studentID], map: "FK_projectcertificate_users")
+}
+
+model projectcertificatestatus {
+  projectID                  String                                 @id @db.VarChar(50)
+  certPCPStatus              projectcertificatestatus_certPCPStatus @default(DISABLED)
+  certPCPCreatedDate         DateTime                               @default(now()) @db.DateTime(0)
+  certSTFStatus              projectcertificatestatus_certSTFStatus @default(DISABLED)
+  certSTFCreatedDate         DateTime                               @default(now()) @db.DateTime(0)
+  teacherNameSignatureTH     String?                                @default("ชื่อ-สกุล อาจารย์") @db.Text
+  teacherNameSignatureEN     String?                                @default("Full Name Teacher") @db.Text
+  teacherPositionSignatureTH String?                                @default("ตำแหน่ง อาจารย์") @db.Text
+  teacherPositionSignatureEN String?                                @default("Position Teacher") @db.Text
+  teacherSignatureFileID     String?                                @db.VarChar(50)
+  updatedDatetime            DateTime?                              @default(now()) @db.DateTime(0)
+  projects                   projects                               @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectcertificatestatus_projects")
+}
+
+model projectcheckincode {
+  projectID       String    @id @db.VarChar(50)
+  checkinCode     String    @unique(map: "checkinCode") @db.VarChar(6)
+  updatedDatetime DateTime? @default(now()) @db.DateTime(0)
+  projects        projects  @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcheckincode_projects")
+}
+
+model projectevaluateformstatus {
+  projectID       String                               @id @db.VarChar(50)
+  formStatus      projectevaluateformstatus_formStatus @default(INACTIVE)
+  maxNumberPCP    Int                                  @default(0)
+  joinedNumberPCP Int                                  @default(0)
+  maxNumberSTF    Int                                  @default(0)
+  joinedNumberSTF Int                                  @default(0)
+  updatedDatetime DateTime?                            @default(now()) @db.DateTime(0)
+  projects        projects                             @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectevaluateformstatus_projects")
+}
+
+model projectparticipation {
+  applicationID       String                                   @id @db.VarChar(50)
+  studentID           String                                   @default("") @db.VarChar(10)
+  projectID           String                                   @db.VarChar(50)
+  participationStatus projectparticipation_participationStatus @default(ABSENT)
+  updatedDatetime     DateTime?                                @default(now()) @db.DateTime(0)
+  projects            projects                                 @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectparticipation_projects")
+  users               users                                    @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_projectparticipation_users")
+
+  @@index([projectID], map: "projectID")
+  @@index([studentID], map: "studentID")
+}
+
+model projectevaluateformresponse {
+  studentID                          String    @db.VarChar(10)
+  projectID                          String    @db.VarChar(50)
+  fundamentalLiteracy                Int       @default(0)
+  fundamentalNumeracy                Int       @default(0)
+  fundamentalScientific              Int       @default(0)
+  fundamentalFinancial               Int       @default(0)
+  fundamentalICT                     Int       @default(0)
+  fundamentalCulturalCivic           Int       @default(0)
+  competencyCriticalThinkProblemSolv Int       @default(0)
+  competencyCreativity               Int       @default(0)
+  competencyCommunication            Int       @default(0)
+  competencyCollaboration            Int       @default(0)
+  characterCuriosity                 Int       @default(0)
+  characterInitiative                Int       @default(0)
+  characterPersistenceGrit           Int       @default(0)
+  characterAdaptability              Int       @default(0)
+  characterLeadership                Int       @default(0)
+  characterSocialCulturalAwareness   Int       @default(0)
+  shouldContinue                     Int       @default(0)
+  comment                            String?   @db.LongText
+  createdDatetime                    DateTime? @default(now()) @db.DateTime(0)
+  projects                           projects  @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectevaluateformresponse_projects")
+
+  @@id([studentID, projectID])
+  @@index([projectID], map: "FK_projectevaluateformresponse_projects")
+  @@index([studentID], map: "FK_projectevaluateformresponse_users")
 }
 
 enum projectconsiderationstatus_statusVP {
@@ -455,4 +552,35 @@ enum usercredentials_role {
 enum projectconsiderationstatus_projectType {
   OLD
   NEW
+}
+
+enum projectcertificate_certDesignType {
+  PCP_TH
+  PCP_EN
+  STF_TH
+  STF_EN
+}
+
+enum projectcertificatestatus_certPCPStatus {
+  DISABLED
+  NOT_READY
+  REQ_NOT_MEET
+  READY
+}
+
+enum projectevaluateformstatus_formStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum projectcertificatestatus_certSTFStatus {
+  DISABLED
+  NOT_READY
+  REQ_NOT_MEET
+  READY
+}
+
+enum projectparticipation_participationStatus {
+  ABSENT
+  PRESENT
 }
