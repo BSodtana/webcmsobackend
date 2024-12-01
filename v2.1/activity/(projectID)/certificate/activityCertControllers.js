@@ -138,11 +138,81 @@ const editCertDefaultDataCon = async (req, res) => {
     }
 }
 
+const editCertStatusWithConsentCon = async (req, res) => {
+
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+        const { certPCPStatus, certSTFStatus, confirm } = req.body
+
+        // check if each status is specific type/word
+
+        if (!((typeof (certPCPStatus) === 'undefined') || ['DISABLED', 'NOT_READY', 'REQ_NOT_MEET', 'READY'].includes(certPCPStatus))) {
+
+            // certPCPStatus is not undefined or specific status
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", projectID, certPCPStatus))
+
+
+        } else if (!((typeof (certSTFStatus) === 'undefined') || ['DISABLED', 'NOT_READY', 'REQ_NOT_MEET', 'READY'].includes(certSTFStatus))) {
+
+            // certSTFStatus is not undefined or specific status
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", projectID, certSTFStatus))
+
+        } else if (confirm === true) {
+
+            // type of both are correct
+            const results = await activityCertServices.changeCertCommonStatusWithRules(projectID, certPCPStatus, certSTFStatus)
+            res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-EDIT-CERT-STATUS-SUCCESS', projectID, studentID))
+
+        } else {
+
+            res.status(400).json(errorCodeToResponse("DECLINED-CONFIRM", projectID, { certPCPStatus, certSTFStatus, confirm }))
+
+        }
+
+
+
+    } catch (error) {
+        console.log('editCertStatusWithConsentCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'editCertStatusWithConsentCon'))
+
+
+    }
+}
+
+const generateCertForUserCon = async (req, res) => {
+
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+        const { confirm } = req.body
+
+        if (!confirm) {
+            res.status(400).json(errorCodeToResponse("DECLINED-CONFIRM", projectID, { confirm }))
+
+        } else {
+            const results = await activityCertServices.generateCertForUser(studentID, projectID, false)
+            res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-GENERATE-SUCCESS', projectID, studentID))
+        }
+
+
+    } catch (error) {
+        console.log('generateCertForUserCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'generateCertForUserCon'))
+
+    }
+}
 
 module.exports = {
     getCertStatusPCPCon,
     editCertStatusCon,
 
     getCertDefaultDataCon,
-    editCertDefaultDataCon
+    editCertDefaultDataCon,
+
+    editCertStatusWithConsentCon,
+
+    generateCertForUserCon
 }

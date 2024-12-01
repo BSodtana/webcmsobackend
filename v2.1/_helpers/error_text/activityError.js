@@ -48,6 +48,20 @@ const activityError = {
         "shouldContactAdmin": true,
         "shouldTryAgain": false,
     },
+    "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA": {
+        "code": "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่สามารถดึงข้อมูลพื้นฐานของเกียรติบัตรได้",
+        "textEN": "Cannot retreive certificate default data",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "GENERATE-CERTIFICATE-FAILED-NOT-MEET-CRITERIA": {
+        "code": "GENERATE-CERTIFICATE-FAILED-NOT-MEET-CRITERIA",
+        "textTH": "ไม่สามารถลงทะเบียนเกียรติบัตรได้เนื่องจากไม่ผ่านเงื่อนไข",
+        "textEN": "Failed to generate a certificate because all criteria were not met",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = activityError

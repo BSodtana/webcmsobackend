@@ -1,5 +1,8 @@
 require('dotenv').config()
+const activityError = require('../../../_helpers/error_text/activityError')
 const prisma = require('../../../prisma')
+const checkGenCertLogic = require('./(genCertLogic)/checkGenCertLogic')
+const { generateNumberForCertificate } = require('./(genCertLogic)/genNumberCertLogic')
 
 const getCertificateCommonStatus = async (projectID) => {
 
@@ -199,6 +202,134 @@ const editCertDefaultData = async (
 
 }
 
+const changeCertCommonStatusWithRules = async (projectID, certPCPStatusEdited, certSTFStatusEdited) => {
+
+    // todo: add logic to check Rules b4 changeing status
+
+    const data = await editCertificateCommonStatus(projectID, certPCPStatusEdited, certSTFStatusEdited)
+
+    return data
+}
+
+const generateCertForUser = async (studentID, projectID, forced = false) => {
+
+    // check if this user already has cert
+
+    try {
+        const search = await searchCertificateByProjectIDStudentID(projectID, studentID)
+
+
+        // if not error = already has cert = return cert num and link for download
+        return {
+            certificateID: search.certificateID,
+            linkToDownload: ""
+        }
+
+    } catch (error) {
+
+        // if error = not generate cert yet = gen and sent download link
+
+        // list for check if user can download cert
+        // 1 user join activity and has role data
+        // 2 user do evaluation form
+        // 3 that form has percent pass treshold -todo
+        // 4 owner allow to download
+
+
+        const checkList = [
+            await checkGenCertLogic.checkIfUserJoinedProject(studentID, projectID),
+            await checkGenCertLogic.checkIfUserDidEvaluationForm(studentID, projectID),
+            true,
+            await checkIfOwnerAllowedUserToDL(studentID, projectID)
+        ]
+
+        console.log('gencert checkList', checkList);
+
+        const dictDesc = [
+            {
+                "textTH": "ผู้ใช้ไม่ได้ลงทะเบียนกิจกรรมนี้",
+                "textEN": "This student didn't join this activity",
+            },
+            {
+                "textTH": "ผู้ใช้ยังไม่ได้ประเมินกิจกรรม",
+                "textEN": "This student hasn't evaluated this activity yet",
+            },
+            {
+                "textTH": "ผู้เข้าร่วมยังประเมินกิจกรรมไม่ถึงที่กำหนดไว้",
+                "textEN": "Evaluation not met criteria",
+            },
+            {
+                "textTH": "เจ้าของกิจกรรมยังไม่เปิดให้ดาวน์โหลดเกียรติบัตร",
+                "textEN": "Download a certificate is not allowed (yet)",
+            }
+        ]
+
+        // check if can regis?
+        const isNotAllowedGenerate = checkList.includes(false)
+        const reason = dictDesc.filter((d, ind) => !checkList[ind])
+
+        if (!forced && isNotAllowedGenerate) {
+            throw {
+                code: 'GENERATE-CERTIFICATE-FAILED-NOT-MEET-CRITERIA',
+                desc: { userData: { studentID, projectID, }, reason }
+            }
+        } else {
+
+            // generate join id
+
+            const createCertNo = await generateNumberForCertificate(projectID)
+            const getUserData = await checkGenCertLogic.checkIfUserJoinedProject(studentID, projectID, true)
+            const getUserApplicationID = getUserData.as === 'PCP' ? getUserData.data.participantApplicationID :
+                getUserData.data.staffApplicationID
+
+            console.log('createCertNo', createCertNo);
+            console.log('getUserData', getUserData);
+            console.log('getUserApplicationID', getUserApplicationID);
+
+            const newCert = await prisma.projectcertificatelist.create({
+                data: {
+                    certificateID: createCertNo,
+                    studentID: studentID,
+                    projectID: projectID,
+                    certUserType: getUserData.as,
+                    applicationID: getUserApplicationID,
+                    updatedDatetime: new Date()
+                }
+            })
+
+            return {
+                certificateID: newCert.certificateID,
+                linkToDownload: ""
+            }
+
+
+
+        }
+
+    }
+
+
+
+
+}
+
+// ------
+const checkIfOwnerAllowedUserToDL = async (studentID, projectID) => {
+
+    const userRole = await checkGenCertLogic.checkIfUserJoinedProject(studentID, projectID, true)
+    const getCertStatus = await getCertificateCommonStatus(projectID)
+
+    if ((userRole.as === 'PCP') && (getCertStatus.certPCPStatus === 'READY')) {
+        return true
+    } else if ((userRole.as === 'STF') && (getCertStatus.certSTFStatus === 'READY')) {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+
 module.exports = {
     getCertificateCommonStatus,
     editCertificateCommonStatus,
@@ -206,5 +337,9 @@ module.exports = {
     getCertificateUserConsentStatus,
 
     getCertDefaultData,
-    editCertDefaultData
+    editCertDefaultData,
+
+    changeCertCommonStatusWithRules,
+
+    generateCertForUser
 }

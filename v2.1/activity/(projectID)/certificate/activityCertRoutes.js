@@ -8,16 +8,18 @@ const isProjectOwner = require("../../../_middleware/isProjectOwner");
 
 // /v2.1/activity/:projectID/certificate
 
-// todo:
+
 router.get('/status', [isLoggedIn()], activityCertControllers.getCertStatusPCPCon)
 router.post('/status', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertStatusCon)
 
 router.get('/data', [isLoggedIn()], activityCertControllers.getCertDefaultDataCon)
 router.post('/data', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertDefaultDataCon)
 
+// todo:
+router.post('/generate', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertStatusWithConsentCon)
+router.post('/consent', [isLoggedIn()], activityCertControllers.generateCertForUserCon)
 
-// router.post('/generate', [isLoggedIn()], activityControllers.getCheckInCodeCon)
-// router.post('/consent', [isLoggedIn()], activityControllers.getCheckInCodeCon)
+router.use('/pdf', require('./(pdfCertLogic)/pdfRoute'))
 
 // router.get('/download', [isLoggedIn()], activityControllers.getCheckInCodeCon)
 

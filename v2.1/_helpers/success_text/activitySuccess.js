@@ -69,6 +69,13 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "CERTIFICATE-GENERATE-SUCCESS": {
+        "code": "CERTIFICATE-GENERATE-SUCCESS",
+        "textTH": "สร้างเกียรติบัตรสำเร็จ",
+        "textEN": "Generate a certification ssuccess",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activitySuccess
