@@ -108,6 +108,96 @@ const editCertificateCommonStatus = async (projectID, certPCPStatusEdited, certS
 
 }
 
+const getCertDefaultData = async (projectID) => {
+
+    const defaultSearch = await prisma.projectcertificatedefaultdata.findUnique({
+        where: {
+            projectID: projectID
+        }
+    })
+
+    if (!defaultSearch) {
+        throw {
+            code: 'CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA',
+            desc: { userData: { projectID } },
+        }
+    } else {
+
+        return {
+            teacherNameSignatureTH: defaultSearch.teacherNameSignatureTH,
+            teacherNameSignatureEN: defaultSearch.teacherNameSignatureEN,
+            teacherPositionSignatureTH: defaultSearch.teacherPositionSignatureTH,
+            teacherPositionSignatureEN: defaultSearch.teacherPositionSignatureEN,
+            teacherSignatureFileID: defaultSearch.teacherSignatureFileID,
+            certPCPCreatedDate: defaultSearch.certPCPCreatedDate,
+            certPCPDefaultDesignType: defaultSearch.certPCPDefaultDesignType,
+            certSTFCreatedDate: defaultSearch.certSTFCreatedDate,
+            certSTFDefaultDesignType: defaultSearch.certSTFDefaultDesignType,
+            updatedDatetime: defaultSearch.updatedDatetime
+        }
+
+    }
+
+}
+
+const editCertDefaultData = async (
+    projectID,
+    teacherNameSignatureTH,
+    teacherNameSignatureEN,
+    teacherPositionSignatureTH,
+    teacherPositionSignatureEN,
+    teacherSignatureFileID,
+    certPCPCreatedDate,
+    certPCPDefaultDesignType,
+    certSTFCreatedDate,
+    certSTFDefaultDesignType
+) => {
+
+    const update = await prisma.projectcertificatedefaultdata.upsert({
+        where: {
+            projectID: projectID
+        },
+        update: {
+            teacherNameSignatureTH: teacherNameSignatureTH,
+            teacherNameSignatureEN: teacherNameSignatureEN,
+            teacherPositionSignatureTH: teacherPositionSignatureTH,
+            teacherPositionSignatureEN: teacherPositionSignatureEN,
+            teacherSignatureFileID: teacherSignatureFileID,
+            certPCPCreatedDate: certPCPCreatedDate,
+            certPCPDefaultDesignType: certPCPDefaultDesignType,
+            certSTFCreatedDate: certSTFCreatedDate,
+            certSTFDefaultDesignType: certSTFDefaultDesignType,
+            updatedDatetime: new Date()
+        },
+        create: {
+            projectID: projectID,
+            teacherNameSignatureTH: teacherNameSignatureTH,
+            teacherNameSignatureEN: teacherNameSignatureEN,
+            teacherPositionSignatureTH: teacherPositionSignatureTH,
+            teacherPositionSignatureEN: teacherPositionSignatureEN,
+            teacherSignatureFileID: teacherSignatureFileID,
+            certPCPCreatedDate: certPCPCreatedDate,
+            certPCPDefaultDesignType: certPCPDefaultDesignType,
+            certSTFCreatedDate: certSTFCreatedDate,
+            certSTFDefaultDesignType: certSTFDefaultDesignType,
+            updatedDatetime: new Date()
+        }
+    })
+
+    return {
+        teacherNameSignatureTH: update.teacherNameSignatureTH,
+        teacherNameSignatureEN: update.teacherNameSignatureEN,
+        teacherPositionSignatureTH: update.teacherPositionSignatureTH,
+        teacherPositionSignatureEN: update.teacherPositionSignatureEN,
+        teacherSignatureFileID: update.teacherSignatureFileID,
+        certPCPCreatedDate: update.certPCPCreatedDate,
+        certPCPDefaultDesignType: update.certPCPDefaultDesignType,
+        certSTFCreatedDate: update.certSTFCreatedDate,
+        certSTFDefaultDesignType: update.certSTFDefaultDesignType,
+        updatedDatetime: update.updatedDatetime
+    }
+
+}
 
 module.exports = {
     getCertificateCommonStatus,
@@ -115,4 +205,6 @@ module.exports = {
 
     getCertificateUserConsentStatus,
 
+    getCertDefaultData,
+    editCertDefaultData
 }

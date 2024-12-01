@@ -61,17 +61,88 @@ const editCertStatusCon = async (req, res) => {
     }
 }
 
+const getCertDefaultDataCon = async (req, res) => {
+
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+
+        const results = await activityCertServices.getCertDefaultData(projectID)
+        res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-GET-USER-STATUS-SUCCESS', projectID, studentID))
+
+
     } catch (error) {
-        console.log('checkInBulkCon', error)
-        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'checkInBulkCon'))
+        console.log('getCertDefaultDataCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getCertDefaultDataCon'))
 
     }
 }
 
+const editCertDefaultDataCon = async (req, res) => {
+
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+        const {
+            teacherNameSignatureTH,
+            teacherNameSignatureEN,
+            teacherPositionSignatureTH,
+            teacherPositionSignatureEN,
+            teacherSignatureFileID,
+            certPCPCreatedDate,
+            certPCPDefaultDesignType,
+            certSTFCreatedDate,
+            certSTFDefaultDesignType
+        } = req.body
+
+        // check if each status is specific type/word
+
+        if (!((typeof (certPCPDefaultDesignType) === 'undefined') || ['PCP_TH', 'PCP_EN'].includes(certPCPDefaultDesignType))) {
+
+            // certPCPDefaultDesignType is not undefined or specific status
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", projectID, certPCPDefaultDesignType))
+
+
+        } else if (!((typeof (certSTFDefaultDesignType) === 'undefined') || ['STF_TH', 'STF_EN'].includes(certSTFDefaultDesignType))) {
+
+            // certSTFDefaultDesignType is not undefined or specific status
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", projectID, certSTFDefaultDesignType))
+
+        } else {
+
+            // type of both are correct
+            const results = await activityCertServices.editCertDefaultData(
+                projectID,
+                teacherNameSignatureTH,
+                teacherNameSignatureEN,
+                teacherPositionSignatureTH,
+                teacherPositionSignatureEN,
+                teacherSignatureFileID,
+                certPCPCreatedDate,
+                certPCPDefaultDesignType,
+                certSTFCreatedDate,
+                certSTFDefaultDesignType
+            )
+            res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-EDIT-DEFAULT-DATA-SUCCESS', projectID, studentID))
+
+        }
+
+
+    } catch (error) {
+        console.log('editCertDefaultDataCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'editCertDefaultDataCon'))
+
+
+    }
+}
 
 
 module.exports = {
     getCertStatusPCPCon,
     editCertStatusCon,
 
+    getCertDefaultDataCon,
+    editCertDefaultDataCon
 }

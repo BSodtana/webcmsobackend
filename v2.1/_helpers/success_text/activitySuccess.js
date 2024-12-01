@@ -48,6 +48,20 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "CERTIFICATE-GET-DEFAULT-DATA-SUCCESS": {
+        "code": "CERTIFICATE-GET-DEFAULT-DATA-SUCCESS",
+        "textTH": "ดึงข้อมูลพื้นฐานของเกียรติบัตรสำเร็จ",
+        "textEN": "Get certificate default data success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-EDIT-DEFAULT-DATA-SUCCESS": {
+        "code": "CERTIFICATE-EDIT-DEFAULT-DATA-SUCCESS",
+        "textTH": "แก้ไขข้อมูลพื้นฐานของเกียรติบัตรสำเร็จ",
+        "textEN": "Edit certificate default data success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activitySuccess

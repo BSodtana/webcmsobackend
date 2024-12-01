@@ -12,6 +12,8 @@ const isProjectOwner = require("../../../_middleware/isProjectOwner");
 router.get('/status', [isLoggedIn()], activityCertControllers.getCertStatusPCPCon)
 router.post('/status', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertStatusCon)
 
+router.get('/data', [isLoggedIn()], activityCertControllers.getCertDefaultDataCon)
+router.post('/data', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertDefaultDataCon)
 
 
 // router.post('/generate', [isLoggedIn()], activityControllers.getCheckInCodeCon)
