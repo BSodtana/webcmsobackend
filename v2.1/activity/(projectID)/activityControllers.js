@@ -80,6 +80,22 @@ const editEvaluationFormStatusCon = async (req, res) => {
     }
 }
 
+const getIfUserDoneEvaluationFormCon = async (req, res) => {
+    try {
+
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { projectID } = req.params
+
+        const results = await activityServices.checkIfUserDoneEvaluation(studentID, projectID)
+        res.status(200).json(successCodeToResponse(results, 'EVALUATION-FORM-USER-DONE-RETRIEVE-STATUS-SUCCESS', projectID, studentID))
+
+
+    } catch (error) {
+        console.log('getIfUserDoneEvaluationFormCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getIfUserDoneEvaluationFormCon'))
+    }
+}
+
 const countNumberCon = async (req, res) => {
     try {
         const { studentID = 'NO-STD-ID' } = await req?.userData
@@ -103,6 +119,7 @@ module.exports = {
 
     getEvaluationFormStatusCon,
     editEvaluationFormStatusCon,
+    getIfUserDoneEvaluationFormCon,
 
     countNumberCon
 }

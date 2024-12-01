@@ -205,6 +205,27 @@ const editEvaluationFormStatus = async (projectID, formStatus) => {
 
 }
 
+const checkIfUserDoneEvaluation = async (studentID, projectID) => {
+
+    const search = await prisma.projectevaluateformresponse.findFirst({
+        where: {
+            projectID: projectID,
+            studentID: studentID
+        }
+    })
+
+    if (!search) {
+        return {
+            userDoneEvaluation: false
+        }
+    } else {
+        return {
+            userDoneEvaluation: true
+        }
+    }
+
+}
+
 const countNumber = async (projectID) => {
     // count number of PCP registered to activity by fx: getallpcp
     const maxNumberPCP = (await getAllPCPInProject(projectID)).length
@@ -278,7 +299,7 @@ const countEvaluateFormResponseSTFPCP = async (projectID) => {
 
 
     const filterList = filter.map((each) => each.studentID)
-    console.log('filterList', filterList);
+    // console.log('filterList', filterList);
 
 
     let countPCP = 0
@@ -320,6 +341,7 @@ module.exports = {
 
     getEvaluationFormStatus,
     editEvaluationFormStatus,
+    checkIfUserDoneEvaluation,
 
     countNumber
 }

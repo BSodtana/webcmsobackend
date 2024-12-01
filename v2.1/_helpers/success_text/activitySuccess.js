@@ -27,6 +27,13 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EVALUATION-FORM-USER-DONE-RETRIEVE-STATUS-SUCCESS": {
+        "code": "EVALUATION-FORM-USER-DONE-RETRIEVE-STATUS-SUCCESS",
+        "textTH": "รับข้อมูลการทำแบบประเมินกิจกรรมของผู้ใช้สำเร็จ",
+        "textEN": "Retrieve status if user has done an evaluation form success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "EVALUATION-FORM-COUNT-SUCCESS": {
         "code": "EVALUATION-FORM-COUNT-SUCCESS",
         "textTH": "นับจำนวนข้อมูลของแบบประเมินกิจกรรมสำเร็จ",

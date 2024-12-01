@@ -13,6 +13,7 @@ router.post('/check-in/bulk', [isLoggedIn(), isProjectOwner()], activityControll
 
 router.get('/evaluation/status', [isLoggedIn()], activityControllers.getEvaluationFormStatusCon)
 router.post('/evaluation/status', [isLoggedIn(), isProjectOwner()], activityControllers.editEvaluationFormStatusCon)
+router.get('/evaluation/status/me', [isLoggedIn()], activityControllers.getIfUserDoneEvaluationFormCon)
 
 router.get('/evaluation/count', [isLoggedIn()], activityControllers.countNumberCon)
 
