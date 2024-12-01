@@ -16,7 +16,7 @@ router.post('/evaluation/status', [isLoggedIn(), isProjectOwner()], activityCont
 
 router.get('/evaluation/count', [isLoggedIn()], activityControllers.countNumberCon)
 
-
+router.use('/certificate', require('./certificate/activityCertRoutes'))
 
 
 //---------- default -----------------

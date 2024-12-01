@@ -1,15 +1,17 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
+const activityCertControllers = require("./activityCertControllers");
+
+const isLoggedIn = require("../../../_middleware/isLoggedIn");
+const isProjectOwner = require("../../../_middleware/isProjectOwner");
 
 // /v2.1/activity/:projectID/certificate
 
 // todo:
-// router.get('/status', [isLoggedIn()], activityControllers.getCheckInCodeCon)
-// router.post('/status', [isLoggedIn()], activityControllers.getCheckInCodeCon)
+router.get('/status', [isLoggedIn()], activityCertControllers.getCertStatusPCPCon)
+router.post('/status', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertStatusCon)
 
-// router.get('/status/participant', [isLoggedIn()], activityControllers.getCheckInCodeCon)
-// router.get('/status/staff', [isLoggedIn()], activityControllers.getCheckInCodeCon)
 
 
 // router.post('/generate', [isLoggedIn()], activityControllers.getCheckInCodeCon)

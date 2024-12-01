@@ -1,38 +1,65 @@
-const { errorCodeToResponse } = require('../../_helpers/errorCodeToResponse')
-const { successCodeToResponse } = require('../../_helpers/successCodeToResponse')
-const activityServices = require('./activityCertServices')
+const { errorCodeToResponse } = require('../../../_helpers/errorCodeToResponse')
+const { successCodeToResponse } = require('../../../_helpers/successCodeToResponse')
+const activityCertServices = require('./activityCertServices')
 
-const getCheckInCodeCon = async (req, res) => {
+const getCertStatusPCPCon = async (req, res) => {
+
     try {
 
         const { studentID = 'NO-STD-ID' } = await req?.userData
         const { projectID } = req.params
 
-        const results = await activityServices.getCheckInCode(projectID)
-        res.status(200).json(successCodeToResponse(results, 'ACTIVITY-GET-CHECK-IN-CODE-SUCCESS', studentID))
+        const results = await activityCertServices.getCertificateUserConsentStatus(projectID, studentID)
+        res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-GET-USER-STATUS-SUCCESS', projectID, studentID))
 
 
     } catch (error) {
-        console.log('getCheckInCodeCon', error)
-        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getCheckInCodeCon'))
+        console.log('certStatusPCPCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'certStatusPCPCon'))
+
 
     }
 }
 
-const checkInBulkCon = async (req, res) => {
+
+const editCertStatusCon = async (req, res) => {
+
     try {
 
         const { studentID = 'NO-STD-ID' } = await req?.userData
         const { projectID } = req.params
-        const { studentIDList = [] } = req.body
+        const { certPCPStatus, certSTFStatus } = req.body
 
-        // list of stdid in list
-        if (!projectID || !studentID || studentIDList.constructor !== Array) {
-            res.status(400).json(errorCodeToResponse("NOT-ENOUGH-DATA", projectID, studentIDList))
+        // check if each status is specific type/word
+
+        if (!((typeof (certPCPStatus) === 'undefined') || ['DISABLED', 'NOT_READY', 'REQ_NOT_MEET', 'READY'].includes(certPCPStatus))) {
+
+            // certPCPStatus is not undefined or specific status
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", projectID, certPCPStatus))
+
+
+        } else if (!((typeof (certSTFStatus) === 'undefined') || ['DISABLED', 'NOT_READY', 'REQ_NOT_MEET', 'READY'].includes(certSTFStatus))) {
+
+            // certSTFStatus is not undefined or specific status
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", projectID, certSTFStatus))
+
         } else {
-            const results = await activityServices.checkInBulk(projectID, studentIDList)
-            res.status(200).json(successCodeToResponse(results, 'CHECK-IN-BULK-SUCCESS', projectID))
+
+            // type of both are correct
+            const results = await activityCertServices.editCertificateCommonStatus(projectID, certPCPStatus, certSTFStatus)
+            res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-EDIT-CERT-STATUS-SUCCESS', projectID, studentID))
+
         }
+
+
+
+    } catch (error) {
+        console.log('editCertStatusCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'editCertStatusCon'))
+
+
+    }
+}
 
     } catch (error) {
         console.log('checkInBulkCon', error)
@@ -44,4 +71,7 @@ const checkInBulkCon = async (req, res) => {
 
 
 module.exports = {
+    getCertStatusPCPCon,
+    editCertStatusCon,
+
 }

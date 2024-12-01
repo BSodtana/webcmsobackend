@@ -27,6 +27,27 @@ const activityError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "CERTIFICATE-GET-STATUS-FAILED-NO-STATUS-DEFINED": {
+        "code": "CERTIFICATE-GET-STATUS-FAILED-NO-STATUS-DEFINED",
+        "textTH": "ไม่สามารถดึงข้อมูลสถานะของเกียรติบัตรได้",
+        "textEN": "Cannot retreive certificate status",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-GET-CERT-FAILED-NOT-GENERATED": {
+        "code": "CERTIFICATE-GET-CERT-FAILED-NOT-GENERATED",
+        "textTH": "คุณยังไม่ได้สร้างเกียรติบัตรสำหรับกิจกรรมนี้",
+        "textEN": "Certificate of this activity hasn't been generated",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA": {
+        "code": "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่สามารถดึงข้อมูลพื้นฐานของเกียรติบัตรได้",
+        "textEN": "Cannot retreive certificate default data",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activityError

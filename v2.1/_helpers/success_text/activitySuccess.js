@@ -34,6 +34,20 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "CERTIFICATE-GET-USER-STATUS-SUCCESS": {
+        "code": "CERTIFICATE-GET-USER-STATUS-SUCCESS",
+        "textTH": "ดึงข้อมูลสถานะของเกียรติบัตรสำหรับผู้ใช้คนนี้สำเร็จ",
+        "textEN": "Get certification status of this user success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-EDIT-CERT-STATUS-SUCCESS": {
+        "code": "CERTIFICATE-EDIT-CERT-STATUS-SUCCESS",
+        "textTH": "แก้ไขสถานะการออกเกียรติบัตรสำเร็จ",
+        "textEN": "Edit certification status success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = activitySuccess
