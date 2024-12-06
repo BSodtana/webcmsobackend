@@ -17,11 +17,19 @@ const generatePCPPdf = async () => {
             margin: 0
         });
 
-        // set all thing
+        // docs info
+        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม โครงการเตรียมความพร้อมสำหรับการสอบ Timed-Station Examination (TSE) ของกระบวนวิชาระบบโครงกระดูกและกล้ามเนื้อในมนุษย์ สำหรับนักศึกษาแพทย์ชั้นปีที่ 2 มหาวิทยาลัยเชียงใหม่ ประจำปีการศึกษา 1/2567 (Pre-TSE 2567)`;
+        doc.info['Author'] = `CMSO ONLINE`;
+        doc.info['Subject'] = `กมุทพร อยู่บ้านแพ้ว รัตนโกมล`;
+        doc.info['Keywords '] = `Pre-TSE 2567`;
+        doc.info['ModDate'] = new Date(); // date of making cert
+
+        // set default text & bg thing
         doc.font(Regular)
         doc.image(`${__dirname}/asset/background/TP_CLEAN_PCP_TH.png`)
 
 
+        // start text
         doc.font(Bold).fontSize(185).fillColor('#1c3a4f').text(' ', doc.x + 485, doc.y, defaultMargin);
 
         doc.font(Bold).fontSize(60).text('คณะแพทยศาสตร์ มหาวิทยาลัยเชียงใหม่', defaultMargin);
