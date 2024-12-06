@@ -4,8 +4,9 @@ const demoErrors = require('./error_text/demoError');
 const projectError = require("./error_text/projectError");
 const recruitmentError = require("./error_text/recruitmentError");
 const organizationError = require("./error_text/organizationError");
+const activityError = require("./error_text/activityError");
 
-const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors, projectError, recruitmentError, organizationError)
+const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors, projectError, recruitmentError, organizationError, activityError)
 
 
 

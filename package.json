@@ -41,6 +41,8 @@
     "nanoid": "^3.0.0",
     "nodemon": "^3.0.1",
     "passport-jwt": "^4.0.0",
+    "pdfkit": "^0.15.1",
+    "pdfkit-table": "^0.1.99",
     "prisma-erd-generator": "^1.11.2",
     "uuid": "^8.3.2"
   },

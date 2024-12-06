@@ -48,6 +48,20 @@ const recruitmentError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "GET-STAFF-APPLICATION-ID-DATA-FAILED-NO-DATA": {
+        "code": "GET-STAFF-APPLICATION-ID-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่พบข้อมูลการสมัครจัดกิจกรรมจากเลขที่ใบสมัครนี้",
+        "textEN": "No data associated to this application id (staff)",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "GET-PARTICIPANT-APPLICATION-ID-DATA-FAILED-NO-DATA": {
+        "code": "GET-PARTICIPANT-APPLICATION-ID-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่พบข้อมูลการสมัครเข้าร่วมกิจกรรมจากเลขที่ใบสมัครนี้",
+        "textEN": "No data associated to this application id (participant)",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 }
 
 module.exports = recruitmentError

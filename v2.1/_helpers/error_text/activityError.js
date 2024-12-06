@@ -1,0 +1,82 @@
+const activityError = {
+    "DEMO-ERROR-NO-STUDENT-ID-SPECIFIED": {
+        "code": "DEMO-ERROR-NO-STUDENT-ID-SPECIFIED",
+        "textTH": "กรุณากรอกรหัสนักศึกษา",
+        "textEN": "Student ID is required",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CHECK-IN-ERROR-STUDENT-ID-NOT-JOINED-ACTIVITY": {
+        "code": "CHECK-IN-ERROR-STUDENT-ID-NOT-JOINED-ACTIVITY",
+        "textTH": "ไม่สามารถลงทะเบียนเข้าร่วมกิจกรรมได้เนื่องจากไม่ได้เข้าร่วมกิจกรรม",
+        "textEN": "Cannot check-in because this student was not registered",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CHECK-IN-ERROR-STUDENT-ID-CHECK-IN-ALREADY": {
+        "code": "CHECK-IN-ERROR-STUDENT-ID-CHECK-IN-ALREADY",
+        "textTH": "ไม่สามารถลงทะเบียนเข้าร่วมกิจกรรมได้เนื่องจากเข้าร่วมกิจกรรมไปแล้ว",
+        "textEN": "Cannot check-in because this student was already checked-in",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "EVALUATION-FORM-EDIT-STATUS-FAILED-SAME-STATUS": {
+        "code": "EVALUATION-FORM-EDIT-STATUS-FAILED-SAME-STATUS",
+        "textTH": "ไม่สามารถแก้ไขสถานะแบบประเมินเป็นสถานะเดิม",
+        "textEN": "Cannot edit evaluation form status to be the same",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-GET-STATUS-FAILED-NO-STATUS-DEFINED": {
+        "code": "CERTIFICATE-GET-STATUS-FAILED-NO-STATUS-DEFINED",
+        "textTH": "ไม่สามารถดึงข้อมูลสถานะของเกียรติบัตรได้",
+        "textEN": "Cannot retreive certificate status",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-GET-CERT-FAILED-NOT-GENERATED": {
+        "code": "CERTIFICATE-GET-CERT-FAILED-NOT-GENERATED",
+        "textTH": "คุณยังไม่ได้สร้างเกียรติบัตรสำหรับกิจกรรมนี้",
+        "textEN": "Certificate of this activity hasn't been generated",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA": {
+        "code": "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่สามารถดึงข้อมูลพื้นฐานของเกียรติบัตรได้",
+        "textEN": "Cannot retreive certificate default data",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA": {
+        "code": "CERTIFICATE-GET-DEFAULT-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่สามารถดึงข้อมูลพื้นฐานของเกียรติบัตรได้",
+        "textEN": "Cannot retreive certificate default data",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "GENERATE-CERTIFICATE-FAILED-NOT-MEET-CRITERIA": {
+        "code": "GENERATE-CERTIFICATE-FAILED-NOT-MEET-CRITERIA",
+        "textTH": "ไม่สามารถลงทะเบียนเกียรติบัตรได้เนื่องจากไม่ผ่านเงื่อนไข",
+        "textEN": "Failed to generate a certificate because all criteria were not met",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "CERTIFICATE-INFO-GET-DATA-FAILED-NO-DATA": {
+        "code": "CERTIFICATE-INFO-GET-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่มีข้อมูลของเกียรติบัตรฉบับนี้",
+        "textEN": "No data associated with this certificate ID",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR": {
+        "code": "GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบสร้างเกียรติบัตร",
+        "textEN": "Failed to generate a certificate (Internal Error)",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+
+}
+
+module.exports = activityError
