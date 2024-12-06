@@ -103,7 +103,14 @@ const commonErrors = {
         "textEN": "There is an internal error",
         "shouldContactAdmin": true,
         "shouldTryAgain": false,
-    }
+    },
+    "DECLINED-CONFIRM": {
+        "code": "DECLINED-CONFIRM",
+        "textTH": "คุณไม่ได้ยืนยัน",
+        "textEN": "Confirmation was not done",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
 
 }
 

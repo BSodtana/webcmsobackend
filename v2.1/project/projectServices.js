@@ -2,13 +2,18 @@ require('dotenv').config()
 const prisma = require('../prisma')
 
 const getAnnouncementList = async (project = null) => {
-
     const search = await prisma.cmsoprojectannouncement.findMany({
         where: { projectID: project },
-        include: {
+        select: {
+            announcementID: true,
+            studentID: true,
+            projectID: true,
+            announcementTitle: true,
+            announcementBody: true,
+            announcementCTALink: true,
+            updatedDateTime: true,
             users: {
                 select: {
-                    studentID: true,
                     titleTH: true,
                     firstNameTH: true,
                     lastNameTH: true
@@ -17,7 +22,21 @@ const getAnnouncementList = async (project = null) => {
         }
     })
 
-    return search
+    return search.map((each) => {
+        return {
+            announcementID: each.announcementID,
+            studentID: each.studentID,
+            projectID: each.projectID,
+            announcementTitle: each.announcementTitle,
+            announcementBody: each.announcementBody,
+            announcementCTALink: each.announcementCTALink,
+            updatedDateTime: each.updatedDateTime,
+
+            titleTH: each.users?.titleTH || null,
+            firstNameTH: each.users?.firstNameTH || null,
+            lastNameTH: each.users?.lastNameTH || null,
+        }
+    })
 
 }
 
@@ -106,7 +125,7 @@ const newAnnouncement = async (studentID, isGlobal = false, projectID = null, da
 
 }
 
-const searchListProjectByNamePage = async (searchByName = '', language = 'TH', page = 1) => {
+const searchListProjectByNamePage = async (searchByName = '', language = 'TH', page = 1, ended = false) => {
 
     if (language === 'EN') {
         // if language is en -> search en
@@ -125,9 +144,36 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                             contains: searchByName
                         }
                     }
-                ]
+                ],
+                AND: ended ? {} : {
+                    eventDateFinish: {
+                        gte: new Date()
+                    }
+                }
+
             },
-            include: {
+            orderBy: {
+                eventDateFinish: {
+                    sort: 'asc',
+                    nulls: 'last'
+                }
+            },
+            select: {
+                projectID: true,
+                studentID: true,
+                orgID: true,
+
+                projectNameTH: true,
+                projectNickNameTH: true,
+                projectShortDescriptionTH: true,
+
+                projectNameEN: true,
+                projectNickNameEN: true,
+
+                eventDateStart: true,
+                eventDateFinish: true,
+
+                academicYear: true,
                 projectdata: {
                     select: {
                         placeInCMU: true,
@@ -135,9 +181,32 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                     }
                 }
             }
+
         })
 
-        return search
+        return search.map((each) => {
+            return {
+                projectID: each.projectID,
+                studentID: each.studentID,
+                orgID: each.orgID,
+
+                projectNameTH: each.projectNameTH,
+                projectNickNameTH: each.projectNickNameTH,
+                projectShortDescriptionTH: each.projectShortDescriptionTH,
+
+                projectNameEN: each.projectNameEN,
+                projectNickNameEN: each.projectNickNameEN,
+
+                eventDateStart: each.eventDateStart,
+                eventDateFinish: each.eventDateFinish,
+
+                academicYear: each.academicYear,
+
+                placeInCMU: each.projectdata?.placeInCMU || null,
+                placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
+
+            }
+        })
 
 
     } else {
@@ -158,9 +227,35 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
                             contains: searchByName
                         }
                     }
-                ]
+                ],
+                AND: ended ? {} : {
+                    eventDateFinish: {
+                        gte: new Date()
+                    }
+                }
             },
-            include: {
+            orderBy: {
+                eventDateFinish: {
+                    sort: 'asc',
+                    nulls: 'last'
+                }
+            },
+            select: {
+                projectID: true,
+                studentID: true,
+                orgID: true,
+
+                projectNameTH: true,
+                projectNickNameTH: true,
+                projectShortDescriptionTH: true,
+
+                projectNameEN: true,
+                projectNickNameEN: true,
+
+                eventDateStart: true,
+                eventDateFinish: true,
+
+                academicYear: true,
                 projectdata: {
                     select: {
                         placeInCMU: true,
@@ -170,7 +265,29 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
             }
         })
 
-        return search
+        return search.map((each) => {
+            return {
+                projectID: each.projectID,
+                studentID: each.studentID,
+                orgID: each.orgID,
+
+                projectNameTH: each.projectNameTH,
+                projectNickNameTH: each.projectNickNameTH,
+                projectShortDescriptionTH: each.projectShortDescriptionTH,
+
+                projectNameEN: each.projectNameEN,
+                projectNickNameEN: each.projectNickNameEN,
+
+                eventDateStart: each.eventDateStart,
+                eventDateFinish: each.eventDateFinish,
+
+                academicYear: each.academicYear,
+
+                placeInCMU: each.projectdata?.placeInCMU || null,
+                placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
+
+            }
+        })
 
     }
 

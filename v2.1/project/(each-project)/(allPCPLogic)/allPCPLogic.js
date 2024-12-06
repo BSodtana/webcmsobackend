@@ -21,6 +21,11 @@ const getAllPCPInProject = async (projectID = '') => {
                     lastNameEN: true,
                     currentYear: true,
                 }
+            },
+            projectparticipantrecruit: {
+                select: {
+                    projectID: true
+                }
             }
         }
 
