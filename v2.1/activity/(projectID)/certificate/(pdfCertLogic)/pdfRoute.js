@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-const { pdfController } = require("./pdfController");
+const { pdfPCPController, pdfSTFController } = require("./pdfController");
 
 // /v2.1/activity/:projectID/certificate/pdf
 
-router.get('/1', pdfController)
+router.get('/1', pdfPCPController)
+router.get('/2', pdfSTFController)
 
 
 //---------- default -----------------
