@@ -1,6 +1,10 @@
 require('dotenv').config()
 const activityError = require('../../../_helpers/error_text/activityError')
+const { getUserBriefPersonalData } = require('../../../account/profile/profileServices')
 const prisma = require('../../../prisma')
+const { getProjectBriefData } = require('../../../project/(each-project)/eachProjectServices')
+const { getDataSpecificPositionID } = require('../../../project/(each-project)/recruitment/(recruitmentID)/eachRCMServices')
+const { getDataStaffSpecificPositionID } = require('../../../project/(each-project)/recruitment/(recruitmentID)/position/(positionID)/eachPOSServices')
 const checkGenCertLogic = require('./(genCertLogic)/checkGenCertLogic')
 const { generateNumberForCertificate } = require('./(genCertLogic)/genNumberCertLogic')
 
@@ -313,7 +317,59 @@ const generateCertForUser = async (studentID, projectID, forced = false) => {
 
 }
 
-// ------
+
+const getInfoFromCertNo = async (certID) => {
+    const data = await prisma.projectcertificatelist.findUnique({
+        where: {
+            certificateID: certID
+        }
+    })
+
+    if (!data) {
+        // no data
+        throw {
+            code: 'CERTIFICATE-INFO-GET-DATA-FAILED-NO-DATA',
+            desc: { userData: { certID } },
+        }
+    } else {
+
+        // get user data
+        const userData = await getUserBriefPersonalData(data.studentID)
+
+        // get project data
+        const projectData = await getProjectBriefData(data.projectID)
+
+        let STFpositionDetail = {}
+        let PCPpositionDetail = {}
+        // check if user is stf or pcp
+        if (data.certUserType === 'STF') {
+            // user is stf -> get position detail
+            STFpositionDetail = await getSTFDataFromApplicationID(data.applicationID)
+        } else {
+            // user is pcp -> get pcp detail
+            PCPpositionDetail = await getPCPDataFromApplicationID(data.applicationID)
+        }
+
+        // get this this activity cert data
+        const certCommonData = await getCertDefaultData(data.projectID)
+
+
+
+        // construct output data
+        const output = {
+            userData,
+            projectData,
+            certUserType: data.certUserType,
+            PCPpositionDetail,
+            STFpositionDetail,
+            certCommonData
+
+        }
+        return output
+    }
+}
+
+// ------ logic for check allowed to generate -----
 const checkIfOwnerAllowedUserToDL = async (studentID, projectID) => {
 
     const userRole = await checkGenCertLogic.checkIfUserJoinedProject(studentID, projectID, true)
@@ -328,6 +384,59 @@ const checkIfOwnerAllowedUserToDL = async (studentID, projectID) => {
     }
 }
 
+// --- logic to get user data from application id ---
+
+const getSTFDataFromApplicationID = async (staffApplicationID) => {
+    const data = await prisma.projectstaffs.findUnique({
+        where: {
+            staffApplicationID: staffApplicationID
+        }
+    })
+
+    if (!data) {
+        throw {
+            code: 'GET-STAFF-APPLICATION-ID-DATA-FAILED-NO-DATA',
+            desc: { userData: { staffApplicationID } },
+        }
+    } else {
+        // get position data
+        const posData = await getDataStaffSpecificPositionID(data.positionID)
+        return {
+            applicationID: data.staffApplicationID,
+            recruitID: data.recruitID,
+            positionID: data.positionID,
+            studentID: data.studentID,
+            createdDateTime: data.createdDateTime,
+            positionData: {
+                staffPositionID: posData.staffPositionID,
+                positionName: posData.positionName,
+            }
+        }
+    }
+}
+
+const getPCPDataFromApplicationID = async (participantApplicationID) => {
+    const data = await prisma.projectparticipants.findUnique({
+        where: {
+            participantApplicationID: participantApplicationID
+        }
+    })
+
+    if (!data) {
+        throw {
+            code: 'GET-PARTICIPANT-APPLICATION-ID-DATA-FAILED-NO-DATA',
+            desc: { userData: { participantApplicationID } },
+        }
+    } else {
+
+        return {
+            applicationID: data.participantApplicationID,
+            recruitID: data.recruitID,
+            studentID: data.studentID,
+            createdDateTime: data.createdDateTime
+        }
+    }
+}
 
 
 module.exports = {
@@ -335,11 +444,14 @@ module.exports = {
     editCertificateCommonStatus,
 
     getCertificateUserConsentStatus,
+    searchCertificateByProjectIDStudentID,
 
     getCertDefaultData,
     editCertDefaultData,
 
     changeCertCommonStatusWithRules,
 
-    generateCertForUser
+    generateCertForUser,
+
+    getInfoFromCertNo
 }

@@ -15,15 +15,12 @@ router.post('/status', [isLoggedIn(), isProjectOwner()], activityCertControllers
 router.get('/data', [isLoggedIn()], activityCertControllers.getCertDefaultDataCon)
 router.post('/data', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertDefaultDataCon)
 
-// todo:
 router.post('/generate', [isLoggedIn(), isProjectOwner()], activityCertControllers.editCertStatusWithConsentCon)
 router.post('/consent', [isLoggedIn()], activityCertControllers.generateCertForUserCon)
 
-router.use('/pdf', require('./(pdfCertLogic)/pdfRoute'))
+// router.use('/pdf', require('./(pdfCertLogic)/pdfRoute'))
 
-// router.get('/download', [isLoggedIn()], activityControllers.getCheckInCodeCon)
-
-
+router.use('/download', require('./(pdfCertLogic)/pdfRoute'))
 
 //---------- default -----------------
 router.get('/', (req, res) => {

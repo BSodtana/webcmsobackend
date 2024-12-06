@@ -1,6 +1,7 @@
 const PDFDocument = require('pdfkit-table');
 const fs = require('fs');
 const getStream = require('get-stream');
+const { formatThaiDate } = require('../../../../_helpers/formatDate');
 
 const Regular = `${__dirname}/asset/font/Prompt-Regular.ttf`
 const Bold = `${__dirname}/asset/font/Prompt-Bold.ttf`
@@ -9,7 +10,7 @@ const defaultMargin = {
     align: 'center'
 }
 
-const generatePCPPdf = async () => {
+const generatePCPPdf = async (userFullName, projectName, projectNickname, activityDate, certDate, projectOwnerFullName, advisorName, advisorTitle) => {
     try {
 
         const doc = new PDFDocument({
@@ -18,16 +19,19 @@ const generatePCPPdf = async () => {
         });
 
         // docs info
-        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม โครงการเตรียมความพร้อมสำหรับการสอบ Timed-Station Examination (TSE) ของกระบวนวิชาระบบโครงกระดูกและกล้ามเนื้อในมนุษย์ สำหรับนักศึกษาแพทย์ชั้นปีที่ 2 มหาวิทยาลัยเชียงใหม่ ประจำปีการศึกษา 1/2567 (Pre-TSE 2567)`;
+        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectNickname || projectName}`;
         doc.info['Author'] = `CMSO ONLINE`;
-        doc.info['Subject'] = `กมุทพร อยู่บ้านแพ้ว รัตนโกมล`;
-        doc.info['Keywords '] = `Pre-TSE 2567`;
-        doc.info['ModDate'] = new Date(); // date of making cert
+        doc.info['Subject'] = `${userFullName}`;
+        doc.info['Keywords '] = `${projectNickname || projectName}`;
+        doc.info['ModDate'] = new Date(certDate); // date of making cert
 
         // set default text & bg thing
         doc.font(Regular)
         doc.image(`${__dirname}/asset/background/TP_CLEAN_PCP_TH.png`)
 
+        // date text
+        const activityStringDate = formatThaiDate(activityDate)
+        const certStringDate = formatThaiDate(certDate)
 
         // start text
         doc.font(Bold).fontSize(185).fillColor('#1c3a4f').text(' ', doc.x + 485, doc.y, defaultMargin);
@@ -40,16 +44,14 @@ const generatePCPPdf = async () => {
 
         doc.font(Bold).fontSize(80).text(' ', defaultMargin);
 
-        doc.font(Bold).fontSize(85).fillColor('#349288').text('กมุทพร อยู่บ้านแพ้ว รัตนโกมล', defaultMargin);
+        doc.font(Bold).fontSize(85).fillColor('#349288').text(`${userFullName}`, defaultMargin);
 
         doc.font(Bold).fontSize(10).text(' ', defaultMargin);
 
-        doc.font(Regular).fontSize(35).fillColor('#1c3a4f').text('ได้เข้าร่วมโครงการเตรียมความพร้อมสำหรับการสอบ Timed-Station Examination (TSE) ของกระบวนวิชาระบบโครงกระดูกและกล้ามเนื้อในมนุษย์ สำหรับนักศึกษาแพทย์ชั้นปีที่ 2 มหาวิทยาลัยเชียงใหม่ ประจำปีการศึกษา 1/2567 (Pre-TSE 2567)', {
-            ...defaultMargin,
-        });
-        doc.font(Regular).fontSize(35).text('เมื่อวันที่ 16 กรกฎาคม พ.ศ. 2567', defaultMargin);
+        doc.font(Regular).fontSize(35).fillColor('#1c3a4f').text(`ได้เข้าร่วม${projectNickname || projectName}`, defaultMargin);
+        doc.font(Regular).fontSize(35).text(`เมื่อวันที่ ${activityStringDate}`, defaultMargin);
 
-        doc.fontSize(37).text('ให้ไว้ ณ วันที่ 20 เดือน กันยายน พ.ศ.2567', doc.x, 1010, defaultMargin);
+        doc.fontSize(37).text(`ให้ไว้ ณ วันที่ ${certStringDate}`, doc.x, 1010, defaultMargin);
 
         // spacing below
         const init_pad = 157.5
@@ -94,10 +96,10 @@ const generatePCPPdf = async () => {
         // });
 
         // name of signed ppl
-        const PROJECT_OWNER = `นศพ. ชื่อ สกุล`.replace(' ', ' ')
-        const PROJECT_ADVISOR = `ผศ.พญ. จีระนันท์ คุณาชีวะ`.replace(' ', ' ')
+        const PROJECT_OWNER = `นศพ. ${projectOwnerFullName}`.replace(' ', ' ')
+        const PROJECT_ADVISOR = `${advisorName}`.replace(' ', ' ')
+        const PROJECT_ADVISOR_TITLE = `${advisorTitle}`
         const PROJECT_CMSO_HEAD = `นศพ. พิมพ์ลักษณ์ ชัยจิตติประเสริฐ`.replace(' ', ' ')
-        const PROJECT_ADVISOR_TITLE = `ผู้ช่วยคณบดีคณะแพทยศาสตร์`
 
 
         const commonHeaderStyle = {
@@ -139,13 +141,15 @@ const generatePCPPdf = async () => {
 
     } catch (error) {
 
-        console.log('error', error);
+        throw {
+            code: 'GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR',
+            desc: { userData: { error } },
+        }
 
-        return null;
     }
 }
 
-const generateSTFPdf = async () => {
+const generateSTFPdf = async (userFullName, userPosition, projectName, projectNickname, activityDate, certDate, projectOwnerFullName, advisorName, advisorTitle) => {
     try {
 
         const doc = new PDFDocument({
@@ -154,15 +158,19 @@ const generateSTFPdf = async () => {
         });
 
         // docs info
-        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม โครงการเตรียมความพร้อมสำหรับการสอบ Timed-Station Examination (TSE) ของกระบวนวิชาระบบโครงกระดูกและกล้ามเนื้อในมนุษย์ สำหรับนักศึกษาแพทย์ชั้นปีที่ 2 มหาวิทยาลัยเชียงใหม่ ประจำปีการศึกษา 1/2567 (Pre-TSE 2567)`;
+        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectNickname || projectName}`;
         doc.info['Author'] = `CMSO ONLINE`;
-        doc.info['Subject'] = `กมุทพร อยู่บ้านแพ้ว รัตนโกมล`;
-        doc.info['Keywords '] = `Pre-TSE 2567`;
-        doc.info['ModDate'] = new Date(); // date of making cert
+        doc.info['Subject'] = `${userFullName}`;
+        doc.info['Keywords '] = `${projectNickname || projectName}`;
+        doc.info['ModDate'] = new Date(certDate); // date of making cert
 
         // set default text & bg thing
         doc.font(Regular)
         doc.image(`${__dirname}/asset/background/TP_CLEAN_STF_TH.png`)
+
+        // date text
+        const activityStringDate = formatThaiDate(activityDate)
+        const certStringDate = formatThaiDate(certDate)
 
 
         // start text
@@ -176,21 +184,21 @@ const generateSTFPdf = async () => {
 
         doc.font(Bold).fontSize(30).text(' ', defaultMargin);
 
-        doc.font(Bold).fontSize(85).fillColor('#5e17eb').text('กมุทพร อยู่บ้านแพ้ว รัตนโกมล', defaultMargin);
+        doc.font(Bold).fontSize(85).fillColor('#5e17eb').text(`${userFullName}`, defaultMargin);
 
         doc.font(Bold).fontSize(14).text(' ', defaultMargin);
 
-        doc.font(Regular).fontSize(31).fillColor('#1c3a4f').text('ได้เข้าร่วมเป็นคณะกรรมการดำเนินงาน ตำแหน่ง รองประธาน', defaultMargin);
+        doc.font(Regular).fontSize(31).fillColor('#1c3a4f').text(`ได้เข้าร่วมเป็นคณะกรรมการดำเนินงาน ตำแหน่ง ${userPosition}`, defaultMargin);
 
         const maxWidth = 1850
-        doc.font(Regular).fontSize(31).fillColor('#1c3a4f').text('โครงการเตรียมความพร้อมสำหรับการสอบ Timed-Station Examination (TSE) ของกระบวนวิชาระบบโครงกระดูกและกล้ามเนื้อในมนุษย์ สำหรับนักศึกษาแพทย์ชั้นปีที่ 2 มหาวิทยาลัยเชียงใหม่ ประจำปีการศึกษา 1/2567 (Pre-TSE 2567)', ((2000 - maxWidth) / 2), doc.y, {
+        doc.font(Regular).fontSize(31).fillColor('#1c3a4f').text(`${projectName}`, ((2000 - maxWidth) / 2), doc.y, {
             width: maxWidth,
             ...defaultMargin,
         });
 
-        doc.font(Regular).fontSize(31).text('เมื่อวันที่ 16 กรกฎาคม พ.ศ. 2567', 0, doc.y, defaultMargin);
+        doc.font(Regular).fontSize(31).text(`เมื่อวันที่ ${activityStringDate}`, 0, doc.y, defaultMargin);
 
-        doc.fontSize(31).text('ให้ไว้ ณ วันที่ 20 เดือน กันยายน พ.ศ.2567', doc.x, 1080, defaultMargin);
+        doc.fontSize(31).text(`ให้ไว้ ณ วันที่ ${certStringDate}`, doc.x, 1080, defaultMargin);
 
         // spacing below
         const init_pad = 400
@@ -235,10 +243,10 @@ const generateSTFPdf = async () => {
         // });
 
         // name of signed ppl
-        const PROJECT_OWNER = `นศพ. ชื่อ สกุล`.replace(' ', ' ')
-        const PROJECT_ADVISOR = `ผศ.พญ. จีระนันท์ คุณาชีวะ`.replace(' ', ' ')
+        const PROJECT_OWNER = `นศพ. ${projectOwnerFullName}`.replace(' ', ' ')
+        const PROJECT_ADVISOR = `${advisorName}`.replace(' ', ' ')
+        const PROJECT_ADVISOR_TITLE = `${advisorTitle}`
         const PROJECT_CMSO_HEAD = `นศพ. พิมพ์ลักษณ์ ชัยจิตติประเสริฐ`.replace(' ', ' ')
-        const PROJECT_ADVISOR_TITLE = `ผู้ช่วยคณบดีคณะแพทยศาสตร์`
 
 
         const commonHeaderStyle = {
@@ -280,9 +288,10 @@ const generateSTFPdf = async () => {
 
     } catch (error) {
 
-        console.log('error', error);
-
-        return null;
+        throw {
+            code: 'GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR',
+            desc: { userData: { error } },
+        }
     }
 }
 

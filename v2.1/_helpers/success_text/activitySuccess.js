@@ -72,7 +72,14 @@ const activitySuccess = {
     "CERTIFICATE-GENERATE-SUCCESS": {
         "code": "CERTIFICATE-GENERATE-SUCCESS",
         "textTH": "สร้างเกียรติบัตรสำเร็จ",
-        "textEN": "Generate a certification ssuccess",
+        "textEN": "Generate a certification success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "CERTIFICATE-INFO-GET-DATA-SUCCESS": {
+        "code": "CERTIFICATE-INFO-GET-DATA-SUCCESS",
+        "textTH": "รับข้อมูลของเกียรติบัตรสำเร็จ",
+        "textEN": "Get a certification info success",
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },

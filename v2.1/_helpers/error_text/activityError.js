@@ -62,6 +62,21 @@ const activityError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "CERTIFICATE-INFO-GET-DATA-FAILED-NO-DATA": {
+        "code": "CERTIFICATE-INFO-GET-DATA-FAILED-NO-DATA",
+        "textTH": "ไม่มีข้อมูลของเกียรติบัตรฉบับนี้",
+        "textEN": "No data associated with this certificate ID",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR": {
+        "code": "GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบสร้างเกียรติบัตร",
+        "textEN": "Failed to generate a certificate (Internal Error)",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+
 }
 
 module.exports = activityError

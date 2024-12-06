@@ -205,6 +205,25 @@ const generateCertForUserCon = async (req, res) => {
     }
 }
 
+const getCertInfoDataCon = async (req, res) => {
+
+    try {
+
+        // const { studentID = 'NO-STD-ID' } = await req?.userData
+        const { certID } = req.params
+
+        const results = await activityCertServices.getInfoFromCertNo(certID)
+        res.status(200).json(successCodeToResponse(results, 'CERTIFICATE-INFO-GET-DATA-SUCCESS', certID))
+
+
+    } catch (error) {
+        console.log('getCertInfoDataCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getCertInfoDataCon'))
+
+
+    }
+}
+
 module.exports = {
     getCertStatusPCPCon,
     editCertStatusCon,
@@ -214,5 +233,7 @@ module.exports = {
 
     editCertStatusWithConsentCon,
 
-    generateCertForUserCon
+    generateCertForUserCon,
+
+    getCertInfoDataCon
 }
