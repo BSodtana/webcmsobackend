@@ -39,7 +39,12 @@ const checkIfUserYearIsAllowed = async (recruitID = '', studentID = '') => {
     const recruitData = await eachRCMServices.getDataSpecificRecruitID(recruitID)
     const yearAllowed = recruitData.yearAllowed.split(',')
 
-    return yearAllowed.includes(stdYear)
+    //const re-wording of element to not have space
+    const newYearAllowed = yearAllowed.map((each) => {
+        return each.trim()
+    })
+
+    return newYearAllowed.includes(stdYear)
 
 }
 

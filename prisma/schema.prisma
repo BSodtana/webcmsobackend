@@ -219,8 +219,8 @@ model projects {
   projectNameEN                    String?                           @db.Text
   projectNickNameEN                String?                           @db.VarChar(500)
   projectFullDetail                String?                           @db.MediumText
-  eventDateStart                   DateTime?                         @default(dbgenerated("(curdate())")) @db.Date
-  eventDateFinish                  DateTime?                         @default(dbgenerated("(curdate())")) @db.Date
+  eventDateStart                   DateTime?                         @default(now()) @db.Date
+  eventDateFinish                  DateTime?                         @default(now()) @db.Date
   createdDateTime                  DateTime?                         @default(now()) @db.DateTime(0)
   updatedDateTime                  DateTime?                         @default(now()) @db.DateTime(0)
   isShown                          Int                               @default(0)
@@ -503,6 +503,32 @@ model projectcertificatelist {
   @@index([studentID], map: "FK_projectcertificate_users")
 }
 
+model projectcertificate {
+  certificateID   String                            @id @db.VarChar(50)
+  certDesignType  projectcertificate_certDesignType @default(PCP_TH)
+  studentID       String                            @db.VarChar(10)
+  applicationID   String                            @db.VarChar(50)
+  projectID       String                            @db.VarChar(50)
+  createdDatetime DateTime?                         @default(now()) @db.DateTime(0)
+
+  @@index([projectID], map: "FK_projectcertificate_projects")
+  @@index([studentID], map: "FK_projectcertificate_users")
+}
+
+model projectcertificatestatus {
+  projectID                  String                                 @id @db.VarChar(50)
+  certPCPStatus              projectcertificatestatus_certPCPStatus @default(DISABLED)
+  certPCPCreatedDate         DateTime                               @default(now()) @db.DateTime(0)
+  certSTFStatus              projectcertificatestatus_certSTFStatus @default(DISABLED)
+  certSTFCreatedDate         DateTime                               @default(now()) @db.DateTime(0)
+  teacherNameSignatureTH     String?                                @default("ชื่อ-สกุล อาจารย์") @db.Text
+  teacherNameSignatureEN     String?                                @default("Full Name Teacher") @db.Text
+  teacherPositionSignatureTH String?                                @default("ตำแหน่ง อาจารย์") @db.Text
+  teacherPositionSignatureEN String?                                @default("Position Teacher") @db.Text
+  teacherSignatureFileID     String?                                @db.VarChar(50)
+  updatedDatetime            DateTime?                              @default(now()) @db.DateTime(0)
+}
+
 enum projectconsiderationstatus_statusVP {
   QUEUE
   APPROVED
@@ -604,4 +630,25 @@ enum projectcertificatedefaultdata_certPCPDefaultDesignType {
 enum projectcertificatedefaultdata_certSTFDefaultDesignType {
   STF_TH
   STF_EN
+}
+
+enum projectcertificate_certDesignType {
+  PCP_TH
+  PCP_EN
+  STF_TH
+  STF_EN
+}
+
+enum projectcertificatestatus_certPCPStatus {
+  DISABLED
+  NOT_READY
+  REQ_NOT_MEET
+  READY
+}
+
+enum projectcertificatestatus_certSTFStatus {
+  DISABLED
+  NOT_READY
+  REQ_NOT_MEET
+  READY
 }

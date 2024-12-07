@@ -238,8 +238,15 @@ const joinProjectCon = async (req, res) => {
 
             // check if this id was PCP or STF
             if (joinAs === 'staff') {
-                const results = await eachprojectServices.joinProjectAsSTF(recruitID, positionID, studentID, password, forced)
-                res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-STF-SUCCESS', positionID, studentID))
+
+                // check if have all data
+                if (!positionID) {
+                    res.status(400).json(errorCodeToResponse("NOT-ENOUGH-DATA", recruitID, studentID))
+                } else {
+                    const results = await eachprojectServices.joinProjectAsSTF(recruitID, positionID, studentID, password, forced)
+                    res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-STF-SUCCESS', positionID, studentID))
+                }
+
             } else {
                 const results = await eachprojectServices.joinProjectPCP(recruitID, studentID, password, forced)
                 res.status(200).json(successCodeToResponse(results, 'JOIN-PROJECT-PCP-SUCCESS', recruitID, studentID))

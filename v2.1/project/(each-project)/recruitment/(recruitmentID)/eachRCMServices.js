@@ -24,7 +24,16 @@ const getDataSpecificPCPRecruitID = async (recruitmentID = '', showPassword = fa
         }
     })
 
-    return search
+    if (!search) {
+        throw {
+            code: 'P2025',
+            desc: { userData: { recruitmentID } },
+        }
+    } else {
+        return search
+    }
+
+
 }
 
 const getDataSpecificSTFRecruitID = async (recruitmentID = '', showPassword = false) => {
@@ -59,7 +68,15 @@ const getDataSpecificSTFRecruitID = async (recruitmentID = '', showPassword = fa
         }
     })
 
-    return search
+    if (!search) {
+        throw {
+            code: 'P2025',
+            desc: { userData: { recruitmentID } },
+        }
+    } else {
+        return search
+    }
+
 }
 
 
