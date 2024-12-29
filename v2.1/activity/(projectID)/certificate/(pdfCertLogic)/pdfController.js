@@ -87,9 +87,54 @@ const downloadCertCon = async (req, res) => {
     }
 }
 
+const downloadCertConTest = async (req, res) => {
+    try {
+
+        // const { studentID = 'NO-STD-ID' } = await req?.userData
+        // const { projectID } = req.params
+
+        // to download, user need to have certID
+        // const search = await searchCertificateByProjectIDStudentID(projectID, studentID)
+        // const allData = await getInfoFromCertNo(search.certificateID)
+        const dateNow = new Date()
+
+        //     `${allData.userData.firstNameTH} ${allData.userData.lastNameTH}`,
+        // `${allData.projectData.projectNameTH}`,
+        //     `${allData.projectData.projectNickNameTH}`,
+        //     allData.projectData.eventDateStart,
+        //     allData.certCommonData.certPCPCreatedDate,
+        //     `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
+        //     `${allData.certCommonData.teacherNameSignatureTH}`,
+        //     `${allData.certCommonData.teacherPositionSignatureTH}`
+
+        const pdfStream = await pdfService.generatePCPPdfTest(
+            `อันนา จุลกทัพพะ วทัญญุตา`,
+            `โครงการเตรียมความพร้อมสำหรับการสอบ Timed-Station Examination (TSE) ของกระบวนวิชาระบบโครงกระดูกและกล้ามเนือในมนุษย์ สำาหรับนักศึกษาแพทย์ชันปีที 2 มหาวิทยาลัยเชียงใหม่ ประจำาปีการศึกษา 1/2567 (Pre-TSE 2567)`,
+            `Pre-TSE 2567`,
+            dateNow,
+            dateNow,
+            `กมุทพร อยู่บ้านแพว รัตนโกมล`,
+            `จีระนันท์ คุณาชีวะ`,
+            `จีระนันท์ คุณาชีวะ`
+        )
+
+        res.writeHead(200, {
+            'Content-Length': Buffer.byteLength(pdfStream),
+            'Content-Type': 'application/pdf',
+            'Content-disposition': `attachment;filename=Certificate-PCP-TEST-CERT.pdf`,
+        }).end(pdfStream);
+
+
+    } catch (error) {
+        console.log('downloadCertConTest', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'downloadCertConTest'))
+    }
+}
+
 
 module.exports = {
     // pdfPCPController,
     // pdfSTFController,
-    downloadCertCon
+    downloadCertCon,
+    downloadCertConTest
 }

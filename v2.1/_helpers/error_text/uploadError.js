@@ -1,0 +1,88 @@
+const uploadError = {
+    "UPLOAD-FILE-ERROR-INTERNAL-ERROR": {
+        "code": "UPLOAD-FILE-ERROR-INTERNAL-ERROR",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้",
+        "textEN": "Upload File Error",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "LIMIT_FILE_SIZE": {
+        "code": "LIMIT_FILE_SIZE",
+        "textTH": "ไฟล์ขนาดใหญ่กว่าที่กำหนด",
+        "textEN": "File too large",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "UPLOAD-FILE-ERROR-NO-FILE-ATTACHED": {
+        "code": "UPLOAD-FILE-ERROR-NO-FILE-ATTACHED",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากไม่ได้แนบไฟล์มาด้วย",
+        "textEN": "Cannot upload file because no file was attached",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "UPLOAD-FILE-ERROR-UNACCEPTED-REASON": {
+        "code": "UPLOAD-FILE-ERROR-UNACCEPTED-REASON",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากคำขออัปโหลดไฟล์ไม่ถูกต้อง",
+        "textEN": "Cannot upload file due to unaccepted reason",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-TYPE-ERROR": {
+        "code": "UPLOAD-FILE-ERROR-TYPE-ERROR",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากสถานะไม่ถูกต้อง",
+        "textEN": "Cannot upload file due to unaccepted type",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-UNKNOWN-QUOTA": {
+        "code": "UPLOAD-FILE-ERROR-UNKNOWN-QUOTA",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากไม่ได้ระบุที่มา",
+        "textEN": "Cannot upload file due to unknown file origin",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-UNKNOWN-DESTINATION": {
+        "code": "UPLOAD-FILE-ERROR-UNKNOWN-DESTINATION",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากไม่ระบุเป้าหมาย",
+        "textEN": "Cannot upload file due to unknown file destination",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-UNKNOWN-PROJECT-ID": {
+        "code": "UPLOAD-FILE-ERROR-UNKNOWN-PROJECT-ID",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากไม่พบกิจกรรมนี้",
+        "textEN": "Cannot upload file due to unknown project ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-UNKNOWN-ORG-ID": {
+        "code": "UPLOAD-FILE-ERROR-UNKNOWN-ORG-ID",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากไม่พบองค์กรนี้",
+        "textEN": "Cannot upload file due to unknown organization ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE": {
+        "code": "UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE",
+        "textTH": "ไม่อนุญาตให้อัปโหลดไฟล์ประเภทนี้",
+        "textEN": "This type of file is not allowed",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-FULL-QUOTA": {
+        "code": "UPLOAD-FILE-ERROR-FULL-QUOTA",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากพื้นที่เต็มแล้ว",
+        "textEN": "Cannot upload file because storage was full",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "UPLOAD-FILE-ERROR-ACCESS-DENIED": {
+        "code": "UPLOAD-FILE-ERROR-ACCESS-DENIED",
+        "textTH": "ไม่สามารถอัปโหลดไฟล์ได้เนื่องจากไม่มีสิทธิ์อนุญาต",
+        "textEN": "Cannot upload file due to access denied",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+}
+
+module.exports = uploadError

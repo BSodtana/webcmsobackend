@@ -1,304 +1,577 @@
 require('dotenv').config()
 const prisma = require('../prisma')
+const multer = require('multer')
+const nanoid = require('nanoid')
+const fs = require('fs')
+const nanoid2 = nanoid.customAlphabet('123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 16)
 
-const getAnnouncementList = async (project = null) => {
-    const search = await prisma.cmsoprojectannouncement.findMany({
-        where: { projectID: project },
-        select: {
-            announcementID: true,
-            studentID: true,
-            projectID: true,
-            announcementTitle: true,
-            announcementBody: true,
-            announcementCTALink: true,
-            updatedDateTime: true,
-            users: {
-                select: {
-                    titleTH: true,
-                    firstNameTH: true,
-                    lastNameTH: true
-                }
+const path = require('path')
+const { filePublicityType, uploadedReasonList } = require('../_helpers/file_upload/uploadedReason')
+const allowedFileType = require('../_helpers/file_upload/allowedFileType')
+
+// default value
+const maxFileSizeMB = 5
+
+const storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+
+        // check req if the file needed to upload where 
+        const {
+            uuid
+        } = req?.userData
+
+        const {
+            fileRelatedType,
+            fileRelatedTypeID,
+            filePublicity,
+            fileUploadedReason
+        } = req?.fileReason
+
+        let path = ""
+
+        switch (fileRelatedType) {
+            case 'USER':
+                path = `./user_upload/user/${uuid}`
+                break;
+            case 'PROJECT':
+                path = `./user_upload/project/${fileRelatedTypeID}`
+                break;
+            case 'ORG':
+                path = `./user_upload/org/${fileRelatedTypeID}`
+                break;
+            case 'PUBLIC':
+                path = `./user_upload/public`
+                break;
+            default:
+                path = `./user_upload/default`
+                break;
+        }
+
+        fs.mkdirSync(path, { recursive: true })
+        callback(null, path)
+    },
+    filename: function (req, file, callback) {
+        // set file name by project/orgid and type
+        const {
+            uuid
+        } = req?.userData
+
+        const {
+            fileRelatedType,
+            fileRelatedTypeID,
+            filePublicity,
+            fileUploadedReason
+        } = req?.fileReason
+
+        let suffix = `${fileUploadedReason}`
+
+        switch (fileRelatedType) {
+            case 'USER':
+                suffix += `-${uuid}`
+                break;
+            case 'PROJECT':
+                suffix += `-${fileRelatedTypeID}`
+                break;
+            case 'ORG':
+                suffix += `-${fileRelatedTypeID}`
+                break;
+            case 'PUBLIC':
+                suffix += `-${uuid}-${fileRelatedTypeID}`
+                break;
+            default:
+                suffix += `-${uuid}`
+                break;
+        }
+
+        // get file extension
+        const filename = file.originalname.split('.')
+        const fileext = filename[filename.length - 1]
+        console.log('[save storage]', `${new Date().getTime().toString()}-${suffix}.${fileext}`);
+
+        callback(null, `${new Date().getTime().toString()}-${suffix}.${fileext}`)
+    },
+})
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 1024 * 1024 * maxFileSizeMB },
+    fileFilter: (req, file, callback) => {
+
+        const filename = file.originalname.split('.')
+        const fileext = filename[filename.length - 1]
+
+        if (!allowedFileType.includes(file.mimetype)) {
+            callback(
+                {
+                    code: 'UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE',
+                    desc: { fileType: file.mimetype, fileExtension: fileext }
+                },
+                false
+            )
+        } else {
+
+            // for each reason, has its own allowed filetype
+            const {
+                fileUploadedReason
+            } = req?.fileReason
+
+            const allowedData = uploadedReasonList[fileUploadedReason]
+
+            if (allowedData.allowedFileType.includes('*')) {
+                console.log('[allowed save]');
+                callback(null, true)
+            } else if (!allowedData.allowedFileType.includes(file.mimetype)) {
+                callback(
+                    {
+                        code: 'UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE',
+                        desc: { fileType: file.mimetype, fileExtension: fileext }
+                    },
+                    false
+                )
+            } else {
+                console.log('[allowed save]');
+                callback(null, true)
             }
         }
-    })
+    }
+}).single(['file'])
 
-    return search.map((each) => {
-        return {
-            announcementID: each.announcementID,
-            studentID: each.studentID,
-            projectID: each.projectID,
-            announcementTitle: each.announcementTitle,
-            announcementBody: each.announcementBody,
-            announcementCTALink: each.announcementCTALink,
-            updatedDateTime: each.updatedDateTime,
+const uploadFileService = async (req, res) => {
 
-            titleTH: each.users?.titleTH || null,
-            firstNameTH: each.users?.firstNameTH || null,
-            lastNameTH: each.users?.lastNameTH || null,
+    return new Promise((resolve, reject) => {
+        try {
+
+            upload(req, res, async (error) => {
+
+                if (error) {
+                    // check error code for specific error response 
+                    reject({
+                        code: error?.code || 'UPLOAD-FILE-ERROR-INTERNAL-ERROR',
+                        desc: { message: error?.message, error }
+                    }
+                    )
+                } else if (!req?.file) {
+                    // no file attached
+                    reject({
+                        code: 'UPLOAD-FILE-ERROR-NO-FILE-ATTACHED',
+                        desc: { message: error?.message, error }
+                    })
+                } else {
+
+
+                    const userData = req?.userData
+                    const {
+                        fileRelatedType,
+                        fileRelatedTypeID,
+                        filePublicity,
+                        fileUploadedReason
+                    } = req?.fileReason
+
+                    // file already in db, so add data to db first
+                    // save data to db
+
+                    const uploadedFileData = req?.file
+
+                    const savedFileDataToDB = await assignFileNamePathOnDB(
+                        uploadedFileData.filename,
+                        uploadedFileData.originalname,
+                        userData.uuid,
+                        fileRelatedType,
+                        fileRelatedTypeID,
+                        uploadedFileData.path,
+                        uploadedFileData.size,
+                        filePublicity,
+                        fileUploadedReason
+                    )
+
+                    console.log('[save db]',
+                        uploadedFileData.filename,
+                        uploadedFileData.originalname,
+                        userData.uuid,
+                        fileRelatedType,
+                        fileRelatedTypeID,
+                        uploadedFileData.path,
+                        uploadedFileData.size,
+                        filePublicity,
+                        fileUploadedReason
+                    );
+
+
+                    // after check file type and reason, check quota
+                    switch (fileRelatedType) {
+                        case 'USER':
+                            // user quota
+                            const quota = await getCurrentSizeAndUpdateQuotaUser(fileRelatedTypeID)
+
+                            if (quota.currentSizeUsed > quota.maxSizeQuota) {
+
+                                // storage full, delete this files
+                                fs.unlinkSync(uploadedFileData?.path)
+                                await deleteFileIDFromDB(savedFileDataToDB.fileID)
+
+                                reject({
+                                    code: 'UPLOAD-FILE-ERROR-FULL-QUOTA',
+                                    desc: {
+                                        currentFileSize: uploadedFileData?.size,
+                                        currentSizeUsed: quota.currentSizeUsed - uploadedFileData?.size,
+                                        maxSizeQuota: quota.maxSizeQuota,
+                                        quotaDeficit: quota.currentSizeUsed - quota.maxSizeQuota
+                                    }
+                                })
+                            } else {
+
+                                resolve({
+                                    fileID: savedFileDataToDB.fileID,
+                                    fileName: savedFileDataToDB.fileName,
+                                    fileUploadByUUID: savedFileDataToDB.fileUploadByUUID,
+                                    fileRelatedType: fileRelatedType,
+                                    fileRelatedTypeID: fileRelatedTypeID,
+                                    fileSize: uploadedFileData.size,
+                                    filePublicity: filePublicity,
+                                    fileUploadedReason: fileUploadedReason,
+                                    currentSizeUsed: quota.currentSizeUsed,
+                                })
+                            }
+                            break;
+
+                        case 'PROJECT':
+                            // user quota
+                            const quotaProject = await getCurrentSizeAndUpdateQuotaProject(fileRelatedTypeID)
+
+                            if (quotaProject.currentSizeUsed > quotaProject.maxSizeQuota) {
+
+                                // storage full, delete this files
+                                fs.unlinkSync(uploadedFileData?.path)
+                                await deleteFileIDFromDB(savedFileDataToDB.fileID)
+
+                                reject({
+                                    code: 'UPLOAD-FILE-ERROR-FULL-QUOTA',
+                                    desc: {
+                                        currentFileSize: uploadedFileData?.size,
+                                        currentSizeUsed: quotaProject.currentSizeUsed - uploadedFileData?.size,
+                                        maxSizeQuota: quotaProject.maxSizeQuota,
+                                        quotaDeficit: quotaProject.currentSizeUsed - quotaProject.maxSizeQuota
+                                    }
+                                })
+                            } else {
+
+                                resolve({
+                                    fileID: savedFileDataToDB.fileID,
+                                    fileName: savedFileDataToDB.fileName,
+                                    fileUploadByUUID: savedFileDataToDB.fileUploadByUUID,
+                                    fileRelatedType: fileRelatedType,
+                                    fileRelatedTypeID: fileRelatedTypeID,
+                                    fileSize: uploadedFileData.size,
+                                    filePublicity: filePublicity,
+                                    fileUploadedReason: fileUploadedReason,
+                                    currentSizeUsed: quotaProject.currentSizeUsed,
+                                })
+                            }
+                            break;
+
+                        case 'ORG':
+                            // org quota
+                            const orgQuota = await getCurrentSizeAndUpdateQuotaOrg(fileRelatedTypeID)
+
+                            if (orgQuota.currentSizeUsed > orgQuota.maxSizeQuota) {
+
+                                // storage full, delete this files
+                                fs.unlinkSync(uploadedFileData?.path)
+                                await deleteFileIDFromDB(savedFileDataToDB.fileID)
+
+                                reject({
+                                    code: 'UPLOAD-FILE-ERROR-FULL-QUOTA',
+                                    desc: {
+                                        currentFileSize: uploadedFileData?.size,
+                                        currentSizeUsed: orgQuota.currentSizeUsed - uploadedFileData?.size,
+                                        maxSizeQuota: orgQuota.maxSizeQuota,
+                                        quotaDeficit: orgQuota.currentSizeUsed - orgQuota.maxSizeQuota
+                                    }
+                                })
+                            } else {
+
+                                resolve({
+                                    fileID: savedFileDataToDB.fileID,
+                                    fileName: savedFileDataToDB.fileName,
+                                    fileUploadByUUID: savedFileDataToDB.fileUploadByUUID,
+                                    fileRelatedType: fileRelatedType,
+                                    fileRelatedTypeID: fileRelatedTypeID,
+                                    fileSize: uploadedFileData.size,
+                                    filePublicity: filePublicity,
+                                    fileUploadedReason: fileUploadedReason,
+                                    currentSizeUsed: orgQuota.currentSizeUsed,
+                                })
+                            }
+                            break;
+
+
+                        case 'PUBLIC':
+                            // no quota
+                            resolve({
+                                fileID: savedFileDataToDB.fileID,
+                                fileName: savedFileDataToDB.fileName,
+                                fileUploadByUUID: savedFileDataToDB.fileUploadByUUID,
+                                fileRelatedType: fileRelatedType,
+                                fileRelatedTypeID: fileRelatedTypeID,
+                                fileSize: uploadedFileData.size,
+                                filePublicity: filePublicity,
+                                fileUploadedReason: fileUploadedReason,
+                            })
+
+                            break;
+                        default:
+                            // no quota
+                            throw {
+                                code: error?.code || 'UPLOAD-FILE-ERROR-INTERNAL-ERROR',
+                                desc: { error },
+                            }
+
+                    }
+
+
+
+
+
+
+
+                }
+            })
+        } catch (error) {
+
+            throw {
+                code: error?.code || 'UPLOAD-FILE-ERROR-INTERNAL-ERROR',
+                desc: { error },
+            }
+
         }
-    })
 
+
+    })
 }
 
-const updateAnnouncement = async (announcementID, editedStudentID, data) => {
 
-    const edit = await prisma.cmsoprojectannouncement.update({
-        where: {
-            announcementID: announcementID
+const getCurrentSizeAndUpdateQuotaUser = async (uuid) => {
+
+    // sum data
+    const sumTotalFileSize = await prisma.uploadedfiledata.aggregate({
+        _sum: {
+            fileSize: true
         },
-        data: {
-            ...data,
-            studentID: editedStudentID,
-            updatedDateTime: new Date(),
+        where: {
+            fileRelatedType: 'USER',
+            fileRelatedTypeID: uuid
         }
     })
 
-    return edit
+    const fileSizeUserNow = sumTotalFileSize._sum.fileSize || 0
 
+    const updateQuota = await prisma.userfilequota.upsert({
+        where: {
+            UUID: uuid
+        },
+        update: {
+            currentSizeUsed: fileSizeUserNow,
+            updatedDatetime: new Date()
+        },
+        create: {
+            currentSizeUsed: fileSizeUserNow,
+            updatedDatetime: new Date(),
+            usercredentials: {
+                connect: {
+                    uuid: uuid
+                }
+            }
+        }
+    })
+
+    return {
+        UUID: updateQuota.UUID,
+        maxSizeQuota: updateQuota.maxSizeQuota,
+        currentSizeUsed: updateQuota.currentSizeUsed,
+        updatedDatetime: updateQuota.updatedDatetime
+    }
 }
 
-const deleteAnnouncement = async (announcementID, confirmed = false) => {
+const getCurrentSizeAndUpdateQuotaProject = async (projectID) => {
 
-    // check if confirmed?
-    if (!confirmed) {
+    // sum data
+    const sumTotalFileSize = await prisma.uploadedfiledata.aggregate({
+        _sum: {
+            fileSize: true
+        },
+        where: {
+            fileRelatedType: 'PROJECT',
+            fileRelatedTypeID: projectID
+        }
+    })
 
-        throw {
-            code: 'DECLINED-CONFIRM-DELETE',
-            desc: { userData: { announcementID, confirmed } }
+    const fileSizeUserNow = sumTotalFileSize._sum.fileSize || 0
+
+
+
+    const updateQuota = await prisma.projectfilequota.upsert({
+        where: {
+            projectID: projectID
+        },
+        update: {
+            currentSizeUsed: fileSizeUserNow,
+            updatedDatetime: new Date()
+        },
+        create: {
+            currentSizeUsed: fileSizeUserNow,
+            updatedDatetime: new Date(),
+            projects: {
+                connect: {
+                    projectID: projectID
+                }
+            }
+        }
+    })
+
+    return {
+        projectID: updateQuota.projectID,
+        maxSizeQuota: updateQuota.maxSizeQuota,
+        currentSizeUsed: updateQuota.currentSizeUsed,
+        updatedDatetime: updateQuota.updatedDatetime
+    }
+}
+
+const getCurrentSizeAndUpdateQuotaOrg = async (orgID) => {
+
+    // sum data
+    const sumTotalFileSize = await prisma.uploadedfiledata.aggregate({
+        _sum: {
+            fileSize: true
+        },
+        where: {
+            fileRelatedType: 'ORG',
+            fileRelatedTypeID: orgID
+        }
+    })
+
+    const fileSizeUserNow = sumTotalFileSize._sum.fileSize || 0
+
+    const updateQuota = await prisma.organizationsfilequota.upsert({
+        where: {
+            orgID: orgID
+        },
+        update: {
+            currentSizeUsed: fileSizeUserNow,
+            updatedDatetime: new Date()
+        },
+        create: {
+            currentSizeUsed: fileSizeUserNow,
+            updatedDatetime: new Date(),
+            organizations: {
+                connect: {
+                    orgID: orgID
+                }
+            }
+        }
+    })
+
+    return {
+        orgID: updateQuota.orgID,
+        maxSizeQuota: updateQuota.maxSizeQuota,
+        currentSizeUsed: updateQuota.currentSizeUsed,
+        updatedDatetime: updateQuota.updatedDatetime
+    }
+}
+
+// file data on db
+const assignFileNamePathOnDB = async (fileName, fileOriginalName, fileUploadByUUID, fileRelatedType = 'USER', fileRelatedTypeID, filePath, fileSize, filePublicity = 'PRIVATE', fileUploadedReason) => {
+
+    try {
+
+        // gen an ID
+        let fileID = nanoid2()
+        let checkUsed = {}
+
+        do {
+
+            checkUsed = await prisma.uploadedfiledata.findUnique({
+                where: {
+                    fileID: fileID
+                }
+            })
+
+            if (!checkUsed) {
+                // not used -> add to db
+                const saveToDB = await prisma.uploadedfiledata.create({
+                    data: {
+                        fileID: fileID,
+                        fileName: fileName,
+                        fileOriginalName: fileOriginalName,
+                        fileUploadDatetime: new Date(),
+                        fileUploadByUUID: fileUploadByUUID,
+                        fileRelatedType: fileRelatedType,
+                        fileRelatedTypeID: fileRelatedTypeID,
+                        filePathNow: filePath,
+                        fileSize: fileSize,
+                        filePublicity: filePublicity,
+                        fileUploadedReason: fileUploadedReason
+                    }
+                })
+
+                return {
+                    fileID: saveToDB.fileID,
+                    fileName: saveToDB.fileName,
+                    fileUploadDatetime: saveToDB.fileUploadDatetime,
+                    fileUploadByUUID: saveToDB.fileUploadByUUID,
+                    fileUploadedReason: saveToDB.fileUploadedReason
+                }
+            }
+        } while (!checkUsed)
+    }
+
+    catch (error) {
+        throw { code: error?.code || 500, message: error.message || error }
+
+    }
+}
+
+const deleteFileIDFromDB = async (fileID) => {
+    const deleteFile = await prisma.uploadedfiledata.delete({
+        where: {
+            fileID: fileID
+        }
+    })
+
+    return {
+        fileID: fileID
+    }
+}
+
+
+
+
+// view file [TODO]
+const sentFile = async () => {
+    try {
+
+        const fileDetails = await db.pool.query('select * from fileuploaddata where fileID = ?', [id])
+
+        if (fileDetails.length === 0) {
+            res.status(200).json({ status: 'failed', data: { error: 'File from provided file ID is not exist.' } })
+
+        } else {
+            const filePath = path.resolve(__dirname, '../../public/uploads', fileDetails[0].fileName);
+            if (action === 'view') {
+                return res.sendFile(filePath);
+            } else {
+                return res.download(filePath);
+            }
         }
 
-    } else {
 
-        const deleteResult = await prisma.cmsoprojectannouncement.delete({
-            where: {
-                announcementID: announcementID
-            }
-        })
 
-        return {}
+    } catch (error) {
+        console.error("view file err", error);
+        res.status(200).json({ status: 'failed', data: { error: error.message || 'Internal Server Error' } })
 
     }
-
-}
-
-const newAnnouncement = async (studentID, isGlobal = false, projectID = null, data) => {
-
-    // check number of the announcement so it wont collide with previous announcement
-    const search = await getAnnouncementList(projectID)
-    const count = search.length
-    const newNum = count + 1
-    const numFormatPadding = newNum.toString().padStart(4, '0') // 4 digit string with leading 0
-
-
-    if (isGlobal) {
-        // if global announcement
-        const newAnnoun = await prisma.cmsoprojectannouncement.create({
-            data: {
-                announcementID: `GLOBAL-A${numFormatPadding}`,
-                studentID: studentID,
-                projectID: null,
-                announcementTitle: data.announcementTitle || 'New announcement',
-                announcementBody: data.announcementBody || null,
-                announcementCTALink: data.announcementCTALink || null,
-            }
-        })
-
-        return newAnnoun
-
-    } else {
-        // announcement project specific
-
-        const newAnnoun = await prisma.cmsoprojectannouncement.create({
-            data: {
-                announcementID: `${projectID}-A${numFormatPadding}`,
-                studentID: studentID,
-                projectID: projectID,
-                announcementTitle: data.announcementTitle || 'New announcement',
-                announcementBody: data.announcementBody || null,
-                announcementCTALink: data.announcementCTALink || null,
-            }
-        })
-
-        return newAnnoun
-
-    }
-
-}
-
-const searchListProjectByNamePage = async (searchByName = '', language = 'TH', page = 1, ended = false) => {
-
-    if (language === 'EN') {
-        // if language is en -> search en
-        const search = await prisma.projects.findMany({
-            skip: (page - 1) * 20,
-            take: 20,
-            where: {
-                OR: [
-                    {
-                        projectNameEN: {
-                            contains: searchByName
-                        }
-                    },
-                    {
-                        projectNickNameEN: {
-                            contains: searchByName
-                        }
-                    }
-                ],
-                AND: ended ? {} : {
-                    eventDateFinish: {
-                        gte: new Date()
-                    }
-                }
-
-            },
-            orderBy: {
-                eventDateFinish: {
-                    sort: 'asc',
-                    nulls: 'last'
-                }
-            },
-            select: {
-                projectID: true,
-                studentID: true,
-                orgID: true,
-
-                projectNameTH: true,
-                projectNickNameTH: true,
-                projectShortDescriptionTH: true,
-
-                projectNameEN: true,
-                projectNickNameEN: true,
-
-                eventDateStart: true,
-                eventDateFinish: true,
-
-                academicYear: true,
-                projectdata: {
-                    select: {
-                        placeInCMU: true,
-                        placeOutsideCMU: true
-                    }
-                }
-            }
-
-        })
-
-        return search.map((each) => {
-            return {
-                projectID: each.projectID,
-                studentID: each.studentID,
-                orgID: each.orgID,
-
-                projectNameTH: each.projectNameTH,
-                projectNickNameTH: each.projectNickNameTH,
-                projectShortDescriptionTH: each.projectShortDescriptionTH,
-
-                projectNameEN: each.projectNameEN,
-                projectNickNameEN: each.projectNickNameEN,
-
-                eventDateStart: each.eventDateStart,
-                eventDateFinish: each.eventDateFinish,
-
-                academicYear: each.academicYear,
-
-                placeInCMU: each.projectdata?.placeInCMU || null,
-                placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
-
-            }
-        })
-
-
-    } else {
-        // else -> default seach = if language is th
-        const search = await prisma.projects.findMany({
-            skip: (page - 1) * 20,
-            take: 20,
-            where: {
-
-                OR: [
-                    {
-                        projectNameTH: {
-                            contains: searchByName
-                        }
-                    },
-                    {
-                        projectNickNameTH: {
-                            contains: searchByName
-                        }
-                    }
-                ],
-                AND: ended ? {} : {
-                    eventDateFinish: {
-                        gte: new Date()
-                    }
-                }
-            },
-            orderBy: {
-                eventDateFinish: {
-                    sort: 'asc',
-                    nulls: 'last'
-                }
-            },
-            select: {
-                projectID: true,
-                studentID: true,
-                orgID: true,
-
-                projectNameTH: true,
-                projectNickNameTH: true,
-                projectShortDescriptionTH: true,
-
-                projectNameEN: true,
-                projectNickNameEN: true,
-
-                eventDateStart: true,
-                eventDateFinish: true,
-
-                academicYear: true,
-                projectdata: {
-                    select: {
-                        placeInCMU: true,
-                        placeOutsideCMU: true
-                    }
-                }
-            }
-        })
-
-        return search.map((each) => {
-            return {
-                projectID: each.projectID,
-                studentID: each.studentID,
-                orgID: each.orgID,
-
-                projectNameTH: each.projectNameTH,
-                projectNickNameTH: each.projectNickNameTH,
-                projectShortDescriptionTH: each.projectShortDescriptionTH,
-
-                projectNameEN: each.projectNameEN,
-                projectNickNameEN: each.projectNickNameEN,
-
-                eventDateStart: each.eventDateStart,
-                eventDateFinish: each.eventDateFinish,
-
-                academicYear: each.academicYear,
-
-                placeInCMU: each.projectdata?.placeInCMU || null,
-                placeOutsideCMU: each.projectdata?.placeOutsideCMU || null
-
-            }
-        })
-
-    }
-
-
 }
 
 module.exports = {
-    getAnnouncementList,
-    updateAnnouncement,
-    deleteAnnouncement,
-    newAnnouncement,
-
-    searchListProjectByNamePage
+    uploadFileService
 }

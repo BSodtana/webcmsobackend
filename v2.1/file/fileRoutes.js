@@ -1,17 +1,20 @@
 const express = require("express");
 const router = express.Router();
+
 // /v2.1/file/
 
-const eachProjectRoute = require('./(each-project)/eachProjectRoutes')
+// const eachProjectRoute = require('./(each-project)/eachProjectRoutes')
 
-const projectControllers = require('./projectControllers');
+const fileControllers = require('./fileControllers');
 
 const isLoggedIn = require("../_middleware/isLoggedIn");
 
 
-router.get('/announcement', [isLoggedIn()], projectControllers.getAnnouncementListController)
-router.get('/list', projectControllers.searchListProjectByNamePageController)
-router.use('/:projectID', eachProjectRoute)
+// todo
+router.post('/upload', [isLoggedIn()], fileControllers.uploadFileCon)
+// router.get('/view', projectControllers)
+// router.use('/manage', projectControllers)
+
 
 
 //---------- default -----------------
