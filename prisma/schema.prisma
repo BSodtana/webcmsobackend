@@ -39,17 +39,18 @@ model categorycmuproject {
 }
 
 model organizations {
-  orgID               String                @id @db.VarChar(15)
-  orgName             String                @db.Text
-  orgDesc             String?               @db.Text
-  orgImageID          String?               @db.VarChar(50)
-  orgType             organizations_orgType @default(DIVISION)
-  parentOrg           String?               @db.VarChar(15)
-  updatedDateTime     DateTime?             @default(now()) @db.DateTime(0)
-  organizations       organizations?        @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
-  other_organizations organizations[]       @relation("organizationsToorganizations")
-  projects            projects[]
-  useraffiliation     useraffiliation[]
+  orgID                  String                  @id @db.VarChar(15)
+  orgName                String                  @db.Text
+  orgDesc                String?                 @db.Text
+  orgImageID             String?                 @db.VarChar(50)
+  orgType                organizations_orgType   @default(DIVISION)
+  parentOrg              String?                 @db.VarChar(15)
+  updatedDateTime        DateTime?               @default(now()) @db.DateTime(0)
+  organizations          organizations?          @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
+  other_organizations    organizations[]         @relation("organizationsToorganizations")
+  organizationsfilequota organizationsfilequota?
+  projects               projects[]
+  useraffiliation        useraffiliation[]
 
   @@index([parentOrg], map: "parentOrg")
 }
@@ -234,6 +235,7 @@ model projects {
   projectdata                      projectdata?
   projectevaluateformresponse      projectevaluateformresponse[]
   projectevaluateformstatus        projectevaluateformstatus?
+  projectfilequota                 projectfilequota?
   projectparticipantrecruit        projectparticipantrecruit[]
   projectparticipation             projectparticipation[]
   organizations                    organizations                     @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
@@ -320,16 +322,18 @@ model usercodeverification {
 }
 
 model usercredentials {
-  uuid            String               @unique(map: "uuid") @db.VarChar(50)
-  studentID       String               @id @db.VarChar(10)
-  email           String?              @db.VarChar(100)
-  hashPassword    String?              @db.VarChar(500)
-  createdDateTime DateTime?            @default(now())
-  updatedDateTime DateTime?            @default(now())
-  role            usercredentials_role @default(USER)
-  emailVerified   Int                  @default(0)
-  users           users                @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
-  userslogout     userslogout[]
+  uuid             String               @unique(map: "uuid") @db.VarChar(50)
+  studentID        String               @id @db.VarChar(10)
+  email            String?              @db.VarChar(100)
+  hashPassword     String?              @db.VarChar(500)
+  createdDateTime  DateTime?            @default(now())
+  updatedDateTime  DateTime?            @default(now())
+  role             usercredentials_role @default(USER)
+  emailVerified    Int                  @default(0)
+  uploadedfiledata uploadedfiledata[]
+  users            users                @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_usercredentials_users")
+  userfilequota    userfilequota?
+  userslogout      userslogout[]
 }
 
 model users {
@@ -359,7 +363,6 @@ model users {
   projectparticipation        projectparticipation[]
   projects                    projects[]
   projectstaffs               projectstaffs[]
-  uploadedfiledraft           uploadedfiledraft[]
   useraffiliation             useraffiliation[]
   usercodeverification        usercodeverification?
   usercredentials             usercredentials?
@@ -389,17 +392,6 @@ model cmsoprojectannouncement {
   users               users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
 
   @@index([projectID], map: "projectID")
-  @@index([studentID], map: "studentID")
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model uploadedfiledraft {
-  fileID          String    @id @default("") @db.VarChar(50)
-  studentID       String    @db.VarChar(10)
-  path            String    @db.Text
-  updatedDatetime DateTime? @db.DateTime(0)
-  users           users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_uploadedfile_draft_users")
-
   @@index([studentID], map: "studentID")
 }
 
@@ -529,6 +521,48 @@ model projectcertificatestatus {
   updatedDatetime            DateTime?                              @default(now()) @db.DateTime(0)
 }
 
+model organizationsfilequota {
+  orgID           String        @id @db.VarChar(15)
+  maxSizeQuota    Int           @default(52428800)
+  currentSizeUsed Int
+  updatedDatetime DateTime?     @default(now()) @db.DateTime(0)
+  organizations   organizations @relation(fields: [orgID], references: [orgID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizationsfilequota_organizations")
+}
+
+model projectfilequota {
+  projectID       String    @id @default("") @db.VarChar(50)
+  maxSizeQuota    Int       @default(52428800)
+  currentSizeUsed Int
+  updatedDatetime DateTime? @default(now()) @db.DateTime(0)
+  projects        projects  @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectfilequota_projects")
+}
+
+model uploadedfiledata {
+  fileID             String                           @id @default("") @db.VarChar(50)
+  fileName           String                           @default(dbgenerated("(current_timestamp())")) @db.MediumText
+  fileOriginalName   String                           @db.MediumText
+  fileUploadDatetime DateTime?                        @default(now()) @db.DateTime(0)
+  fileUploadByUUID   String                           @default("") @db.VarChar(50)
+  fileRelatedType    uploadedfiledata_fileRelatedType @default(PROJECT)
+  fileRelatedTypeID  String                           @db.VarChar(50)
+  filePathNow        String                           @db.MediumText
+  fileSize           Int
+  filePublicity      uploadedfiledata_filePublicity   @default(PRIVATE)
+  fileUploadedReason String?                          @db.MediumText
+  usercredentials    usercredentials                  @relation(fields: [fileUploadByUUID], references: [uuid], onDelete: NoAction, onUpdate: NoAction, map: "FK_uploadedfiledata_usercredentials")
+
+  @@index([fileRelatedTypeID], map: "FK_uploadedfiledata_projects")
+  @@index([fileUploadByUUID], map: "FK_uploadedfiledata_usercredentials")
+}
+
+model userfilequota {
+  UUID            String          @id @db.VarChar(50)
+  maxSizeQuota    Int             @default(5242880)
+  currentSizeUsed Int
+  updatedDatetime DateTime?       @default(now()) @db.DateTime(0)
+  usercredentials usercredentials @relation(fields: [UUID], references: [uuid], onDelete: NoAction, onUpdate: NoAction, map: "FK_userfilequota_usercredentials")
+}
+
 enum projectconsiderationstatus_statusVP {
   QUEUE
   APPROVED
@@ -651,4 +685,17 @@ enum projectcertificatestatus_certSTFStatus {
   NOT_READY
   REQ_NOT_MEET
   READY
+}
+
+enum uploadedfiledata_fileRelatedType {
+  USER
+  PROJECT
+  ORG
+  PUBLIC
+}
+
+enum uploadedfiledata_filePublicity {
+  PUBLIC
+  PRIVATE
+  LOGIN_ONLY
 }
