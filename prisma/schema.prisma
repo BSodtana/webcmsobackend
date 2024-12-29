@@ -41,6 +41,7 @@ model categorycmuproject {
 model organizations {
   orgID                  String                  @id @db.VarChar(15)
   orgName                String                  @db.Text
+  studentID              String?                 @db.VarChar(10)
   orgDesc                String?                 @db.Text
   orgImageID             String?                 @db.VarChar(50)
   orgType                organizations_orgType   @default(DIVISION)
@@ -48,11 +49,13 @@ model organizations {
   updatedDateTime        DateTime?               @default(now()) @db.DateTime(0)
   organizations          organizations?          @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
   other_organizations    organizations[]         @relation("organizationsToorganizations")
+  users                  users?                  @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizations_users")
   organizationsfilequota organizationsfilequota?
   projects               projects[]
   useraffiliation        useraffiliation[]
 
   @@index([parentOrg], map: "parentOrg")
+  @@index([studentID], map: "FK_organizations_users")
 }
 
 model projectconsiderationstatus {
@@ -357,6 +360,7 @@ model users {
   createdDateTime             DateTime?                     @default(now()) @db.DateTime(0)
   updatedDateTime             DateTime?                     @default(now()) @db.DateTime(0)
   cmsoprojectannouncement     cmsoprojectannouncement[]
+  organizations               organizations[]
   projectcertificatelist      projectcertificatelist[]
   projectevaluateformresponse projectevaluateformresponse[]
   projectparticipants         projectparticipants[]
@@ -557,10 +561,10 @@ model uploadedfiledata {
 
 model userfilequota {
   UUID            String          @id @db.VarChar(50)
-  maxSizeQuota    Int             @default(5242880)
+  maxSizeQuota    Int             @default(52428800)
   currentSizeUsed Int
   updatedDatetime DateTime?       @default(now()) @db.DateTime(0)
-  usercredentials usercredentials @relation(fields: [UUID], references: [uuid], onDelete: NoAction, onUpdate: NoAction, map: "FK_userfilequota_usercredentials")
+  usercredentials usercredentials @relation(fields: [UUID], references: [uuid], onDelete: Cascade, map: "FK_userfilequota_usercredentials")
 }
 
 enum projectconsiderationstatus_statusVP {
