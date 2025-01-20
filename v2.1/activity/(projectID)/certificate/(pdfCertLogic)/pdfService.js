@@ -22,7 +22,7 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
         doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectNickname || projectName}`;
         doc.info['Author'] = `CMSO ONLINE`;
         doc.info['Subject'] = `${userFullName}`;
-        doc.info['Keywords '] = `${projectNickname || projectName}`;
+        doc.info['Keywords'] = `${projectNickname || projectName}`;
         doc.info['ModDate'] = new Date(certDate); // date of making cert
 
         // set default text & bg thing
@@ -48,7 +48,7 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
 
         doc.font(Bold).fontSize(10).text(' ', defaultMargin);
 
-        doc.font(Regular).fontSize(35).fillColor('#1c3a4f').text(`ได้เข้าร่วม${projectNickname || projectName}`, defaultMargin);
+        doc.font(Regular).fontSize(35).fillColor('#1c3a4f').text(`ได้เข้าร่วม${projectName || projectNickname}`, defaultMargin);
         doc.font(Regular).fontSize(35).text(`เมื่อวันที่ ${activityStringDate}`, defaultMargin);
 
         doc.fontSize(37).text(`ให้ไว้ ณ วันที่ ${certStringDate}`, doc.x, 1010, defaultMargin);
