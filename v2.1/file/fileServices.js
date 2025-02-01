@@ -561,8 +561,33 @@ const deleteFileIDFromDB = async (fileID) => {
     }
 }
 
+const getFileInfoFromDB = async (fileID) => {
+
+    const search = await prisma.uploadedfiledata.findFirstOrThrow({
+        where: {
+            fileID: fileID
+        },
+        select: {
+            fileID: true,
+            fileName: true,
+            fileOriginalName: true,
+            fileUploadDatetime: true,
+            fileUploadByUUID: true,
+            fileRelatedType: true,
+            fileRelatedTypeID: true,
+            filePathNow: true,
+            fileSize: true,
+            filePublicity: true,
+            fileUploadedReason: true
+        }
+    })
+
+    return search
+}
+
 
 module.exports = {
     uploadFileService,
-    serveFileFromFileID
+    serveFileFromFileID,
+    getFileInfoFromDB
 }
