@@ -11,7 +11,24 @@ const defaultMargin = {
     align: 'center'
 }
 
-const generatePCPPdf = async (userFullName, projectName, projectNickname, activityDate, certDate, projectOwnerFullName, advisorName, advisorTitle) => {
+const generatePCPPdf = async (
+    userFullName,
+
+    projectName,
+    projectNickname,
+    activityDate,
+    certDate,
+
+    projectOwnerFullName,
+    projectOwnerSignatureFileID = '8mwGVo1bRMPHoLL3',
+
+    advisorName,
+    advisorTitle,
+    advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3',
+
+    presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
+    presidentAcademicYear = '2568',
+    presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
     try {
 
         const doc = new PDFDocument({
@@ -74,9 +91,35 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
         // doc.lineWidth(2).rect(doc.x + init_pad + 6.5 + 800, 1100, image_width, image_height).stroke();
 
         // real image
-        const SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
-        const SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
-        const SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+        // const SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        // const SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        // const SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+        let SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        let SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        let SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+
+
+        try {
+            SIGN_OWNER = await serveFileFromFileID(projectOwnerSignatureFileID)
+        } catch (error) {
+            console.log('[Gen Certificate PCP] Signature file id error', error);
+            SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        }
+
+        try {
+            SIGN_ADVISOR = await serveFileFromFileID(advisorNameSignatureFileID)
+        } catch (error) {
+            console.log('[Gen Certificate PCP] Signature file id error', error);
+            SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        }
+
+        try {
+            SIGN_CMSOHEAD = await serveFileFromFileID(presidentSignatureFileID)
+        } catch (error) {
+            console.log('[Gen Certificate PCP] Signature file id error', error);
+            SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+        }
+
         // Fit the image in the dimensions, and center it both horizontally and vertically
         doc.image(SIGN_OWNER, doc.x + init_pad, 1145, { fit: [image_width, image_height], align: 'center', valign: 'center' })
         doc.image(SIGN_ADVISOR, doc.x + init_pad + 400, 1145, { fit: [image_width, image_height], align: 'center', valign: 'center' })
@@ -105,7 +148,7 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
         const PROJECT_OWNER = `นศพ. ${projectOwnerFullName}`.replace(' ', ' ')
         const PROJECT_ADVISOR = `${advisorName}`.replace(' ', ' ')
         const PROJECT_ADVISOR_TITLE = `${advisorTitle}`
-        const PROJECT_CMSO_HEAD = `นศพ. พิมพ์ลักษณ์ ชัยจิตติประเสริฐ`.replace(' ', ' ')
+        const PROJECT_CMSO_HEAD = `นศพ. ${presidentFullName}`.replace(' ', ' ')
 
 
         const commonHeaderStyle = {
@@ -122,7 +165,7 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
                 { label: PROJECT_CMSO_HEAD, property: 'cmsoHeadName', ...commonHeaderStyle },
             ],
             rows: [
-                ["ประธานโครงการ", PROJECT_ADVISOR_TITLE, "นายกสโมสรนักศึกษาคณะแพทยศาสตร์ ประจำปีการศึกษา 2567"],
+                ["ประธานโครงการ", PROJECT_ADVISOR_TITLE, `นายกสโมสรนักศึกษาคณะแพทยศาสตร์ ประจำปีการศึกษา ${presidentAcademicYear}`],
             ],
         };
 
@@ -155,7 +198,25 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
     }
 }
 
-const generateSTFPdf = async (userFullName, userPosition, projectName, projectNickname, activityDate, certDate, projectOwnerFullName, projectOwnerSignatureFileID = '8mwGVo1bRMPHoLL3', advisorName, advisorTitle, advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3', presidentFullName = 'วิริทธิ์พล ดวงจันทร์', presidentAcademicYear = '2568', presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
+const generateSTFPdf = async (
+    userFullName,
+    userPosition,
+
+    projectName,
+    projectNickname,
+    activityDate,
+    certDate,
+
+    projectOwnerFullName,
+    projectOwnerSignatureFileID = '8mwGVo1bRMPHoLL3',
+
+    advisorName,
+    advisorTitle,
+    advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3',
+
+    presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
+    presidentAcademicYear = '2568',
+    presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
     try {
 
         const doc = new PDFDocument({
@@ -232,9 +293,32 @@ const generateSTFPdf = async (userFullName, userPosition, projectName, projectNi
         // const SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
         // const SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
 
-        const SIGN_OWNER = await serveFileFromFileID(projectOwnerSignatureFileID) || `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
-        const SIGN_ADVISOR = await serveFileFromFileID(advisorNameSignatureFileID) || `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
-        const SIGN_CMSOHEAD = await serveFileFromFileID(presidentSignatureFileID) || `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+        let SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        let SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        let SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+
+
+        try {
+            SIGN_OWNER = await serveFileFromFileID(projectOwnerSignatureFileID)
+        } catch (error) {
+            console.log('[Gen Certificate PCP] Signature file id error', error);
+            SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        }
+
+        try {
+            SIGN_ADVISOR = await serveFileFromFileID(advisorNameSignatureFileID)
+        } catch (error) {
+            console.log('[Gen Certificate PCP] Signature file id error', error);
+            SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        }
+
+        try {
+            SIGN_CMSOHEAD = await serveFileFromFileID(presidentSignatureFileID)
+        } catch (error) {
+            console.log('[Gen Certificate PCP] Signature file id error', error);
+            SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+        }
+
 
         // Fit the image in the dimensions, and center it both horizontally and vertically
         doc.image(SIGN_OWNER, doc.x + init_pad, 1150, { fit: [image_width, image_height], align: 'center', valign: 'center' })

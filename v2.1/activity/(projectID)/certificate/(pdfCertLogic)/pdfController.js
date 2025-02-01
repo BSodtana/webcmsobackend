@@ -49,9 +49,17 @@ const downloadCertCon = async (req, res) => {
                 `${allData.projectData.projectNickNameTH}`,
                 allData.projectData.eventDateStart,
                 allData.certCommonData.certPCPCreatedDate,
+
                 `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
+                projectOwnerSignatureFileID = '',
+
                 `${allData.certCommonData.teacherNameSignatureTH}`,
-                `${allData.certCommonData.teacherPositionSignatureTH}`
+                `${allData.certCommonData.teacherPositionSignatureTH}`,
+                advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3',
+
+                presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
+                presidentAcademicYear = '2568',
+                presidentSignatureFileID = '8mwGVo1bRMPHoLL3'
             )
 
             res.writeHead(200, {
