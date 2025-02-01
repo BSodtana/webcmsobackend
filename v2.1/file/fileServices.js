@@ -101,13 +101,11 @@ const upload = multer({
         const fileext = filename[filename.length - 1]
 
         if (!allowedFileType.includes(file.mimetype)) {
-            callback(
-                {
-                    code: 'UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE',
-                    desc: { fileType: file.mimetype, fileExtension: fileext }
-                },
-                false
-            )
+            file.uploadError = {
+                code: 'UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE',
+                desc: { fileType: file.mimetype, fileExtension: fileext }
+            }
+            return callback(null, false)// return but with error code
         } else {
 
             // for each reason, has its own allowed filetype
@@ -121,16 +119,14 @@ const upload = multer({
                 console.log('[allowed save]');
                 callback(null, true)
             } else if (!allowedData.allowedFileType.includes(file.mimetype)) {
-                callback(
-                    {
-                        code: 'UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE',
-                        desc: { fileType: file.mimetype, fileExtension: fileext }
-                    },
-                    false
-                )
+                file.uploadError = {
+                    code: 'UPLOAD-FILE-ERROR-NOT-ALLOWED-TYPE',
+                    desc: { fileType: file.mimetype, fileExtension: fileext }
+                }
+                return callback(null, true) // return but with error code
             } else {
                 console.log('[allowed save]');
-                callback(null, true)
+                return callback(null, true)
             }
         }
     }
@@ -150,11 +146,11 @@ const uploadFileService = async (req, res) => {
                         desc: { message: error?.message, error }
                     }
                     )
-                } else if (!req?.file) {
-                    // no file attached
+                } else if (req?.file && req?.file?.uploadError) {
+                    // file attached but some error happened
                     reject({
-                        code: 'UPLOAD-FILE-ERROR-NO-FILE-ATTACHED',
-                        desc: { message: error?.message, error }
+                        code: req?.file?.uploadError?.code || error?.code || 'UPLOAD-FILE-ERROR-INTERNAL-ERROR',
+                        desc: { message: error?.message, error: req?.file?.uploadError.desc }
                     })
                 } else {
 
