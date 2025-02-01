@@ -3,6 +3,8 @@ const { filePublicityType, fileRelatedTypeType, uploadedReasonList } = require("
 const { successCodeToResponse } = require("../_helpers/successCodeToResponse")
 const { getUserFullCredentialData } = require("../account/profile/profileServices")
 const { getSpecificOrgDetails } = require("../common/organization/(orgID)/eachOrgServices")
+const { getUsersInSpecifigOrg } = require("../organization/users/orgUsersServices")
+const { getAllPCPInProject, getAllSTFInProject } = require("../project/(each-project)/(allPCPLogic)/allPCPLogic")
 const { getProjectBriefData } = require("../project/(each-project)/eachProjectServices")
 const fileServices = require("./fileServices")
 
@@ -108,18 +110,131 @@ const getFileCon = async (req, res) => {
         const allowedAction = ['download', 'view']
 
         let { fileID, action } = req?.query
-        console.log('[data]', studentID, uuid, fileID, action);
 
         if (!allowedAction.includes(action)) {
             res.status(400).json(errorCodeToResponse("VIEW-FILE-ERROR-TYPE-ERROR", fileID, action))
         } else {
-            const fileSearch = await fileServices.serveFileFromFileID(fileID)
 
-            if (action === 'view') {
-                res.sendFile(fileSearch);
+            // search for permission first
+            const searchData = await fileServices.getFileInfoFromDB(fileID)
+
+            if (searchData.filePublicity === 'PUBLIC') {
+                // public file are allowed to access, even though not login
+                const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                if (action === 'view') {
+                    res.sendFile(fileSearch);
+                } else {
+                    res.download(fileSearch);
+                }
+
+            } else if (searchData.filePublicity === 'LOGIN_ONLY' && !!uuid && !!studentID) {
+
+                // user need to login first, check by uuid and studentID
+
+                if (searchData.fileRelatedType === 'USER' && (searchData.fileRelatedTypeID == uuid)) {
+                    // user need to match to see this file
+                    const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                    if (action === 'view') {
+                        res.sendFile(fileSearch);
+                    } else {
+                        res.download(fileSearch);
+                    }
+                } else if (searchData.fileRelatedType === 'ORG' && ((await getUsersInSpecifigOrg(searchData.fileRelatedTypeID)).some((each) => each.studentID == studentID))) {
+                    // to see org file, user need to be in that org
+                    const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                    if (action === 'view') {
+                        res.sendFile(fileSearch);
+                    } else {
+                        res.download(fileSearch);
+                    }
+                } else if (searchData.fileRelatedType === 'PROJECT'
+                    && (
+                        ((await getAllPCPInProject(searchData.fileRelatedTypeID)).some((each) => each.studentID == studentID))
+                        || ((await getAllSTFInProject(searchData.fileRelatedTypeID)).some((each) => each.studentID == studentID))
+                    )) {
+                    //  to see project file, user need to be joined this activity (as pcp or stf)
+                    const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                    if (action === 'view') {
+                        res.sendFile(fileSearch);
+                    } else {
+                        res.download(fileSearch);
+                    }
+                } else {
+                    // else access denied
+                    throw {
+                        code: 'ACCESS-DENIED-ROLE',
+                        desc: {
+                            userData: {
+                                uuid,
+                                studentID,
+                                fileID, action
+                            },
+                        }
+                    }
+                }
+
+
+
+            } else if (searchData.filePublicity === 'PRIVATE' && !!uuid && !!studentID) {
+
+                // user need to login first, check by uuid and studentID
+                if (searchData.fileRelatedType === 'USER' && (searchData.fileRelatedTypeID == uuid)) {
+                    // user need to match to see this file
+                    const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                    if (action === 'view') {
+                        res.sendFile(fileSearch);
+                    } else {
+                        res.download(fileSearch);
+                    }
+                } else if (searchData.fileRelatedType === 'ORG' && ((await getSpecificOrgDetails(searchData.fileRelatedTypeID)).studentID == studentID)) {
+                    // to see org file, user need to be org owner
+                    const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                    if (action === 'view') {
+                        res.sendFile(fileSearch);
+                    } else {
+                        res.download(fileSearch);
+                    }
+                } else if (searchData.fileRelatedType === 'PROJECT' && ((await getProjectBriefData(searchData.fileRelatedTypeID)).studentID == studentID)) {
+                    //  to see project file, user need to be project owner
+                    const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+                    if (action === 'view') {
+                        res.sendFile(fileSearch);
+                    } else {
+                        res.download(fileSearch);
+                    }
+                } else {
+                    // else access denied
+                    throw {
+                        code: 'ACCESS-DENIED-ROLE',
+                        desc: {
+                            userData: {
+                                uuid,
+                                studentID, fileID, action
+                            },
+                        }
+                    }
+                }
+
             } else {
-                res.download(fileSearch);
+                // else access denied
+                throw {
+                    code: 'ACCESS-DENIED-ROLE',
+                    desc: {
+                        userData: {
+                            uuid,
+                            studentID, fileID, action
+                        },
+                    }
+                }
             }
+
         }
     } catch (error) {
         console.log('getFileCon', error)
