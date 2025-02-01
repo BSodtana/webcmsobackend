@@ -96,16 +96,6 @@ const uploadFileCon = async (req, res) => {
     }
 }
 
-
-// const viewfile = async (req, res) => async (req, res) => {
-// const { id, action = 'download' } = req.query
-
-// if (!id) {
-//     res.status(200).json({ status: 'failed', data: { error: 'File ID and action is required.' } })
-// } else {
-
-// }
-
 const getFileCon = async (req, res) => {
 
     try {
@@ -130,7 +120,6 @@ const getFileCon = async (req, res) => {
             } else {
                 res.download(fileSearch);
             }
-            // res.status(200).json(successCodeToResponse(`${studentID}-${uuid}-${fileID}-${action}`, 'VIEW-FILE-SUCCESS'))
         }
     } catch (error) {
         console.log('getFileCon', error)

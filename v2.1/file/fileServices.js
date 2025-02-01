@@ -364,7 +364,6 @@ const serveFileFromFileID = async (fileID) => {
         }
     } else {
         const filePath = path.resolve(__dirname, '../../', check.filePathNow)
-        console.log('[filepath]', filePath);
         return filePath
     }
 }
