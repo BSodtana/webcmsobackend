@@ -351,13 +351,13 @@ const serveFileFromFileID = async (fileID) => {
 
     // check if file id exists in system
 
-    const check = await prisma.uploadedfiledata.findFirstOrThrow({
+    const check = await prisma.uploadedfiledata.findFirst({
         where: {
             fileID: fileID
         }
     })
 
-    if (!check.fileID) {
+    if (!check?.fileID) {
         throw {
             code: 'VIEW-FILE-ERROR-NO-FILE-ID-EXIST',
             desc: { fileID },
