@@ -19,11 +19,16 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
         });
 
         // docs info
-        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectNickname || projectName}`;
-        doc.info['Author'] = `CMSO ONLINE`;
-        doc.info['Subject'] = `${userFullName}`;
-        doc.info['Keywords'] = `${projectNickname || projectName}`;
-        doc.info['ModDate'] = new Date(certDate); // date of making cert
+        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectName || projectNickname}`;
+        doc.info['Author'] = `${userFullName}`;
+        doc.info['Subject'] = `${projectNickname || projectName}`;
+        doc.info['Keywords'] = `${projectNickname || projectName}, Participant, Certificate, CMSO, MedCMU`;
+
+        doc.info['CreationDate'] = new Date(certDate); // date of cert (from CMSO)
+        doc.info['ModDate'] = new Date(); // date of last downloading cert
+
+        doc.info['Producer'] = `${projectOwnerFullName || 'CMSO ONLINE'}`;
+        doc.info['Creator'] = `Chiang Mai Medical Student Organization, Faculty of Medicine, Chiang Mai University`
 
         // set default text & bg thing
         doc.font(Regular)
@@ -158,11 +163,18 @@ const generateSTFPdf = async (userFullName, userPosition, projectName, projectNi
         });
 
         // docs info
-        doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectNickname || projectName}`;
-        doc.info['Author'] = `CMSO ONLINE`;
-        doc.info['Subject'] = `${userFullName}`;
-        doc.info['Keywords '] = `${projectNickname || projectName}`;
-        doc.info['ModDate'] = new Date(certDate); // date of making cert
+        doc.info['Title'] = `เกียรติบัตรผู้จัดกิจกรรม ${projectName || projectNickname}`;
+        doc.info['Author'] = `${userFullName}`;
+        doc.info['Subject'] = `${projectNickname || projectName}`;
+        doc.info['Keywords'] = `${projectNickname || projectName}, Staff, Certificate, CMSO, MedCMU`;
+        // doc.info['ModDate'] = new Date(certDate); // date of making cert
+
+        doc.info['CreationDate'] = new Date(certDate); // date of cert (from CMSO)
+        doc.info['ModDate'] = new Date(); // date of last downloading cert
+
+        doc.info['Producer'] = `${projectOwnerFullName || 'CMSO ONLINE'}`;
+        doc.info['Creator'] = `Chiang Mai Medical Student Organization, Faculty of Medicine, Chiang Mai University`
+
 
         // set default text & bg thing
         doc.font(Regular)
