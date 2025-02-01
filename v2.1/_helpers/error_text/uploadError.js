@@ -83,6 +83,20 @@ const uploadError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "VIEW-FILE-ERROR-TYPE-ERROR": {
+        "code": "VIEW-FILE-ERROR-TYPE-ERROR",
+        "textTH": "ไม่สามารถดาวน์โหลดไฟล์ได้เนื่องจากสถานะไม่ถูกต้อง",
+        "textEN": "Cannot download file due to unaccepted type",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "VIEW-FILE-ERROR-NO-FILE-ID-EXIST": {
+        "code": "VIEW-FILE-ERROR-NO-FILE-ID-EXIST",
+        "textTH": "ไม่สามารถดาวน์โหลดไฟล์ได้เนื่องไม่มีไฟล์นี้",
+        "textEN": "Cannot download file because file ID was not existed",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = uploadError

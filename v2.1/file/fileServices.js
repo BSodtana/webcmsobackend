@@ -346,6 +346,30 @@ const uploadFileService = async (req, res) => {
 }
 
 
+const serveFileFromFileID = async (fileID) => {
+
+
+    // check if file id exists in system
+
+    const check = await prisma.uploadedfiledata.findFirstOrThrow({
+        where: {
+            fileID: fileID
+        }
+    })
+
+    if (!check.fileID) {
+        throw {
+            code: 'VIEW-FILE-ERROR-NO-FILE-ID-EXIST',
+            desc: { fileID },
+        }
+    } else {
+        const filePath = path.resolve(__dirname, '../../', check.filePathNow)
+        console.log('[filepath]', filePath);
+        return filePath
+    }
+}
+
+
 const getCurrentSizeAndUpdateQuotaUser = async (uuid) => {
 
     // sum data
@@ -539,35 +563,7 @@ const deleteFileIDFromDB = async (fileID) => {
 }
 
 
-
-
-// view file [TODO]
-const sentFile = async () => {
-    try {
-
-        const fileDetails = await db.pool.query('select * from fileuploaddata where fileID = ?', [id])
-
-        if (fileDetails.length === 0) {
-            res.status(200).json({ status: 'failed', data: { error: 'File from provided file ID is not exist.' } })
-
-        } else {
-            const filePath = path.resolve(__dirname, '../../public/uploads', fileDetails[0].fileName);
-            if (action === 'view') {
-                return res.sendFile(filePath);
-            } else {
-                return res.download(filePath);
-            }
-        }
-
-
-
-    } catch (error) {
-        console.error("view file err", error);
-        res.status(200).json({ status: 'failed', data: { error: error.message || 'Internal Server Error' } })
-
-    }
-}
-
 module.exports = {
-    uploadFileService
+    uploadFileService,
+    serveFileFromFileID
 }

@@ -97,8 +97,6 @@ const uploadFileCon = async (req, res) => {
 }
 
 
-// ___/v1/view
-
 // const viewfile = async (req, res) => async (req, res) => {
 // const { id, action = 'download' } = req.query
 
@@ -107,6 +105,38 @@ const uploadFileCon = async (req, res) => {
 // } else {
 
 // }
+
+const getFileCon = async (req, res) => {
+
+    try {
+
+        const {
+            studentID = 'NO-STD-ID',
+            uuid
+        } = await req?.userData
+
+        const allowedAction = ['download', 'view']
+
+        let { fileID, action } = req?.query
+        console.log('[data]', studentID, uuid, fileID, action);
+
+        if (!allowedAction.includes(action)) {
+            res.status(400).json(errorCodeToResponse("VIEW-FILE-ERROR-TYPE-ERROR", fileID, action))
+        } else {
+            const fileSearch = await fileServices.serveFileFromFileID(fileID)
+
+            if (action === 'view') {
+                res.sendFile(fileSearch);
+            } else {
+                res.download(fileSearch);
+            }
+            // res.status(200).json(successCodeToResponse(`${studentID}-${uuid}-${fileID}-${action}`, 'VIEW-FILE-SUCCESS'))
+        }
+    } catch (error) {
+        console.log('getFileCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getFileCon'))
+    }
+}
 
 
 // const getAnnouncementListController = async (req, res) => {
@@ -126,10 +156,6 @@ const uploadFileCon = async (req, res) => {
 
 
 module.exports = {
-    // getAnnouncementListController,
-    // searchListProjectByNamePageController,
-
-    // uploadFileThroughHandler
-
-    uploadFileCon
+    uploadFileCon,
+    getFileCon
 }

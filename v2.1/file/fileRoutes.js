@@ -12,7 +12,7 @@ const isLoggedIn = require("../_middleware/isLoggedIn");
 
 // todo
 router.post('/upload', [isLoggedIn()], fileControllers.uploadFileCon)
-// router.get('/view', projectControllers)
+router.get('/view', [isLoggedIn()], fileControllers.getFileCon)
 // router.use('/manage', projectControllers)
 
 
