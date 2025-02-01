@@ -2,6 +2,7 @@ const PDFDocument = require('pdfkit-table');
 const fs = require('fs');
 const getStream = require('get-stream');
 const { formatThaiDate } = require('../../../../_helpers/formatDate');
+const { serveFileFromFileID } = require('../../../../file/fileServices');
 
 const Regular = `${__dirname}/asset/font/Prompt-Regular.ttf`
 const Bold = `${__dirname}/asset/font/Prompt-Bold.ttf`
@@ -154,7 +155,7 @@ const generatePCPPdf = async (userFullName, projectName, projectNickname, activi
     }
 }
 
-const generateSTFPdf = async (userFullName, userPosition, projectName, projectNickname, activityDate, certDate, projectOwnerFullName, advisorName, advisorTitle) => {
+const generateSTFPdf = async (userFullName, userPosition, projectName, projectNickname, activityDate, certDate, projectOwnerFullName, projectOwnerSignatureFileID = '8mwGVo1bRMPHoLL3', advisorName, advisorTitle, advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3', presidentFullName = 'วิริทธิ์พล ดวงจันทร์', presidentAcademicYear = '2568', presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
     try {
 
         const doc = new PDFDocument({
@@ -226,10 +227,15 @@ const generateSTFPdf = async (userFullName, userPosition, projectName, projectNi
         // doc.lineWidth(2).rect(doc.x + init_pad + 400, 1150, image_width, image_height).stroke();
         // doc.lineWidth(2).rect(doc.x + init_pad + 800, 1150, image_width, image_height).stroke();
 
-        // real image
-        const SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
-        const SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
-        const SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+        // // real image
+        // const SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        // const SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        // const SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+
+        const SIGN_OWNER = await serveFileFromFileID(projectOwnerSignatureFileID) || `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
+        const SIGN_ADVISOR = await serveFileFromFileID(advisorNameSignatureFileID) || `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
+        const SIGN_CMSOHEAD = await serveFileFromFileID(presidentSignatureFileID) || `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+
         // Fit the image in the dimensions, and center it both horizontally and vertically
         doc.image(SIGN_OWNER, doc.x + init_pad, 1150, { fit: [image_width, image_height], align: 'center', valign: 'center' })
         doc.image(SIGN_ADVISOR, doc.x + init_pad + 400, 1150, { fit: [image_width, image_height], align: 'center', valign: 'center' })
@@ -258,7 +264,7 @@ const generateSTFPdf = async (userFullName, userPosition, projectName, projectNi
         const PROJECT_OWNER = `นศพ. ${projectOwnerFullName}`.replace(' ', ' ')
         const PROJECT_ADVISOR = `${advisorName}`.replace(' ', ' ')
         const PROJECT_ADVISOR_TITLE = `${advisorTitle}`
-        const PROJECT_CMSO_HEAD = `นศพ. พิมพ์ลักษณ์ ชัยจิตติประเสริฐ`.replace(' ', ' ')
+        const PROJECT_CMSO_HEAD = `นศพ. ${presidentFullName}`.replace(' ', ' ')
 
 
         const commonHeaderStyle = {
@@ -275,7 +281,7 @@ const generateSTFPdf = async (userFullName, userPosition, projectName, projectNi
                 { label: PROJECT_CMSO_HEAD, property: 'cmsoHeadName', ...commonHeaderStyle },
             ],
             rows: [
-                ["ประธานโครงการ", PROJECT_ADVISOR_TITLE, "นายกสโมสรนักศึกษาคณะแพทยศาสตร์ ประจำปีการศึกษา 2567"],
+                ["ประธานโครงการ", PROJECT_ADVISOR_TITLE, `นายกสโมสรนักศึกษาคณะแพทยศาสตร์ ประจำปีการศึกษา ${presidentAcademicYear}`],
             ],
         };
 

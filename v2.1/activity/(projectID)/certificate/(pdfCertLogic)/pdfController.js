@@ -1,4 +1,5 @@
 const { errorCodeToResponse } = require("../../../../_helpers/errorCodeToResponse");
+const { successCodeToResponse } = require("../../../../_helpers/successCodeToResponse");
 const { searchCertificateByProjectIDStudentID, getInfoFromCertNo } = require("../activityCertServices");
 const pdfService = require("./pdfService");
 
@@ -63,14 +64,25 @@ const downloadCertCon = async (req, res) => {
             const pdfStream = await pdfService.generateSTFPdf(
                 `${allData.userData.firstNameTH} ${allData.userData.lastNameTH}`,
                 `${allData.STFpositionDetail?.positionData?.positionName}`,
+
                 `${allData.projectData.projectNameTH}`,
                 `${allData.projectData.projectNickNameTH}`,
                 allData.projectData.eventDateStart,
                 allData.certCommonData.certPCPCreatedDate,
+
                 `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
+                projectOwnerSignatureFileID = '5OigYSQ9sjNQJpeK',
+
                 `${allData.certCommonData.teacherNameSignatureTH}`,
-                `${allData.certCommonData.teacherPositionSignatureTH}`
+                `${allData.certCommonData.teacherPositionSignatureTH}`,
+                advisorNameSignatureFileID = '5OigYSQ9sjNQJpeK',
+
+                presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
+                presidentAcademicYear = '2568',
+                presidentSignatureFileID = '5OigYSQ9sjNQJpeK'
             )
+
+            successCodeToResponse('CERTIFICATE STAFF', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE STAFF')
 
             res.writeHead(200, {
                 'Content-Length': Buffer.byteLength(pdfStream),
