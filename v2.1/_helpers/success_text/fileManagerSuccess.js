@@ -78,6 +78,35 @@ const fileManagerSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    // ------ ORG ------
+    "FILE-MANAGER-LIST-FILE-BY-ORG-SUCCESS": {
+        "code": "FILE-MANAGER-LIST-FILE-BY-ORG-SUCCESS",
+        "textTH": "รับรายชื่อไฟล์ขององค์กรสำเร็จ",
+        "textEN": "Get the list of an organization success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FILE-MANAGER-GET-FILE-INFO-ORG-SUCCESS": {
+        "code": "FILE-MANAGER-GET-FILE-INFO-ORG-SUCCESS",
+        "textTH": "รับข้อมูลไฟล์ขององค์กรสำเร็จ",
+        "textEN": "Get info of organization's files success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FILE-MANAGER-DELETE-FILE-ORG-SUCCESS": {
+        "code": "FILE-MANAGER-DELETE-ORG-PROJECT-SUCCESS",
+        "textTH": "ลบไฟล์ขององค์กรสำเร็จ",
+        "textEN": "Delete organization's files success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FILE-MANAGER-CHANGE-FILE-PUBLICITY-ORG-SUCCESS": {
+        "code": "FILE-MANAGER-CHANGE-FILE-PUBLICITY-ORG-SUCCESS",
+        "textTH": "เปลี่ยนสถานะไฟล์ขององค์กรสำเร็จ",
+        "textEN": "Change organization's file publicity success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = fileManagerSuccess

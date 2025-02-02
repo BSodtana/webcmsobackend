@@ -24,16 +24,17 @@ router.get("/project/:projectID/quota", [isLoggedIn()], fileManagerController.ch
 router.get("/project/:projectID/item/list", [isLoggedIn()], fileManagerController.listAllFilesByProjectCon) // list file of project
 router.get("/project/:projectID/item/:fileID", [isLoggedIn()], fileManagerController.getSpecificFileInfoProjectCon) // get file info of project
 router.get("/project/:projectID/item/:fileID/info", [isLoggedIn()], fileManagerController.getSpecificFileInfoProjectCon) // get file info of project
-router.post("/project/:projectID/item/:fileID/delete", [isLoggedIn()], fileManagerController.deleteFileProjectCon) // get file info of project
+router.post("/project/:projectID/item/:fileID/delete", [isLoggedIn()], fileManagerController.deleteFileProjectCon) //delete file of project
 router.post("/project/:projectID/item/:fileID/publicity", [isLoggedIn()], fileManagerController.changeFilePublicityProjectCon) // change file publicity
 
 // organization
 router.get("/organization/:orgID", [isLoggedIn()], fileManagerController.checkQuotaByOrgCon)
 router.get("/organization/:orgID/quota", [isLoggedIn()], fileManagerController.checkQuotaByOrgCon) // check quota of org
-// list file of organization: router.get('/organization/:orgID/item/list', projectControllers)
-// get file info of organization: router.get('/organization/:orgID/item/:fileID/info', projectControllers)
-// delete file of organization: router.delete('/organization/:orgID/item/:fileID/delete', projectControllers)
-// change organization file publicity: router.post('/organization/:orgID/item/:fileID/publicity', projectControllers)
+router.get("/organization/:orgID/list", [isLoggedIn()], fileManagerController.listAllFilesByOrgCon) // list file of org
+router.get("/organization/:orgID/item/:fileID", [isLoggedIn()], fileManagerController.getSpecificFileInfoOrgCon) // get file info of org
+router.get("/organization/:orgID/item/:fileID/info", [isLoggedIn()], fileManagerController.getSpecificFileInfoOrgCon) // get file info of org
+router.post("/organization/:orgID/item/:fileID/delete", [isLoggedIn()], fileManagerController.deleteFileOrgCon) // delete file of user org
+router.post("/organization/:orgID/item/:fileID/publicity", [isLoggedIn()], fileManagerController.changeFilePublicityOrgCon) // change file publicity
 
 // homepage
 // list file of homepage: router.get('/public/item/list', projectControllers)

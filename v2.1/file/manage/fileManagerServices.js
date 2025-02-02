@@ -109,6 +109,47 @@ const listAllFilesPaginationByProject = async (projectID, page = 1) => {
     }
 }
 
+const listAllFilesPaginationByOrg = async (orgID, page = 1) => {
+
+    const numEachPage = 50
+
+    // count max page
+    const countListFiles = await prisma.uploadedfiledata.count({
+        where: {
+            fileRelatedType: 'ORG',
+            fileRelatedTypeID: orgID
+        }
+    })
+
+    const listFiles = await prisma.uploadedfiledata.findMany({
+        skip: (page - 1) * numEachPage,
+        take: numEachPage,
+        where: {
+            fileRelatedType: 'ORG',
+            fileRelatedTypeID: orgID
+        },
+        select: {
+            fileID: true,
+            fileOriginalName: true,
+            fileUploadDatetime: true,
+            fileUploadByUUID: true,
+            fileSize: true,
+            filePublicity: true,
+            fileUploadedReason: true
+        }
+    })
+
+    return {
+        fileList: listFiles,
+        pagination: {
+            nowPage: page,
+            lastPage: Math.ceil(countListFiles / numEachPage),
+            maxEachPage: numEachPage,
+            fileCount: countListFiles
+        }
+    }
+}
+
 // ----- chenge file ------
 
 const getSpecificFileInfo = async (fileID) => {
@@ -185,7 +226,6 @@ const changeFilePublicityByFileID = async (fileID, publicity = 'PRIVATE') => {
 
 
 module.exports = {
-    checkQuotaByOrg,
 
     // ------ USER ------
     checkQuotaByUser,
@@ -196,5 +236,9 @@ module.exports = {
 
     // ------ PROJECT ------
     checkQuotaByProject,
-    listAllFilesPaginationByProject
+    listAllFilesPaginationByProject,
+
+    // ------ ORG ------
+    checkQuotaByOrg,
+    listAllFilesPaginationByOrg
 }
