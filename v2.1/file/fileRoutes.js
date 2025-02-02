@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const fileManagerRouter = require('./manage/fileManagerRoutes')
 
 // /v2.1/file/
-
-// const eachProjectRoute = require('./(each-project)/eachProjectRoutes')
 
 const fileControllers = require('./fileControllers');
 
@@ -13,7 +12,8 @@ const isLoggedIn = require("../_middleware/isLoggedIn");
 // todo
 router.post('/upload', [isLoggedIn()], fileControllers.uploadFileCon)
 router.get('/view', [isLoggedIn({ allowedGuestNotLogin: true })], fileControllers.getFileCon)
-// router.use('/manage', projectControllers)
+
+router.use('/manage', fileManagerRouter)
 
 
 

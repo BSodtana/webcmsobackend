@@ -589,5 +589,10 @@ const getFileInfoFromDB = async (fileID) => {
 module.exports = {
     uploadFileService,
     serveFileFromFileID,
-    getFileInfoFromDB
+    getFileInfoFromDB,
+    deleteFileIDFromDB,
+
+    getCurrentSizeAndUpdateQuotaUser,
+    getCurrentSizeAndUpdateQuotaProject,
+    getCurrentSizeAndUpdateQuotaOrg
 }

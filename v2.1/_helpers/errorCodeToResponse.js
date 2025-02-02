@@ -6,8 +6,9 @@ const recruitmentError = require("./error_text/recruitmentError");
 const organizationError = require("./error_text/organizationError");
 const activityError = require("./error_text/activityError");
 const uploadError = require("./error_text/uploadError");
+const fileManagerError = require("./error_text/fileManagerError");
 
-const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors, projectError, recruitmentError, organizationError, activityError, uploadError)
+const fullErrors = Object.assign(commonErrors, demoErrors, accountErrors, projectError, recruitmentError, organizationError, activityError, uploadError, fileManagerError)
 
 
 
