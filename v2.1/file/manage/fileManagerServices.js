@@ -62,7 +62,8 @@ const listAllFilesPaginationByUser = async (uuid, page = 1) => {
         pagination: {
             nowPage: page,
             lastPage: Math.ceil(countListFiles / numEachPage),
-            maxEachPage: numEachPage
+            maxEachPage: numEachPage,
+            fileCount: countListFiles
         }
     }
 }
