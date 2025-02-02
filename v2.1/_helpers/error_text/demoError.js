@@ -12,14 +12,7 @@ const demoError = {
         "textEN": "There is/are missing data for making new organization",
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
-    },
-    'ERROR-DATA-TYPE-FAILED': {
-        "code": "ERROR-DATA-TYPE-FAILED",
-        "textTH": "ชนิดของข้อมูลที่ได้รับ ไม่ตรงตามที่ตั้งค่าไว้",
-        "textEN": "Data type was not invalid",
-        "shouldContactAdmin": true,
-        "shouldTryAgain": false,
-    },
+    }
 }
 
 module.exports = demoError
