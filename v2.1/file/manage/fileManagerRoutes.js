@@ -7,7 +7,7 @@ const fileManagerController = require('./fileManagerControllers')
 
 // /v2.1/file/manage
 
-// todo
+// todo: permission
 
 // user
 router.get("/user", [isLoggedIn()], fileManagerController.checkQuotaByUserCon)
@@ -21,10 +21,11 @@ router.post("/user/item/:fileID/publicity", [isLoggedIn()], fileManagerControlle
 // project
 router.get("/project/:projectID", [isLoggedIn()], fileManagerController.checkQuotaByProjectCon)
 router.get("/project/:projectID/quota", [isLoggedIn()], fileManagerController.checkQuotaByProjectCon) // check quota of project
-// list file of project: router.get('/project/:projectID/item/list', projectControllers)
-// get file info of project: router.get('/project/:projectID/item/:fileID/info', projectControllers)
-// delete file of project: router.delete('/project/:projectID/item/:fileID/delete', projectControllers)
-// change project file publicity: router.post('/project/:projectID/item/:fileID/publicity', projectControllers)
+router.get("/project/:projectID/item/list", [isLoggedIn()], fileManagerController.listAllFilesByProjectCon) // list file of project
+router.get("/project/:projectID/item/:fileID", [isLoggedIn()], fileManagerController.getSpecificFileInfoProjectCon) // get file info of project
+router.get("/project/:projectID/item/:fileID/info", [isLoggedIn()], fileManagerController.getSpecificFileInfoProjectCon) // get file info of project
+router.post("/project/:projectID/item/:fileID/delete", [isLoggedIn()], fileManagerController.deleteFileProjectCon) // get file info of project
+router.post("/project/:projectID/item/:fileID/publicity", [isLoggedIn()], fileManagerController.changeFilePublicityProjectCon) // change file publicity
 
 // organization
 router.get("/organization/:orgID", [isLoggedIn()], fileManagerController.checkQuotaByOrgCon)
@@ -47,6 +48,8 @@ router.get("/organization/:orgID/quota", [isLoggedIn()], fileManagerController.c
 // get file info of user/project/org/homepage (use above)
 // delete file of user/project/org/homepage (use above)
 // change file publicity (use above)
+
+// change quota of user/project/org/
 
 
 

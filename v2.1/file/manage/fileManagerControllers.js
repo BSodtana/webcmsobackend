@@ -87,6 +87,42 @@ const getSpecificFileInfoUserCon = async (req, res) => {
     }
 }
 
+const listAllFilesByProjectCon = async (req, res) => {
+
+    try {
+        const { studentID = 'NO-STD-ID', uuid } = await req?.userData
+        const { page = 1 } = req?.query
+        const { projectID } = req.params
+
+
+        const results = await manageFileServices.listAllFilesPaginationByProject(projectID, page)
+        res.status(200).json(successCodeToResponse(results, 'FILE-MANAGER-LIST-FILE-BY-PROJECT-SUCCESS', projectID, page))
+
+    } catch (error) {
+        console.log('listAllFilesByProjectCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'listAllFilesByProjectCon'))
+    }
+}
+
+const getSpecificFileInfoProjectCon = async (req, res) => {
+
+    try {
+        const { studentID = 'NO-STD-ID', uuid } = await req?.userData
+        const { fileID, projectID } = req?.params
+
+        if (!fileID || !projectID) {
+            res.status(400).json(errorCodeToResponse("FILE-MANAGER-GET-FILE-INFO-NO-ID-ERROR", uuid, fileID, projectID))
+        } else {
+            const results = await manageFileServices.getSpecificFileInfo(fileID)
+            res.status(200).json(successCodeToResponse(results, 'FILE-MANAGER-GET-FILE-INFO-PROJECT-SUCCESS', uuid, fileID, projectID))
+        }
+
+    } catch (error) {
+        console.log('getSpecificFileInfoProjectCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'getSpecificFileInfoProjectCon'))
+    }
+}
+
 
 // ------ change file ------
 const deleteFileUserCon = async (req, res) => {
@@ -133,13 +169,63 @@ const changeFilePublicityUserCon = async (req, res) => {
     }
 }
 
+const deleteFileProjectCon = async (req, res) => {
+    try {
+
+        const { fileID, projectID } = req.params
+        const { confirm } = req.body
+        const { studentID = 'NO-STD-ID', uuid } = await req?.userData
+
+        if (!confirm) {
+            res.status(400).json(errorCodeToResponse("DECLINED-CONFIRM-DELETE", uuid, projectID, fileID))
+        } else {
+            const results = await manageFileServices.deleteFilefromFileID(fileID, confirm)
+            res.status(200).json(successCodeToResponse(results, 'FILE-MANAGER-DELETE-FILE-PROJECT-SUCCESS', uuid, projectID, fileID))
+
+        }
+
+    } catch (error) {
+        console.log('deleteFileProjectCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'deleteFileProjectCon'))
+    }
+}
+
+const changeFilePublicityProjectCon = async (req, res) => {
+    try {
+
+        const { fileID, projectID } = req.params
+        const { publicity } = req.body
+        const { studentID = 'NO-STD-ID', uuid } = await req?.userData
+
+
+        const filePublicity = ['PUBLIC', 'PRIVATE', 'LOGIN_ONLY']
+        if (!filePublicity.includes(publicity)) {
+            res.status(400).json(errorCodeToResponse("ERROR-DATA-TYPE-FAILED", fileID, publicity, uuid))
+        } else {
+            const results = await manageFileServices.changeFilePublicityByFileID(fileID, publicity)
+            res.status(200).json(successCodeToResponse(results, 'FILE-MANAGER-CHANGE-FILE-PUBLICITY-PROJECT-SUCCESS', fileID, publicity, uuid))
+
+        }
+    } catch (error) {
+        console.log('changeFilePublicityProjectCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'changeFilePublicityProjectCon'))
+    }
+}
+
 module.exports = {
-    checkQuotaByUserCon,
-    checkQuotaByProjectCon,
     checkQuotaByOrgCon,
 
+    // ------ USER ------
+    checkQuotaByUserCon,
     listAllFilesByUserCon,
     getSpecificFileInfoUserCon,
     deleteFileUserCon,
-    changeFilePublicityUserCon
+    changeFilePublicityUserCon,
+
+    // ------ PROJECT ------
+    checkQuotaByProjectCon,
+    listAllFilesByProjectCon,
+    getSpecificFileInfoProjectCon,
+    deleteFileProjectCon,
+    changeFilePublicityProjectCon
 }

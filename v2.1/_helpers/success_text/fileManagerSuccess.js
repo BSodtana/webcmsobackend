@@ -49,6 +49,35 @@ const fileManagerSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    // ------ PROJECT ------
+    "FILE-MANAGER-LIST-FILE-BY-PROJECT-SUCCESS": {
+        "code": "FILE-MANAGER-LIST-FILE-BY-PROJECT-SUCCESS",
+        "textTH": "รับรายชื่อไฟล์ของกิจกรรมสำเร็จ",
+        "textEN": "Get the list of a project success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FILE-MANAGER-GET-FILE-INFO-PROJECT-SUCCESS": {
+        "code": "FILE-MANAGER-GET-FILE-INFO-PROJECT-SUCCESS",
+        "textTH": "รับข้อมูลไฟล์ของกิจกรรมสำเร็จ",
+        "textEN": "Get info of project's files success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FILE-MANAGER-DELETE-FILE-PROJECT-SUCCESS": {
+        "code": "FILE-MANAGER-DELETE-FILE-PROJECT-SUCCESS",
+        "textTH": "ลบไฟล์ของกิจกรรมสำเร็จ",
+        "textEN": "Delete project's files success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
+    "FILE-MANAGER-CHANGE-FILE-PUBLICITY-PROJECT-SUCCESS": {
+        "code": "FILE-MANAGER-CHANGE-FILE-PUBLICITY-PROJECT-SUCCESS",
+        "textTH": "เปลี่ยนสถานะไฟล์ของกิจกรรมสำเร็จ",
+        "textEN": "Change project's file publicity success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 }
 
 module.exports = fileManagerSuccess
