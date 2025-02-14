@@ -6,6 +6,7 @@ const isLoggedIn = require("../../../../_middleware/isLoggedIn");
 
 // /v2.1/activity/:projectID/certificate/download
 router.get('/', [isLoggedIn()], pdfController.downloadCertCon)
+router.get('/1', pdfController.downloadCertConTest)
 
 
 // //---------- default -----------------

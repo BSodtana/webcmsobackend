@@ -111,6 +111,13 @@ const commonErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    'ERROR-DATA-TYPE-FAILED': {
+        "code": "ERROR-DATA-TYPE-FAILED",
+        "textTH": "ชนิดของข้อมูลที่ได้รับไม่ถูกต้อง",
+        "textEN": "Data type was invalid",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
 
 }
 

@@ -22,6 +22,7 @@ const getParticipantRecruitmentList = async (projectID) => {
             updatedDateTime: true,
             isAllowed: true,
             yearAllowed: true,
+            password: true
         }
     })
 
@@ -46,6 +47,7 @@ const getStaffRecruitmentList = async (projectID) => {
             updatedDateTime: true,
             isAllowed: true,
             yearAllowed: true,
+            password: true,
             projectstaffrecruitposition: {
                 select: {
                     staffPositionID: true,
