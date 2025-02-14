@@ -5,8 +5,10 @@ const projectSuccess = require("./success_text/projectSuccess");
 const recruitmentSuccess = require("./success_text/recruitmentSuccess");
 const organizationSuccess = require('./success_text/organizationSuccess');
 const activitySuccess = require("./success_text/activitySuccess");
+const uploadSuccess = require("./success_text/uploadSuccess");
+const fileManagerSuccess = require("./success_text/fileManagerSuccess");
 
-const fullSuccess = Object.assign(commonSuccess, demoSuccess, accountSuccess, projectSuccess, recruitmentSuccess, organizationSuccess, activitySuccess)
+const fullSuccess = Object.assign(commonSuccess, demoSuccess, accountSuccess, projectSuccess, recruitmentSuccess, organizationSuccess, activitySuccess, uploadSuccess, fileManagerSuccess)
 
 
 const successCodeToResponse = (data = {}, successCode, desc = '', desc2 = '', desc3 = '') => {

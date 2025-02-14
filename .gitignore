@@ -1,6 +1,9 @@
 package-lock.json
 
+# user uploaded file
+
 ### Node ###
+/user_upload
 
 # Logs
 logs
