@@ -55,11 +55,11 @@ const downloadCertCon = async (req, res) => {
 
                 `${allData.certCommonData.teacherNameSignatureTH}`,
                 `${allData.certCommonData.teacherPositionSignatureTH}`,
-                advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3',
+                advisorNameSignatureFileID = '',
 
                 presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
                 presidentAcademicYear = '2568',
-                presidentSignatureFileID = '8mwGVo1bRMPHoLL3'
+                presidentSignatureFileID = ''
             )
 
             res.writeHead(200, {
@@ -79,15 +79,15 @@ const downloadCertCon = async (req, res) => {
                 allData.certCommonData.certPCPCreatedDate,
 
                 `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
-                projectOwnerSignatureFileID = '5OigYSQ9sjNQJpeK',
+                projectOwnerSignatureFileID = '',
 
                 `${allData.certCommonData.teacherNameSignatureTH}`,
                 `${allData.certCommonData.teacherPositionSignatureTH}`,
-                advisorNameSignatureFileID = '5OigYSQ9sjNQJpeK',
+                advisorNameSignatureFileID = '',
 
                 presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
                 presidentAcademicYear = '2568',
-                presidentSignatureFileID = '5OigYSQ9sjNQJpeK'
+                presidentSignatureFileID = ''
             )
 
             successCodeToResponse('CERTIFICATE STAFF', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE STAFF')
