@@ -19,7 +19,7 @@ app.use(
 )
 const port = process.env.PORT || 8080
 
-const logger = morgan('dev')
+const logger = morgan('combined')
 // IMPORT API V1
 const v1 = require('./v1/main')
 const v2 = require('./v2/main')
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
     ENV_PORT: process.env.PORT,
   })
 })
- 
+
 
 
 app.listen(port, () => {
