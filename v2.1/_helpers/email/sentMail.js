@@ -3,7 +3,7 @@ const axios = require('axios')
 const sentMail = async (recipient, subject, HTMLcontent) => {
   try {
     const mail = await axios.post(
-      `${process.env.MAIL_ENDPOINT}`,
+      `${process.env.MAIL_ENDPOINT_V2 || process.env.MAIL_ENDPOINT || 'https://w3.med.cmu.ac.th/api/v1/mail'}`,
       {
         subject: `[CMSO] ${subject}`,
         content: HTMLcontent,
@@ -13,7 +13,7 @@ const sentMail = async (recipient, subject, HTMLcontent) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${process.env.MAIL_TOKEN}`,
+          Authorization: `Bearer ${process.env.MAIL_ACCESS_TOKEN_V2 || process.env.MAIL_TOKEN}`,
         },
       }
     )
