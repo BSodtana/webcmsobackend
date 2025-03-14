@@ -2,15 +2,20 @@ require('dotenv').config()
 const prisma = require('../prisma')
 
 const getAnnouncementList = async (project = null) => {
+    console.log('[getAnnouncementList]', project);
+
     const search = await prisma.cmsoprojectannouncement.findMany({
         where: { projectID: project },
         select: {
             announcementID: true,
             studentID: true,
             projectID: true,
+            isPublic: true,
             announcementTitle: true,
             announcementBody: true,
             announcementCTALink: true,
+            isAnnouncementPinned: true,
+            announcementTarget: true,
             updatedDateTime: true,
             users: {
                 select: {
@@ -30,6 +35,11 @@ const getAnnouncementList = async (project = null) => {
             announcementTitle: each.announcementTitle,
             announcementBody: each.announcementBody,
             announcementCTALink: each.announcementCTALink,
+
+            isPublic: each.isPublic,
+            isAnnouncementPinned: each.isAnnouncementPinned,
+            announcementTarget: each.announcementTarget.split(','),
+
             updatedDateTime: each.updatedDateTime,
 
             titleTH: each.users?.titleTH || null,

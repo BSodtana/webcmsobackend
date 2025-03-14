@@ -47,11 +47,7 @@ model organizations {
   orgType                organizations_orgType   @default(DIVISION)
   parentOrg              String?                 @db.VarChar(15)
   updatedDateTime        DateTime?               @default(now()) @db.DateTime(0)
-  organizations          organizations?          @relation("organizationsToorganizations", fields: [parentOrg], references: [orgID], onDelete: NoAction, map: "FK_organizations_organizations")
-  other_organizations    organizations[]         @relation("organizationsToorganizations")
-  users                  users?                  @relation(fields: [studentID], references: [studentID], onDelete: NoAction, onUpdate: NoAction, map: "FK_organizations_users")
   organizationsfilequota organizationsfilequota?
-  projects               projects[]
   useraffiliation        useraffiliation[]
 
   @@index([parentOrg], map: "parentOrg")
@@ -222,7 +218,7 @@ model projects {
   projectShortDescriptionTH        String?                           @db.Text
   projectNameEN                    String?                           @db.Text
   projectNickNameEN                String?                           @db.VarChar(500)
-  projectFullDetail                String?                           @db.MediumText
+  projectFullDetail                String?                           @db.LongText
   eventDateStart                   DateTime?                         @default(now()) @db.Date
   eventDateFinish                  DateTime?                         @default(now()) @db.Date
   createdDateTime                  DateTime?                         @default(now()) @db.DateTime(0)
@@ -241,7 +237,6 @@ model projects {
   projectfilequota                 projectfilequota?
   projectparticipantrecruit        projectparticipantrecruit[]
   projectparticipation             projectparticipation[]
-  organizations                    organizations                     @relation(fields: [orgID], references: [orgID], onDelete: Cascade, map: "organizations-projects-orgID")
   users                            users?                            @relation(fields: [studentID], references: [studentID], map: "users-projects-studentID")
   projectstaffrecruit              projectstaffrecruit[]
 
@@ -360,7 +355,6 @@ model users {
   createdDateTime             DateTime?                     @default(now()) @db.DateTime(0)
   updatedDateTime             DateTime?                     @default(now()) @db.DateTime(0)
   cmsoprojectannouncement     cmsoprojectannouncement[]
-  organizations               organizations[]
   projectcertificatelist      projectcertificatelist[]
   projectevaluateformresponse projectevaluateformresponse[]
   projectparticipants         projectparticipants[]
@@ -376,24 +370,27 @@ model users {
 
 model userslogout {
   autoID          Int             @id @default(autoincrement())
-  studentID       String          @default("0") @db.VarChar(50)
+  studentID       String          @db.VarChar(10)
   token           String          @default("0") @db.VarChar(1000)
   killedDateTime  DateTime?       @default(now()) @db.DateTime(0)
-  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, onUpdate: NoAction, map: "FK_userslogout_usercredentials")
+  usercredentials usercredentials @relation(fields: [studentID], references: [studentID], onDelete: Cascade, map: "FK_userslogout_usercredentials")
 
   @@index([studentID], map: "studentID")
 }
 
 model cmsoprojectannouncement {
-  announcementID      String    @id @db.VarChar(50)
-  studentID           String    @db.VarChar(10)
-  projectID           String?   @db.VarChar(50)
-  announcementTitle   String?   @default("New Announcement") @db.VarChar(250)
-  announcementBody    String?   @db.MediumText
-  announcementCTALink String?   @db.MediumText
-  updatedDateTime     DateTime  @default(now()) @db.DateTime(0)
-  projects            projects? @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_cmsoprojectannouncement_projects")
-  users               users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
+  announcementID       String    @id @db.VarChar(50)
+  studentID            String    @db.VarChar(10)
+  projectID            String?   @db.VarChar(50)
+  isPublic             Int       @default(0)
+  announcementTitle    String?   @default("New Announcement") @db.VarChar(250)
+  announcementBody     String?   @db.MediumText
+  announcementCTALink  String?   @db.MediumText
+  isAnnouncementPinned Int       @default(0)
+  announcementTarget   String    @default("STF,PCP")
+  updatedDateTime      DateTime  @default(now()) @db.DateTime(0)
+  projects             projects? @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_cmsoprojectannouncement_projects")
+  users                users     @relation(fields: [studentID], references: [studentID], onDelete: NoAction, map: "FK_cmsoprojectannouncement_users")
 
   @@index([projectID], map: "projectID")
   @@index([studentID], map: "studentID")
@@ -435,6 +432,7 @@ model projectparticipation {
 model projectevaluateformresponse {
   studentID                          String    @db.VarChar(10)
   projectID                          String    @db.VarChar(50)
+  activityRating                     Int       @default(0)
   fundamentalLiteracy                Int       @default(0)
   fundamentalNumeracy                Int       @default(0)
   fundamentalScientific              Int       @default(0)
@@ -452,6 +450,7 @@ model projectevaluateformresponse {
   characterLeadership                Int       @default(0)
   characterSocialCulturalAwareness   Int       @default(0)
   shouldContinue                     Int       @default(0)
+  otherSkills                        String?   @db.LongText
   comment                            String?   @db.LongText
   createdDatetime                    DateTime? @default(now()) @db.DateTime(0)
   projects                           projects  @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectevaluateformresponse_projects")
@@ -474,7 +473,7 @@ model projectcertificatedefaultdata {
   certSTFCreatedDate         DateTime                                               @default(now()) @db.DateTime(0)
   certSTFDefaultDesignType   projectcertificatedefaultdata_certSTFDefaultDesignType @default(STF_TH)
   updatedDatetime            DateTime?                                              @default(now()) @db.DateTime(0)
-  projects                   projects                                               @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectcertificatedata_projects")
+  projects                   projects                                               @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcertificatedata_projects")
 }
 
 model projectcertificategeneratestatus {
@@ -534,11 +533,11 @@ model organizationsfilequota {
 }
 
 model projectfilequota {
-  projectID       String    @id @default("") @db.VarChar(50)
+  projectID       String    @id @db.VarChar(50)
   maxSizeQuota    Int       @default(52428800)
   currentSizeUsed Int
   updatedDatetime DateTime? @default(now()) @db.DateTime(0)
-  projects        projects  @relation(fields: [projectID], references: [projectID], onDelete: NoAction, onUpdate: NoAction, map: "FK_projectfilequota_projects")
+  projects        projects  @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectfilequota_projects")
 }
 
 model uploadedfiledata {
@@ -546,14 +545,14 @@ model uploadedfiledata {
   fileName           String                           @default(dbgenerated("(current_timestamp())")) @db.MediumText
   fileOriginalName   String                           @db.MediumText
   fileUploadDatetime DateTime?                        @default(now()) @db.DateTime(0)
-  fileUploadByUUID   String                           @default("") @db.VarChar(50)
+  fileUploadByUUID   String?                          @db.VarChar(50)
   fileRelatedType    uploadedfiledata_fileRelatedType @default(PROJECT)
   fileRelatedTypeID  String                           @db.VarChar(50)
   filePathNow        String                           @db.MediumText
   fileSize           Int
   filePublicity      uploadedfiledata_filePublicity   @default(PRIVATE)
   fileUploadedReason String?                          @db.MediumText
-  usercredentials    usercredentials                  @relation(fields: [fileUploadByUUID], references: [uuid], onDelete: NoAction, onUpdate: NoAction, map: "FK_uploadedfiledata_usercredentials")
+  usercredentials    usercredentials?                 @relation(fields: [fileUploadByUUID], references: [uuid], map: "FK_uploadedfiledata_usercredentials")
 
   @@index([fileRelatedTypeID], map: "FK_uploadedfiledata_projects")
   @@index([fileUploadByUUID], map: "FK_uploadedfiledata_usercredentials")
