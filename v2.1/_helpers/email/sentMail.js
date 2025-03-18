@@ -5,7 +5,7 @@ const sentMail = async (recipient, subject, HTMLcontent) => {
     const mail = await axios.post(
       `${process.env.MAIL_ENDPOINT_V2 || process.env.MAIL_ENDPOINT || 'https://w3.med.cmu.ac.th/api/v1/mail'}`,
       {
-        subject: `[CMSO] ${subject}`,
+        subject: `${subject} | เว็บไซต์สโมสรนักศึกษา [CMSO 2025] `,
         content: HTMLcontent,
         relay: 'no-reply-cmso.med@cmu.ac.th',
         mailsent: [recipient],
