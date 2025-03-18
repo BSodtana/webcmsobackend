@@ -55,29 +55,29 @@ const generateVerificationEmail = async (studentID, email) => {
     if (!checkUUID) break
   }
 
-  //code match, update email to database
-  const userData2 = await prisma.usercredentials.upsert({
-    where: {
-      studentID: studentID,
-    },
-    update: {},
-    create: {
-      uuid: uuid,
-      studentID: studentID,
-      email: email,
-      role: 'USER',
-      emailVerified: 0,
-    },
-  })
-
   // then sent email
   const sentEmailSuccess = await sentMail(
     email,
-    'รหัสยืนยันสำหรับเข้าใช้งานเว็บไซต์ CMSO',
+    `${code} คือรหัสยืนยันสำหรับเข้าใช้งาน CMSO Website`,
     verificationMail(code, ref)
   )
 
   if (sentEmailSuccess === 'Y') {
+    //code match, update email to database
+    const userData2 = await prisma.usercredentials.upsert({
+      where: {
+        studentID: studentID,
+      },
+      update: {},
+      create: {
+        uuid: uuid,
+        studentID: studentID,
+        email: email,
+        role: 'USER',
+        emailVerified: 0,
+      },
+    })
+
     return {
       studentID: updateCode.studentID,
       createdDateTime: updateCode.createdDateTime,
@@ -101,7 +101,7 @@ const verifiedEmailStudent = async (studentID, code, ref) => {
       studentID: true,
       referenceID: true,
       code: true,
-      
+
     }
   })
 
