@@ -111,6 +111,28 @@ const projectError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "EDIT-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED": {
+        "code": "EDIT-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED",
+        "textTH": "ไม่สามารถแก้ไขข้อมูลพิจารณากิจกรรมเนื่องจากไม่ได้ให้รหัสกิจกรรม",
+        "textEN": "No project ID was provided",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "RETREIVE-MSLIST-DATA-FAILED-INCORRECT-KEY": {
+        "code": "RETREIVE-MSLIST-DATA-FAILED-INCORRECT-KEY",
+        "textTH": "รหัสเข้าถึงข้อมูลไม่ถูกต้อง",
+        "textEN": "Incorrect secret key",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "RETREIVE-MSLIST-DATA-FAILED-INTERNAL-ERROR": {
+        "code": "RETREIVE-MSLIST-DATA-FAILED-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบ Microsoft List",
+        "textEN": "Internal Error in Microsoft List System",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    }
+
 }
 
 module.exports = projectError

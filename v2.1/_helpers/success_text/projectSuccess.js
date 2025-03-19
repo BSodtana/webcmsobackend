@@ -111,6 +111,13 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "RETREIVE-MSLIST-DATA-SUCCESS": {
+        "code": "RETREIVE-MSLIST-DATA-SUCCESS",
+        "textTH": "รับข้อมูลจาก MS List สำเร็จ",
+        "textEN": "Retreived Data from MS List successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false
+    },
 }
 
 module.exports = projectSuccess
