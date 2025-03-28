@@ -1,5 +1,7 @@
 require('dotenv').config()
-const prisma = require('../prisma')
+const { newProjectID } = require('../_helpers/id_generator/projectIDGen');
+const prisma = require('../prisma');
+const { getProjectBriefData } = require('./(each-project)/eachProjectServices');
 
 const getAnnouncementList = async (project = null) => {
     console.log('[getAnnouncementList]', project);
@@ -304,11 +306,78 @@ const searchListProjectByNamePage = async (searchByName = '', language = 'TH', p
 
 }
 
+const createNewProject = async (
+    studentID,
+    orgID,
+    projectNameTH,
+    projectNickNameTH,
+    projectNameEN,
+    projectNickNameEN,
+    eventDateStart,
+    eventDateFinish,
+    academicYear = "202501",
+) => {
+
+    // extract data
+    const academicYr = academicYear.slice(4)
+    const semester = academicYear.slice(-2)
+
+    // gen proj id
+    const newProjID = newProjectID(academicYr, semester)
+
+    try {
+        const newProj = await prisma.projects.create({
+            data: {
+                projectID: newProjID,
+                studentID: studentID,
+                orgID: orgID,
+
+                projectNameTH: projectNameTH,
+                projectNickNameTH: projectNickNameTH,
+
+                projectNameEN: projectNameEN,
+                projectNickNameEN: projectNickNameEN,
+
+                eventDateStart: eventDateStart,
+                eventDateFinish: eventDateFinish
+
+            }
+        })
+
+        return getProjectBriefData(newProj.projectID)
+
+    } catch (error) {
+
+        console.log('[createNewProject.newProj]', error);
+
+        throw {
+            code: 'CREATE-NEW-PROJECT-INTERNAL-ERROR',
+            desc: {
+                userData: {
+                    studentID,
+                    orgID,
+                    projectNameTH,
+                    projectNickNameTH,
+                    projectNameEN,
+                    projectNickNameEN,
+                    eventDateStart,
+                    eventDateFinish,
+                    academicYear
+                }, error
+            }
+        }
+    }
+
+
+}
+
 module.exports = {
     getAnnouncementList,
     updateAnnouncement,
     deleteAnnouncement,
     newAnnouncement,
 
-    searchListProjectByNamePage
+    searchListProjectByNamePage,
+
+    createNewProject
 }

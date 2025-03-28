@@ -18,8 +18,7 @@ const isLoggedIn = require("../_middleware/isLoggedIn");
 router.get('/announcement', [isLoggedIn()], projectControllers.getAnnouncementListController)
 router.get('/list', projectControllers.searchListProjectByNamePageController)
 router.use('/import', projectImportRoute)
-
-// router.post('/new', projectControllers.searchListProjectByNamePageController)
+router.post('/new', [isLoggedIn()], projectControllers.createNewProjectCon)
 
 router.use('/:projectID', eachProjectRoute)
 

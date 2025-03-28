@@ -1,57 +1,6 @@
 require('dotenv').config()
 const { default: axios } = require('axios');
 
-
-const getAnnouncementList = async (project = null) => {
-    console.log('[getAnnouncementList]', project);
-
-    const search = await prisma.cmsoprojectannouncement.findMany({
-        where: { projectID: project },
-        select: {
-            announcementID: true,
-            studentID: true,
-            projectID: true,
-            isPublic: true,
-            announcementTitle: true,
-            announcementBody: true,
-            announcementCTALink: true,
-            isAnnouncementPinned: true,
-            announcementTarget: true,
-            updatedDateTime: true,
-            users: {
-                select: {
-                    titleTH: true,
-                    firstNameTH: true,
-                    lastNameTH: true
-                }
-            }
-        }
-    })
-
-    return search.map((each) => {
-        return {
-            announcementID: each.announcementID,
-            studentID: each.studentID,
-            projectID: each.projectID,
-            announcementTitle: each.announcementTitle,
-            announcementBody: each.announcementBody,
-            announcementCTALink: each.announcementCTALink,
-
-            isPublic: each.isPublic,
-            isAnnouncementPinned: each.isAnnouncementPinned,
-            announcementTarget: each.announcementTarget.split(','),
-
-            updatedDateTime: each.updatedDateTime,
-
-            titleTH: each.users?.titleTH || null,
-            firstNameTH: each.users?.firstNameTH || null,
-            lastNameTH: each.users?.lastNameTH || null,
-        }
-    })
-
-}
-
-
 const getMSListProject = async (studentID) => {
 
     try {
@@ -136,8 +85,7 @@ const getMSListProject = async (studentID) => {
 }
 
 
-
 module.exports = {
-    getAnnouncementList,
+
     getMSListProject
 }

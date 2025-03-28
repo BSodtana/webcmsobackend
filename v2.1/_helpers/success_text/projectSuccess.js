@@ -118,6 +118,13 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false
     },
+    "CREATE-NEW-PROJECT-SUCCESS": {
+        "code": "CREATE-NEW-PROJECT-SUCCESS",
+        "textTH": "สร้างโครงการใหม่สำเร็จ",
+        "textEN": "Create new project success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false
+    }
 }
 
 module.exports = projectSuccess

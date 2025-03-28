@@ -131,6 +131,20 @@ const projectError = {
         "textEN": "Internal Error in Microsoft List System",
         "shouldContactAdmin": true,
         "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-INTERNAL-ERROR": {
+        "code": "CREATE-NEW-PROJECT-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบสร้างกิจกรรมใหม่",
+        "textEN": "Internal Error in creating new project",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-UPDATE-PROTECTED-DATA": {
+        "code": "CREATE-NEW-PROJECT-UPDATE-PROTECTED-DATA",
+        "textTH": "ไม่สามารถเพิ่มข้อมูลบางอย่างได้ กรุณายกเลิกการเพิ่มข้อมูล",
+        "textEN": "Some data provided cannot be added",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
     }
 
 }
