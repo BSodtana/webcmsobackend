@@ -10,12 +10,12 @@ const newProjectID = async (academicYear = "2025", semester = '01', added = 0) =
             }
         },
         orderBy: {
-            affiliationID: 'desc'
+            projectID: 'desc'
         }
     })
 
     // get number
-    const lastNumber = searchAll?.orgID?.slice(-3) || "000"
+    const lastNumber = searchAll?.projectID?.slice(-3) || "000"
 
     // convert to number and add 1
     const newnum = parseInt(lastNumber) + 1 + added

@@ -319,11 +319,11 @@ const createNewProject = async (
 ) => {
 
     // extract data
-    const academicYr = academicYear.slice(4)
+    const academicYr = academicYear.slice(0, 4)
     const semester = academicYear.slice(-2)
 
     // gen proj id
-    const newProjID = newProjectID(academicYr, semester)
+    const newProjID = await newProjectID(academicYr, semester)
 
     try {
         const newProj = await prisma.projects.create({
@@ -339,12 +339,16 @@ const createNewProject = async (
                 projectNickNameEN: projectNickNameEN,
 
                 eventDateStart: eventDateStart,
-                eventDateFinish: eventDateFinish
+                eventDateFinish: eventDateFinish,
+
+                academicYear: academicYear
 
             }
         })
 
-        return getProjectBriefData(newProj.projectID)
+        const getNewProjData = await getProjectBriefData(newProj.projectID)
+
+        return getNewProjData
 
     } catch (error) {
 
