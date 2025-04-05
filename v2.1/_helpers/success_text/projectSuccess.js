@@ -124,7 +124,14 @@ const projectSuccess = {
         "textEN": "Create new project success",
         "shouldContactAdmin": false,
         "shouldTryAgain": false
-    }
+    },
+    "CREATE-NEW-PROJECT-FROM-MS-LIST-SUCCESS": {
+        "code": "CREATE-NEW-PROJECT-FROM-MS-LIST-SUCCESS",
+        "textTH": "นำเข้าโครงการสำเร็จ",
+        "textEN": "Import a project success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false
+    },
 }
 
 module.exports = projectSuccess

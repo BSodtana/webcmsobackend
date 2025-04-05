@@ -7,7 +7,7 @@ const isLoggedIn = require("../../_middleware/isLoggedIn");
 // /v2.1/project/import
 
 router.get('/list', [isLoggedIn()], projectImportControllers.getMSListProjectController)
-// router.post('/new', [isLoggedIn()], projectImportControllers.getMSListProjectController)
+router.post('/new', [isLoggedIn()], projectImportControllers.createNewProjectFromMSListCon)
 
 
 //---------- default -----------------

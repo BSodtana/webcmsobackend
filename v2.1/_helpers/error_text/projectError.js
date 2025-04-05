@@ -145,7 +145,21 @@ const projectError = {
         "textEN": "Some data provided cannot be added",
         "shouldContactAdmin": true,
         "shouldTryAgain": false
-    }
+    },
+    "CREATE-NEW-PROJECT-MSLIST-FAILED-INTERNAL-ERROR": {
+        "code": "CREATE-NEW-PROJECT-MSLIST-FAILED-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบ Microsoft List ขณะกำลังสร้างโครงการใหม่",
+        "textEN": "Internal Error in Microsoft List System while creating new project",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-MSLIST-FAILED-MULTIPLE-OR-NO-DATA": {
+        "code": "CREATE-NEW-PROJECT-MSLIST-FAILED-MULTIPLE-OR-NO-DATA",
+        "textTH": "ไม่สามารถสร้างกิจกรรมจาก ID ที่ให้มาได้",
+        "textEN": "Cannot create a new project from provided ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
 
 }
 

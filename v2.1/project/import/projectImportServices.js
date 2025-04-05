@@ -1,5 +1,6 @@
 require('dotenv').config()
 const { default: axios } = require('axios');
+const projectServices = require('../projectServices');
 
 const getMSListProject = async (studentID) => {
 
@@ -84,8 +85,66 @@ const getMSListProject = async (studentID) => {
 
 }
 
+const parseNameNickname = (projectFullName) => {
+
+    if (projectFullName) {
+        const extractName = projectFullName.split("(")
+        const extractNickName = extractName[1]?.split(")") || [""]
+
+        return {
+            fullName: extractName[0]?.trim(),
+            nickName: extractNickName[0]?.trim()
+        }
+    } else {
+        return {
+            fullName: "",
+            nickName: ""
+        }
+    }
+
+
+}
+
+const createNewProjectFromMSList = async (studentID, autoID, orgID, editedProjectNameTH, editedProjectNickNameTH, editedDateEventStart, editedDateEventEnd) => {
+
+    try {
+        const msListProject = await getMSListProject(studentID)
+        const filteredProject = msListProject.filter((each) => each?.autoID == parseInt(autoID))
+
+        if (filteredProject.length != 1) {
+            throw {
+                code: "CREATE-NEW-PROJECT-MSLIST-FAILED-MULTIPLE-OR-NO-DATA",
+                desc: { userData: { studentID, autoID } },
+            }
+        } else {
+            const result = await projectServices.createNewProject(
+                studentID,
+                orgID ? orgID : filteredProject[0]?.orgID,
+                editedProjectNameTH ? editedProjectNameTH : parseNameNickname(filteredProject[0]?.projectNameTH || "โครงการใหม่").fullName,
+                editedProjectNickNameTH ? editedProjectNickNameTH : parseNameNickname(filteredProject[0]?.projectNameTH || "โครงการใหม่").nickName,
+                null,
+                null,
+                editedDateEventStart ? new Date(editedDateEventStart) : new Date(filteredProject[0]?.projectdata?.dateEventStart) || new Date(),
+                editedDateEventEnd ? new Date(editedDateEventEnd) : new Date(filteredProject[0]?.projectdata?.dateEventEnd) || new Date(),
+                filteredProject[0]?.academicYear
+            )
+            return result
+
+        }
+
+
+    } catch (error) {
+
+        throw {
+            code: error?.desc?.error?.code || error?.code || "CREATE-NEW-PROJECT-MSLIST-FAILED-INTERNAL-ERROR",
+            desc: { userData: { studentID, autoID, orgID, editedProjectNameTH, editedProjectNickNameTH, editedDateEventStart, editedDateEventEnd } },
+        }
+    }
+
+}
+
 
 module.exports = {
-
+    createNewProjectFromMSList,
     getMSListProject
 }
