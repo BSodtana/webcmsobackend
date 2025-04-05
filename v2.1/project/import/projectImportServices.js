@@ -88,12 +88,16 @@ const getMSListProject = async (studentID) => {
 const parseNameNickname = (projectFullName) => {
 
     if (projectFullName) {
-        const extractName = projectFullName.split("(")
-        const extractNickName = extractName[1]?.split(")") || [""]
+
+        const regexCheck = /^\s*(.*)\(([^()]+)\)([^()]*)\s*$/gm
+        const myArray = regexCheck.exec(projectFullName);
+
+        const extractName = myArray ? myArray[1]?.trim() : projectFullName.split("(")[0]?.trim()
+        const extractNickName = myArray ? myArray[2]?.trim() : projectFullName.split("(")[1]?.split(")")[0]?.trim() || [""][0]?.trim()
 
         return {
-            fullName: extractName[0]?.trim(),
-            nickName: extractNickName[0]?.trim()
+            fullName: extractName,
+            nickName: extractNickName
         }
     } else {
         return {
@@ -101,7 +105,6 @@ const parseNameNickname = (projectFullName) => {
             nickName: ""
         }
     }
-
 
 }
 
