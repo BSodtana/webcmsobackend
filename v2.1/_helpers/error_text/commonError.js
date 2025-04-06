@@ -90,6 +90,13 @@ const commonErrors = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    'P2003': {
+        "code": "DATA-NOT-COHERANT",
+        "textTH": "ข้อมูลไม่สอดคล้องกับฐานข้อมูลในระบบ",
+        "textEN": "Data incoherant with the system",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
     'RATE-LIMITED': {
         "code": "RATE-LIMITED",
         "textTH": "กรุณารอสักครู่ก่อนทำรายการใหม่อีกครั้ง",
