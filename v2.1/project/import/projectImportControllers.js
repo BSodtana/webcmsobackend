@@ -30,7 +30,7 @@ const createNewProjectFromMSListCon = async (req, res) => {
             editedDateEventEnd
         } = req.body
 
-        studentID, autoID, orgID, editedProjectNameTH, editedProjectNickNameTH, editedDateEventStart, editedDateEventEnd
+        // studentID, autoID, orgID, editedProjectNameTH, editedProjectNickNameTH, editedDateEventStart, editedDateEventEnd
 
         const results = await projectImportServices.createNewProjectFromMSList(
             studentID,
