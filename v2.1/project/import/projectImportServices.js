@@ -10,7 +10,8 @@ const getMSListProject = async (studentID) => {
         const fetch = await axios.post(
             `https://prod-00.southeastasia.logic.azure.com:443/workflows/f9156a8b6c2a4a0ea99e162c9142decf/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OsXuxbUDTnEaUW89PAWi_Cl3f1g_-ApwgmJIUsIMnwI`,
             {
-                studentID: "660710029",
+                studentID: studentID,
+                // studentID: "660710029",
                 internalKey: process.env.MS_LIST_SECRET_KEY
             }
         )
