@@ -27,16 +27,10 @@ router.use('/:projectID', eachProjectRoute)
 
 router.get('/', (req, res) => {
     const today = new Date()
-    const month = today.getMonth()
-    const firstDayOfMonth = new Date(today.setDate(1))
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
 
     res.status(200).json({
         status: 200,
         currentPath: '/v2.1/project/',
-        month,
-        firstDayOfMonth,
-        lastDayOfMonth,
     })
 })
 

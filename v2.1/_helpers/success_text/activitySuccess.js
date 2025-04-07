@@ -41,6 +41,13 @@ const activitySuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "EVALUATION-FORM-SUBMISSION-SUCCESS": {
+        "code": "EVALUATION-FORM-SUBMISSION-SUCCESS",
+        "textTH": "ประเมินกิจกรรมสำเร็จ",
+        "textEN": "Evaluated success ",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
     "CERTIFICATE-GET-USER-STATUS-SUCCESS": {
         "code": "CERTIFICATE-GET-USER-STATUS-SUCCESS",
         "textTH": "ดึงข้อมูลสถานะของเกียรติบัตรสำหรับผู้ใช้คนนี้สำเร็จ",
