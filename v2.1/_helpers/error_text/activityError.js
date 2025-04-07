@@ -76,6 +76,20 @@ const activityError = {
         "shouldContactAdmin": true,
         "shouldTryAgain": false,
     },
+    "EVALUATION-ERROR-INTERNAL-ERROR": {
+        "code": "EVALUATION-ERROR-INTERNAL-ERROR",
+        "textTH": "ระบบประเมินกิจกรรมมีปัญหา",
+        "textEN": "Internal Error (Evaluation Service)",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false,
+    },
+    "EVALUATION-ERROR-ALREADY-EVALUATED": {
+        "code": "EVALUATION-ERROR-ALREADY-EVALUATED",
+        "textTH": "คุณประเมินกิจกรรมนี้ไปแล้ว",
+        "textEN": "You've already evaluated this activity",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 
