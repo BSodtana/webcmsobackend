@@ -48,7 +48,9 @@ const submitEvaluationCon = async (req, res) => {
         const { studentID = 'NO-STD-ID' } = await req?.userData
         const {
             projectID,
+        } = req.params
 
+        const {
             activityRating = 0,
             comment = "",
 
@@ -73,11 +75,7 @@ const submitEvaluationCon = async (req, res) => {
             characterAdaptability = 0,
             characterLeadership = 0,
             characterSocialCulturalAwareness = 0
-
-        } = req.params
-
-        // required parameter
-
+        } = req?.body
 
         const results = await activityServices.submitEvaluationForm(
             studentID,
