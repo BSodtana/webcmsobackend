@@ -111,6 +111,56 @@ const projectError = {
         "shouldContactAdmin": false,
         "shouldTryAgain": true,
     },
+    "EDIT-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED": {
+        "code": "EDIT-PROJECT-CONSIDER-DATA-NO-PROJECT-ID-PROVIDED",
+        "textTH": "ไม่สามารถแก้ไขข้อมูลพิจารณากิจกรรมเนื่องจากไม่ได้ให้รหัสกิจกรรม",
+        "textEN": "No project ID was provided",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": true,
+    },
+    "RETREIVE-MSLIST-DATA-FAILED-INCORRECT-KEY": {
+        "code": "RETREIVE-MSLIST-DATA-FAILED-INCORRECT-KEY",
+        "textTH": "รหัสเข้าถึงข้อมูลไม่ถูกต้อง",
+        "textEN": "Incorrect secret key",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "RETREIVE-MSLIST-DATA-FAILED-INTERNAL-ERROR": {
+        "code": "RETREIVE-MSLIST-DATA-FAILED-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบ Microsoft List",
+        "textEN": "Internal Error in Microsoft List System",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-INTERNAL-ERROR": {
+        "code": "CREATE-NEW-PROJECT-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบสร้างกิจกรรมใหม่",
+        "textEN": "Internal Error in creating new project",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-UPDATE-PROTECTED-DATA": {
+        "code": "CREATE-NEW-PROJECT-UPDATE-PROTECTED-DATA",
+        "textTH": "ไม่สามารถเพิ่มข้อมูลบางอย่างได้ กรุณายกเลิกการเพิ่มข้อมูล",
+        "textEN": "Some data provided cannot be added",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-MSLIST-FAILED-INTERNAL-ERROR": {
+        "code": "CREATE-NEW-PROJECT-MSLIST-FAILED-INTERNAL-ERROR",
+        "textTH": "เกิดข้อผิดพลาดภายในระบบ Microsoft List ขณะกำลังสร้างโครงการใหม่",
+        "textEN": "Internal Error in Microsoft List System while creating new project",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-MSLIST-FAILED-MULTIPLE-OR-NO-DATA": {
+        "code": "CREATE-NEW-PROJECT-MSLIST-FAILED-MULTIPLE-OR-NO-DATA",
+        "textTH": "ไม่สามารถสร้างกิจกรรมจาก ID ที่ให้มาได้",
+        "textEN": "Cannot create a new project from provided ID",
+        "shouldContactAdmin": true,
+        "shouldTryAgain": false
+    },
+
 }
 
 module.exports = projectError

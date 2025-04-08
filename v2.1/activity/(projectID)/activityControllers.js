@@ -41,6 +41,81 @@ const checkInBulkCon = async (req, res) => {
     }
 }
 
+const submitEvaluationCon = async (req, res) => {
+    try {
+
+        //todo: check if user is joined that activity b4 allowed to evaluate
+        const { studentID = 'NO-STD-ID' } = await req?.userData
+        const {
+            projectID,
+        } = req.params
+
+        const {
+            activityRating = 0,
+            comment = "",
+
+            otherSkills = "",
+            shouldContinue = 0,
+
+            fundamentalLiteracy = 0,
+            fundamentalNumeracy = 0,
+            fundamentalScientific = 0,
+            fundamentalFinancial = 0,
+            fundamentalICT = 0,
+            fundamentalCulturalCivic = 0,
+
+            competencyCriticalThinkProblemSolv = 0,
+            competencyCreativity = 0,
+            competencyCommunication = 0,
+            competencyCollaboration = 0,
+
+            characterCuriosity = 0,
+            characterInitiative = 0,
+            characterPersistenceGrit = 0,
+            characterAdaptability = 0,
+            characterLeadership = 0,
+            characterSocialCulturalAwareness = 0
+        } = req?.body
+
+        const results = await activityServices.submitEvaluationForm(
+            studentID,
+            projectID,
+
+            activityRating,
+            comment,
+            otherSkills,
+            shouldContinue,
+
+            fundamentalLiteracy,
+            fundamentalNumeracy,
+            fundamentalScientific,
+            fundamentalFinancial,
+            fundamentalICT,
+            fundamentalCulturalCivic,
+
+            competencyCriticalThinkProblemSolv,
+            competencyCreativity,
+            competencyCommunication,
+            competencyCollaboration,
+
+            characterCuriosity,
+            characterInitiative,
+            characterPersistenceGrit,
+            characterAdaptability,
+            characterLeadership,
+            characterSocialCulturalAwareness
+        )
+
+        res.status(200).json(successCodeToResponse(results, 'EVALUATION-FORM-SUBMISSION-SUCCESS', projectID))
+
+
+    } catch (error) {
+        console.log('submitEvaluationCon', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'submitEvaluationCon'))
+
+    }
+}
+
 const getEvaluationFormStatusCon = async (req, res) => {
     try {
 
@@ -117,6 +192,7 @@ module.exports = {
     getCheckInCodeCon,
     checkInBulkCon,
 
+    submitEvaluationCon,
     getEvaluationFormStatusCon,
     editEvaluationFormStatusCon,
     getIfUserDoneEvaluationFormCon,

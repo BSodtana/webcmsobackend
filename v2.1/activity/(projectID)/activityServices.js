@@ -333,12 +333,107 @@ const countEvaluateFormResponseSTFPCP = async (projectID) => {
 
 }
 
+// ------------ submit evaluation ------------------
+
+const submitEvaluationForm = async (
+    studentID,
+    projectID,
+
+    activityRating,
+    comment,
+
+    otherSkills,
+    shouldContinue,
+
+    fundamentalLiteracy,
+    fundamentalNumeracy,
+    fundamentalScientific,
+    fundamentalFinancial,
+    fundamentalICT,
+    fundamentalCulturalCivic,
+
+    competencyCriticalThinkProblemSolv,
+    competencyCreativity,
+    competencyCommunication,
+    competencyCollaboration,
+
+    characterCuriosity,
+    characterInitiative,
+    characterPersistenceGrit,
+    characterAdaptability,
+    characterLeadership,
+    characterSocialCulturalAwareness
+) => {
+
+    try {
+        // check if user already done evaluation
+        const check = await checkIfUserDoneEvaluation(studentID, projectID)
+
+        if (check.userDoneEvaluation === true) {
+            throw {
+                code: 'EVALUATION-ERROR-ALREADY-EVALUATED',
+                desc: { userData: { studentID, projectID }, error: check }
+            }
+        } else {
+
+            const submit = await prisma.projectevaluateformresponse.create({
+                data: {
+                    studentID: studentID,
+                    projectID: projectID,
+
+                    activityRating: activityRating,
+                    shouldContinue: shouldContinue,
+                    otherSkills: otherSkills,
+                    comment: comment,
+                    createdDatetime: new Date(),
+
+                    fundamentalLiteracy: fundamentalLiteracy,
+                    fundamentalNumeracy: fundamentalNumeracy,
+                    fundamentalScientific: fundamentalScientific,
+                    fundamentalFinancial: fundamentalFinancial,
+                    fundamentalICT: fundamentalICT,
+                    fundamentalCulturalCivic: fundamentalCulturalCivic,
+
+                    competencyCriticalThinkProblemSolv: competencyCriticalThinkProblemSolv,
+                    competencyCreativity: competencyCreativity,
+                    competencyCommunication: competencyCommunication,
+                    competencyCollaboration: competencyCollaboration,
+
+                    characterCuriosity: characterCuriosity,
+                    characterInitiative: characterInitiative,
+                    characterPersistenceGrit: characterPersistenceGrit,
+                    characterAdaptability: characterAdaptability,
+                    characterLeadership: characterLeadership,
+                    characterSocialCulturalAwareness: characterSocialCulturalAwareness
+                }
+            })
+        }
+
+    } catch (error) {
+        console.log('[error outer submitEvaluationForm]'.error);
+
+        throw {
+            code: error?.code || 'EVALUATION-ERROR-INTERNAL-ERROR',
+            desc: { userData: { studentID, projectID } }
+        }
+    }
+
+
+
+}
+
+
+
+
+
+
 module.exports = {
     getCheckInCode,
     checkInActivity,
 
     checkInBulk,
 
+    submitEvaluationForm,
     getEvaluationFormStatus,
     editEvaluationFormStatus,
     checkIfUserDoneEvaluation,

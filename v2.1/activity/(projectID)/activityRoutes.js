@@ -17,6 +17,9 @@ router.get('/evaluation/status/me', [isLoggedIn()], activityControllers.getIfUse
 
 router.get('/evaluation/count', [isLoggedIn()], activityControllers.countNumberCon)
 
+router.post('/evaluation/submit', [isLoggedIn()], activityControllers.submitEvaluationCon)
+
+
 router.use('/certificate', require('./certificate/activityCertRoutes'))
 
 

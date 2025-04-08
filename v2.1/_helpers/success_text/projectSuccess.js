@@ -111,6 +111,27 @@ const projectSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "RETREIVE-MSLIST-DATA-SUCCESS": {
+        "code": "RETREIVE-MSLIST-DATA-SUCCESS",
+        "textTH": "รับข้อมูลจาก MS List สำเร็จ",
+        "textEN": "Retreived Data from MS List successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-SUCCESS": {
+        "code": "CREATE-NEW-PROJECT-SUCCESS",
+        "textTH": "สร้างโครงการใหม่สำเร็จ",
+        "textEN": "Create new project success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false
+    },
+    "CREATE-NEW-PROJECT-FROM-MS-LIST-SUCCESS": {
+        "code": "CREATE-NEW-PROJECT-FROM-MS-LIST-SUCCESS",
+        "textTH": "นำเข้าโครงการสำเร็จ",
+        "textEN": "Import a project success",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false
+    },
 }
 
 module.exports = projectSuccess
