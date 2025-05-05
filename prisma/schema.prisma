@@ -469,9 +469,9 @@ model projectcertificatedefaultdata {
   teacherPositionSignatureEN String?                                                @default("Head of Circus Department") @db.Text
   teacherSignatureFileID     String?                                                @db.VarChar(50)
   certPCPCreatedDate         DateTime                                               @default(now()) @db.DateTime(0)
-  certPCPDefaultDesignType   projectcertificatedefaultdata_certPCPDefaultDesignType @default(PCP_TH)
+  certPCPDefaultDesignType   projectcertificatedefaultdata_certPCPDefaultDesignType @default(PCP_2025_TH)
   certSTFCreatedDate         DateTime                                               @default(now()) @db.DateTime(0)
-  certSTFDefaultDesignType   projectcertificatedefaultdata_certSTFDefaultDesignType @default(STF_TH)
+  certSTFDefaultDesignType   projectcertificatedefaultdata_certSTFDefaultDesignType @default(STF_2025_TH)
   updatedDatetime            DateTime?                                              @default(now()) @db.DateTime(0)
   projects                   projects                                               @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcertificatedata_projects")
 }
@@ -488,7 +488,7 @@ model projectcertificatelist {
   certificateID   String                              @id @db.VarChar(50)
   studentID       String                              @db.VarChar(10)
   projectID       String                              @db.VarChar(50)
-  certUserType    projectcertificatelist_certUserType @default(PCP)
+  certUserType    projectcertificatelist_certUserType @default(PCP_2025_TH)
   applicationID   String                              @db.VarChar(50)
   updatedDatetime DateTime?                           @default(now()) @db.DateTime(0)
   projects        projects                            @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcertificate_projects")
@@ -500,7 +500,7 @@ model projectcertificatelist {
 
 model projectcertificate {
   certificateID   String                            @id @db.VarChar(50)
-  certDesignType  projectcertificate_certDesignType @default(PCP_TH)
+  certDesignType  projectcertificate_certDesignType @default(PCP_2024_TH)
   studentID       String                            @db.VarChar(10)
   applicationID   String                            @db.VarChar(50)
   projectID       String                            @db.VarChar(50)
@@ -654,28 +654,6 @@ enum projectcertificategeneratestatus_certSTFStatus {
   READY
 }
 
-enum projectcertificatelist_certUserType {
-  PCP
-  STF
-}
-
-enum projectcertificatedefaultdata_certPCPDefaultDesignType {
-  PCP_TH
-  PCP_EN
-}
-
-enum projectcertificatedefaultdata_certSTFDefaultDesignType {
-  STF_TH
-  STF_EN
-}
-
-enum projectcertificate_certDesignType {
-  PCP_TH
-  PCP_EN
-  STF_TH
-  STF_EN
-}
-
 enum projectcertificatestatus_certPCPStatus {
   DISABLED
   NOT_READY
@@ -701,4 +679,51 @@ enum uploadedfiledata_filePublicity {
   PUBLIC
   PRIVATE
   LOGIN_ONLY
+}
+
+enum projectcertificate_certDesignType {
+  PCP_TH
+  PCP_EN
+  STF_TH
+  STF_EN
+  PCP_2024_TH
+  PCP_2024_EN
+  STF_2024_TH
+  STF_2024_EN
+}
+
+enum projectcertificatelist_certUserType {
+  PCP_TH
+  PCP_EN
+  STF_TH
+  STF_EN
+  PCP_2024_TH
+  PCP_2024_EN
+  PCP_2025_TH
+  PCP_2025_EN
+  STF_2024_TH
+  STF_2024_EN
+  STF_2025_TH
+  STF_2025_EN
+  CMSO_2024_TH
+}
+
+enum projectcertificatedefaultdata_certPCPDefaultDesignType {
+  PCP_TH
+  PCP_EN
+  PCP_2024_TH
+  PCP_2024_EN
+  PCP_2025_TH
+  PCP_2025_EN
+  CMSO_2024_TH
+}
+
+enum projectcertificatedefaultdata_certSTFDefaultDesignType {
+  STF_TH
+  STF_EN
+  STF_2024_TH
+  STF_2024_EN
+  STF_2025_TH
+  STF_2025_EN
+  CMSO_2024_TH
 }
