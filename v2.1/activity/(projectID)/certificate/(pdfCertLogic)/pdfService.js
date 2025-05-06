@@ -40,7 +40,7 @@ const generatePCPPdf = async (
         doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectName || projectNickname}`;
         doc.info['Author'] = `${userFullName}`;
         doc.info['Subject'] = `${projectNickname || projectName}`;
-        doc.info['Keywords'] = `${projectNickname || projectName}, Participant, Certificate, CMSO, MedCMU`;
+        doc.info['Keywords'] = `${projectNickname || projectName}, Participant, Certificate, CMSO, MedCMU, 2024`;
 
         doc.info['CreationDate'] = new Date(certDate); // date of cert (from CMSO)
         doc.info['ModDate'] = new Date(); // date of last downloading cert
@@ -599,12 +599,11 @@ const generateCMSO2024Pdf = async (
     }
 }
 
+const generatePCP2025THPdf = async (
+    userFullName,
 
-const generateCMSO2024_2Pdf = async (
-    userFullName = 'กมุทพร อยู่บ้านแพ้ว รัตนโกมล',
-
-    projectName,
-    projectNickname,
+    projectName = '',
+    projectNickname = '',
     activityDate,
     certDate,
 
@@ -629,7 +628,7 @@ const generateCMSO2024_2Pdf = async (
         doc.info['Title'] = `เกียรติบัตรเข้าร่วมกิจกรรม ${projectName || projectNickname}`;
         doc.info['Author'] = `${userFullName}`;
         doc.info['Subject'] = `${projectNickname || projectName}`;
-        doc.info['Keywords'] = `${projectNickname || projectName}, Participant, Certificate, CMSO, MedCMU`;
+        doc.info['Keywords'] = `${projectNickname || projectName}, Participant, Certificate, CMSO, MedCMU, 2025`;
 
         doc.info['CreationDate'] = new Date(certDate); // date of cert (from CMSO)
         doc.info['ModDate'] = new Date(); // date of last downloading cert
@@ -637,16 +636,17 @@ const generateCMSO2024_2Pdf = async (
         doc.info['Producer'] = `${projectOwnerFullName || 'CMSO ONLINE'}`;
         doc.info['Creator'] = `Chiang Mai Medical Student Organization, Faculty of Medicine, Chiang Mai University`
 
+
         // set default text & bg thing
         doc.font(Regular)
-        doc.image(`${__dirname}/asset/background/CMSO_2024_TH.png`)
+        doc.image(`${__dirname}/asset/background/PCP_2025_TEMPLATE.png`)
 
         // date text
         const activityStringDate = formatThaiDate(activityDate)
         const certStringDate = formatThaiDate(certDate)
 
         // padding
-        const paddingTop = 430
+        const paddingTop = 435
         const paddingLeft = 0
 
         // start text
@@ -656,35 +656,47 @@ const generateCMSO2024_2Pdf = async (
 
         doc.font(Regular).fontSize(40).fillColor('#014e4c').text('ขอมอบเกียรติบัตรให้แก่', defaultMargin);
 
-        doc.font(Bold).fontSize(80).text(' ', defaultMargin);
+        doc.font(Bold).fontSize(15).text(' ', defaultMargin);
 
-        doc.font(Bold).fontSize(85).fillColor('#349288').text(`${userFullName}`, defaultMargin);
+        doc.font(Bold).fontSize(84).fillColor('#014e4c').text(`${userFullName}`, defaultMargin);
 
-        doc.font(Bold).fontSize(10).text(' ', defaultMargin);
+        doc.font(Bold).fontSize(30).text(' ', defaultMargin);
 
-        doc.font(Regular).fontSize(35).fillColor('#1c3a4f').text(`ได้เข้าร่วม${projectName || projectNickname}`, defaultMargin);
-        doc.font(Regular).fontSize(35).text(`เมื่อวันที่ ${activityStringDate}`, defaultMargin);
+        doc.font(Regular).fontSize(31).fillColor('#014e4c').text(`ได้เข้าร่วม${projectName || projectNickname}`, defaultMargin);
+        doc.font(Regular).fontSize(31).text(`เมื่อวันที่ ${activityStringDate}`, defaultMargin);
 
-        doc.fontSize(37).text(`ให้ไว้ ณ วันที่ ${certStringDate}`, doc.x, 1010, defaultMargin);
+        // // max width for job title
+        // const maxWidth = 1850
+
+        // doc.font(Regular).fontSize(31).fillColor('#014e4c').text(`ตำแหน่ง ${userPosition}`, ((2000 - maxWidth) / 2), doc.y, {
+        //     width: maxWidth,
+        //     ...defaultMargin,
+        // });
+
+        doc.font(Regular).fontSize(30).text(` `, paddingLeft, doc.y + paddingTop, defaultMargin);
+
+        doc.font(Bold).fontSize(30).fillColor('#014e4c').text(`ให้ไว้ ณ วันที่ ${certStringDate}`, paddingLeft, 950, defaultMargin);
 
         // spacing below
-        const init_pad = 0
+        const init_pad = 400
         const line_length = 350
         const spacing = 45
+        const bottom_pad = 1017
         const pad2 = init_pad + line_length + spacing
         const pad3 = pad2 + line_length + spacing
 
         // sign image
         const image_width = 400
         const image_height = 100
-        // doc.lineWidth(2).rect(doc.x + init_pad + 6.5, 1100, image_width, image_height).stroke();
-        // doc.lineWidth(2).rect(doc.x + init_pad + 6.5 + 400, 1100, image_width, image_height).stroke();
-        // doc.lineWidth(2).rect(doc.x + init_pad + 6.5 + 800, 1100, image_width, image_height).stroke();
+        // doc.lineWidth(2).rect(doc.x + init_pad, 1150, image_width, image_height).stroke();
+        // doc.lineWidth(2).rect(doc.x + init_pad + 400, 1150, image_width, image_height).stroke();
+        // doc.lineWidth(2).rect(doc.x + init_pad + 800, 1150, image_width, image_height).stroke();
 
-        // real image
+        // // real image
         // const SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
         // const SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
         // const SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
+
         let SIGN_ADVISOR = `${__dirname}/asset/placeholder/SIGNED_ADVISOR.png`
         let SIGN_OWNER = `${__dirname}/asset/placeholder/SIGNED_OWNER.png`
         let SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
@@ -711,17 +723,16 @@ const generateCMSO2024_2Pdf = async (
             SIGN_CMSOHEAD = `${__dirname}/asset/placeholder/SIGNED_CMSOHEAD.png`
         }
 
-        // Fit the image in the dimensions, and center it both horizontally and vertically
-        doc.image(SIGN_OWNER, doc.x + init_pad, 1145, { fit: [image_width, image_height], align: 'center', valign: 'center' })
-        doc.image(SIGN_ADVISOR, doc.x + init_pad + 400, 1145, { fit: [image_width, image_height], align: 'center', valign: 'center' })
-        doc.image(SIGN_CMSOHEAD, doc.x + init_pad + 800, 1145, { fit: [image_width, image_height], align: 'center', valign: 'center' })
 
-        // const pad2 = init_pad + line_length + spacing
-        // const pad3 = pad2 + line_length + spacing
+        // // Fit the image in the dimensions, and center it both horizontally and vertically
+        doc.image(SIGN_OWNER, doc.x + init_pad, bottom_pad, { fit: [image_width, image_height], align: 'center', valign: 'center' })
+        doc.image(SIGN_ADVISOR, doc.x + init_pad + image_width, bottom_pad, { fit: [image_width, image_height], align: 'center', valign: 'center' })
+        doc.image(SIGN_CMSOHEAD, doc.x + init_pad + 2 * image_width, bottom_pad, { fit: [image_width, image_height], align: 'center', valign: 'center' })
 
-        // doc.moveTo(doc.x + init_pad, doc.y).lineCap('round').lineWidth(3).fillColor('#a6a6a6').lineTo(doc.x + init_pad + line_length, doc.y).stroke();
-        // doc.moveTo(doc.x + pad2, doc.y).lineCap('round').lineWidth(3).fillColor('#a6a6a6').lineTo(doc.x + pad2 + line_length, doc.y).stroke();
-        // doc.moveTo(doc.x + pad3, doc.y).lineCap('round').lineWidth(3).fillColor('#a6a6a6').lineTo(doc.x + pad3 + line_length, doc.y).stroke();
+
+        // doc.moveTo(doc.x + init_pad, bottom_pad).lineCap('round').lineWidth(3).fillColor('#a6a6a6').lineTo(doc.x + init_pad + image_width, bottom_pad).stroke();
+        // doc.moveTo(pad2, bottom_pad).lineCap('round').lineWidth(3).fillColor('#a6a6a6').lineTo(pad2 + 2 * image_width, bottom_pad).stroke();
+        // doc.moveTo(pad3, bottom_pad).lineCap('round').lineWidth(3).fillColor('#a6a6a6').lineTo(pad3 + 3 * image_width, bottom_pad).stroke();
 
         // doc.rect(doc.x + 110, doc.y + 10, 1300, 100).stroke();
 
@@ -763,8 +774,8 @@ const generateCMSO2024_2Pdf = async (
         await doc.table(table, {
             width: 1200,
             x: doc.x + init_pad,
-            y: 1270,
-            columnSpacing: 1,
+            y: bottom_pad + image_height + 13,
+            columnSpacing: 0,
             divider: {
                 header: { disabled: true },
                 horizontal: { disabled: true },
@@ -785,14 +796,13 @@ const generateCMSO2024_2Pdf = async (
             code: 'GENERATE-CERTIFICATE-FAILED-INTERNAL-ERROR',
             desc: { userData: { error } },
         }
-
     }
 }
-
-
 
 module.exports = {
     generatePCPPdf,
     generateSTFPdf,
-    generateCMSO2024Pdf
+    generateCMSO2024Pdf,
+
+    generatePCP2025THPdf
 }

@@ -67,7 +67,7 @@ const downloadCertCon = async (req, res) => {
                     presidentSignatureFileID = null
                 )
 
-                successCodeToResponse('CERTIFICATE PCP', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP')
+                successCodeToResponse('CERTIFICATE PCP 2024', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP 2024')
 
 
                 res.writeHead(200, {
@@ -131,7 +131,7 @@ const downloadCertCon = async (req, res) => {
                     presidentSignatureFileID = null
                 )
 
-                successCodeToResponse('CERTIFICATE PCP', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP')
+                successCodeToResponse('CERTIFICATE PCP 2024', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP 2024')
 
 
                 res.writeHead(200, {
@@ -209,6 +209,33 @@ const downloadCertCon = async (req, res) => {
                 break;
 
             case 'PCP_2025_TH':
+                pdfStream = await pdfService.generatePCP2025THPdf(
+                    `${allData.userData.firstNameTH} ${allData.userData.lastNameTH}`,
+                    `${allData.projectData.projectNameTH}`,
+                    `${allData.projectData.projectNickNameTH}`,
+                    allData.projectData.eventDateStart,
+                    allData.certCommonData.certPCPCreatedDate,
+
+                    `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
+                    projectOwnerSignatureFileID = null,
+
+                    `${allData.certCommonData.teacherNameSignatureTH}`,
+                    `${allData.certCommonData.teacherPositionSignatureTH}`,
+                    advisorNameSignatureFileID = null,
+
+                    presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
+                    presidentAcademicYear = '2568',
+                    presidentSignatureFileID = ''
+                )
+
+                successCodeToResponse('CERTIFICATE PCP 2025', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP 2025')
+
+
+                res.writeHead(200, {
+                    'Content-Length': Buffer.byteLength(pdfStream),
+                    'Content-Type': 'application/pdf',
+                    'Content-disposition': `attachment;filename=Certificate-PCP-2025-${search.certificateID}.pdf`,
+                }).end(pdfStream);
 
                 break;
 
