@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
@@ -7,6 +8,10 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 const path = require('path')
+const rfs = require("rotating-file-stream");
+const logDirectory = path.join(__dirname, 'log'); // Define log directory
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+
 
 app.use(
   cors({
@@ -19,15 +24,24 @@ app.use(
 )
 const port = process.env.PORT || 8080
 
-const logger = morgan('combined')
+const rfsStream = rfs.createStream( 'access.log', {
+  size: process.env.LOG_SIZE || '10M',
+  interval: process.env.LOG_INTERVAL || '1d',
+  path: logDirectory,
+  compress: 'gzip'
+  });
+const logFormat = process.env.LOG_FORMAT || 'combined';
+const logStream = process.env.LOG_FILE === 'true' ? rfsStream : process.stdout;
+app.use(morgan(logFormat, { stream: logStream }));
+  
 // IMPORT API V1
 const v1 = require('./v1/main')
 const v2 = require('./v2/main')
 const v2_1 = require('./v2.1/main')
 
-app.use(logger)
 app.use('/v1', v1)
 app.use('/v1/static', express.static(path.join(__dirname, './assets')))
+
 
 app.use('/v2', v2)
 app.use('/v2/static', express.static(path.join(__dirname, './assets')))
@@ -41,8 +55,6 @@ app.get('/', (req, res) => {
     ENV_PORT: process.env.PORT,
   })
 })
-
-
 
 app.listen(port, () => {
   console.log(`Server NODE CMSO BACKEND is up and running at port ${port}`)

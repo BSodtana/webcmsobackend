@@ -1,0 +1,100 @@
+
+services:
+  # --- Your Node.js Application Service ---
+  app:
+    image: medcmu/nodejs-iteru:17.3.0-alpine3.15
+    container_name: nodejs_app
+    working_dir: /usr/src/app
+    volumes:
+      - /Users/newton/Documents/cmsowebsite/cmso_backend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      DB_PORT: 3306
+      DB_HOST: db                   # Use the service name "db"
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_NAME: cmso_db
+      MARIADB_ROOT_PASSWORD: root
+      DATABASE_URL: ${DATABASE_URL}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      MAIL_ENDPOINT: ${MAIL_ENDPOINT}
+      MAIL_TOKEN: ${MAIL_TOKEN}
+      MAIL_ENDPOINT_V2: ${MAIL_ENDPOINT_V2}
+      MAIL_ACCESS_TOKEN_V2: ${MAIL_ACCESS_TOKEN_V2}
+      MAIL_REFRESH_TOKEN_V2: ${MAIL_REFRESH_TOKEN_V2}
+      MS_LIST_SECRET_KEY:       ${MS_LIST_SECRET_KEY}
+      
+    command: > 
+            sh -c "apk add --no-cache python3 make g++ &&  npm install --quiet && npm rebuild bcrypt --build-from-source && npx prisma generate && node app.js"
+    depends_on:
+      db: 
+        condition: service_healthy 
+    restart: always
+
+ 
+  frontend:
+    image: medcmu/nodejs-iteru:19.8.1-alpine3.17 # Using the specified Node.js image
+    container_name: frontend
+    working_dir: /app
+    volumes:
+      # Mount your source code; node_modules will be created inside /app by npm install
+      - /Users/newton/Documents/cmsowebsite/cmso_frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+    
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    
+      PORT: 3000
+    
+      CHOKIDAR_USEPOLLING: "true"
+    
+      HOSTNAME: 0.0.0.0
+    depends_on:
+      - app # Make sure backend service 'app' is available
+    command: > # Execute npm install and start the dev server
+          sh -c "npm install --quiet && npm run dev"
+
+
+  db:
+    image: mariadb:10.11
+    restart: always
+    ports:
+        - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cmso_db
+      MYSQL_USER: root 
+    volumes:
+      - db_data:/var/lib/mysql  
+      - ./cmso_db.sql:/docker-entrypoint-initdb.d/init.sql # <-- Correct: Starts with '-'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-p${DB_PASSWORD:-root}"]
+      interval: 10s      
+      timeout: 5s        
+      retries: 5         
+      start_period: 20s 
+
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8000:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_SOCKETS_DIR=/run/mysqld
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+      - PMA_PORT=3306
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/newton/Documents/cmsowebsite/cmso_backend/db_data
+      o: bind
