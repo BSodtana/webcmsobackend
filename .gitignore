@@ -1,7 +1,9 @@
 package-lock.json
-
+access.log
 # user uploaded file
-
+db_data*
+./db_data
+db_data
 ### Node ###
 /user_upload
 
@@ -10,6 +12,8 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+log
+./log
 
 # Optional npm cache directory
 .npm
@@ -92,3 +96,4 @@ $RECYCLE.BIN/
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
