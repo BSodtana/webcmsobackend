@@ -244,7 +244,7 @@ const generateCertForUser = async (studentID, projectID, forced = false) => {
         const checkList = [
             await checkGenCertLogic.checkIfUserJoinedProject(studentID, projectID),
             await checkGenCertLogic.checkIfUserDidEvaluationForm(studentID, projectID),
-            true,
+            // true,
             await checkIfOwnerAllowedUserToDL(studentID, projectID)
         ]
 
@@ -259,10 +259,10 @@ const generateCertForUser = async (studentID, projectID, forced = false) => {
                 "textTH": "ผู้ใช้ยังไม่ได้ประเมินกิจกรรม",
                 "textEN": "This student hasn't evaluated this activity yet",
             },
-            {
-                "textTH": "ผู้เข้าร่วมยังประเมินกิจกรรมไม่ถึงที่กำหนดไว้",
-                "textEN": "Evaluation not met criteria",
-            },
+            // {
+            //     "textTH": "ผู้เข้าร่วมยังประเมินกิจกรรมไม่ถึงที่กำหนดไว้",
+            //     "textEN": "Evaluation not met criteria",
+            // },
             {
                 "textTH": "เจ้าของกิจกรรมยังไม่เปิดให้ดาวน์โหลดเกียรติบัตร",
                 "textEN": "Download a certificate is not allowed (yet)",
