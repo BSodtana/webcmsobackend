@@ -180,8 +180,8 @@ const downloadCertCon = async (req, res) => {
                 break;
             case 'CMSO_2024_TH':
                 pdfStream = await pdfService.generateCMSO2024Pdf(
-                    'กมุทพร อยู่บ้านแพ้ว รัตนโกมล' || `${allData.userData.firstNameTH} ${allData.userData.lastNameTH}`,
-                    'หัวหน้าฝ่ายเทคโนโลยีและสารสนเทศ' || `${allData.STFpositionDetail?.positionData?.positionName}`,
+                    `${allData.userData.firstNameTH} ${allData.userData.lastNameTH}`,
+                    `${allData.STFpositionDetail?.positionData?.positionName}`,
 
                     `${allData.projectData.projectNameTH}`,
                     `${allData.projectData.projectNickNameTH}`,
