@@ -693,22 +693,6 @@ enum projectcertificate_certDesignType {
   STF_2024_EN
 }
 
-enum projectcertificatelist_certUserType {
-  PCP_TH
-  PCP_EN
-  STF_TH
-  STF_EN
-  PCP_2024_TH
-  PCP_2024_EN
-  PCP_2025_TH
-  PCP_2025_EN
-  STF_2024_TH
-  STF_2024_EN
-  STF_2025_TH
-  STF_2025_EN
-  CMSO_2024_TH
-}
-
 enum projectcertificatedefaultdata_certPCPDefaultDesignType {
   PCP_TH
   PCP_EN
@@ -722,6 +706,24 @@ enum projectcertificatedefaultdata_certPCPDefaultDesignType {
 enum projectcertificatedefaultdata_certSTFDefaultDesignType {
   STF_TH
   STF_EN
+  STF_2024_TH
+  STF_2024_EN
+  STF_2025_TH
+  STF_2025_EN
+  CMSO_2024_TH
+}
+
+enum projectcertificatelist_certUserType {
+  PCP
+  STF
+  PCP_TH
+  PCP_EN
+  STF_TH
+  STF_EN
+  PCP_2024_TH
+  PCP_2024_EN
+  PCP_2025_TH
+  PCP_2025_EN
   STF_2024_TH
   STF_2024_EN
   STF_2025_TH
