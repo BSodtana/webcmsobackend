@@ -56,7 +56,7 @@ const downloadCertCon = async (req, res) => {
                     allData.certCommonData.certPCPCreatedDate,
 
                     `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
-                    projectOwnerSignatureFileID = null,
+                    `${allData.certCommonData.projectOwnerSignatureFileID}`,
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
@@ -120,7 +120,7 @@ const downloadCertCon = async (req, res) => {
                     allData.certCommonData.certPCPCreatedDate,
 
                     `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
-                    projectOwnerSignatureFileID = null,
+                    `${allData.certCommonData.projectOwnerSignatureFileID}`,
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
@@ -154,7 +154,7 @@ const downloadCertCon = async (req, res) => {
                     allData.certCommonData.certPCPCreatedDate,
 
                     `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
-                    projectOwnerSignatureFileID = null,
+                    `${allData.certCommonData.projectOwnerSignatureFileID}`,
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
@@ -217,7 +217,7 @@ const downloadCertCon = async (req, res) => {
                     allData.certCommonData.certPCPCreatedDate,
 
                     `${allData.projectData.users.firstNameTH} ${allData.projectData.users.lastNameTH}`,
-                    projectOwnerSignatureFileID = null,
+                    `${allData.certCommonData.projectOwnerSignatureFileID}`,
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,

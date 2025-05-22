@@ -462,18 +462,19 @@ model projectevaluateformresponse {
 }
 
 model projectcertificatedefaultdata {
-  projectID                  String                                                 @id @db.VarChar(50)
-  teacherNameSignatureTH     String?                                                @default("ผศ. ดร. เอ บีซี") @db.Text
-  teacherNameSignatureEN     String?                                                @default("Ass. Prof. A BC") @db.Text
-  teacherPositionSignatureTH String?                                                @default("ภาควิชากายกรรม") @db.Text
-  teacherPositionSignatureEN String?                                                @default("Head of Circus Department") @db.Text
-  teacherSignatureFileID     String?                                                @db.VarChar(50)
-  certPCPCreatedDate         DateTime                                               @default(now()) @db.DateTime(0)
-  certPCPDefaultDesignType   projectcertificatedefaultdata_certPCPDefaultDesignType @default(PCP_2025_TH)
-  certSTFCreatedDate         DateTime                                               @default(now()) @db.DateTime(0)
-  certSTFDefaultDesignType   projectcertificatedefaultdata_certSTFDefaultDesignType @default(STF_2025_TH)
-  updatedDatetime            DateTime?                                              @default(now()) @db.DateTime(0)
-  projects                   projects                                               @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcertificatedata_projects")
+  projectID                   String                                                 @id @db.VarChar(50)
+  projectOwnerSignatureFileID String?                                                @db.VarChar(50)
+  teacherNameSignatureTH      String?                                                @default("ผศ. ดร. เอ บีซี") @db.Text
+  teacherNameSignatureEN      String?                                                @default("Ass. Prof. A BC") @db.Text
+  teacherPositionSignatureTH  String?                                                @default("ภาควิชากายกรรม") @db.Text
+  teacherPositionSignatureEN  String?                                                @default("Head of Circus Department") @db.Text
+  teacherSignatureFileID      String?                                                @db.VarChar(50)
+  certPCPCreatedDate          DateTime                                               @default(now()) @db.DateTime(0)
+  certPCPDefaultDesignType    projectcertificatedefaultdata_certPCPDefaultDesignType @default(PCP_TH)
+  certSTFCreatedDate          DateTime                                               @default(now()) @db.DateTime(0)
+  certSTFDefaultDesignType    projectcertificatedefaultdata_certSTFDefaultDesignType @default(STF_TH)
+  updatedDatetime             DateTime?                                              @default(now()) @db.DateTime(0)
+  projects                    projects                                               @relation(fields: [projectID], references: [projectID], onDelete: Cascade, map: "FK_projectcertificatedata_projects")
 }
 
 model projectcertificategeneratestatus {

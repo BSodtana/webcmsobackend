@@ -135,6 +135,7 @@ const getCertDefaultData = async (projectID) => {
             teacherNameSignatureEN: defaultSearch.teacherNameSignatureEN,
             teacherPositionSignatureTH: defaultSearch.teacherPositionSignatureTH,
             teacherPositionSignatureEN: defaultSearch.teacherPositionSignatureEN,
+            projectOwnerSignatureFileID: defaultSearch.projectOwnerSignatureFileID,
             teacherSignatureFileID: defaultSearch.teacherSignatureFileID,
             certPCPCreatedDate: defaultSearch.certPCPCreatedDate,
             certPCPDefaultDesignType: defaultSearch.certPCPDefaultDesignType,
