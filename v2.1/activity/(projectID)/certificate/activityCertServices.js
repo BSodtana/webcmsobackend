@@ -296,7 +296,7 @@ const generateCertForUser = async (studentID, projectID, forced = false) => {
                     certificateID: createCertNo,
                     studentID: studentID,
                     projectID: projectID,
-                    certUserType: getUserData.as,
+                    certUserType: getUserData.as === 'PCP' ? (await getCertDefaultData(projectID)).certPCPDefaultDesignType : (await getCertDefaultData(projectID)).certSTFDefaultDesignType,
                     applicationID: getUserApplicationID,
                     updatedDatetime: new Date()
                 }

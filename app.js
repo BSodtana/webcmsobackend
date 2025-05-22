@@ -48,6 +48,7 @@ app.use('/v2/static', express.static(path.join(__dirname, './assets')))
 
 app.use('/v2.1', v2_1)
 app.use('/v2.1/static', express.static(path.join(__dirname, './assets')))
+app.use('/v2.1/custom_log', express.static(path.join(__dirname, './log')))
 
 app.get('/', (req, res) => {
   res.status(200).json({
