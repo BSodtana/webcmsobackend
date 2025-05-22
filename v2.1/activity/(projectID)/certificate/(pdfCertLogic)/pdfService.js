@@ -28,7 +28,7 @@ const generatePCPPdf = async (
 
     presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
     presidentAcademicYear = '2568',
-    presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
+    presidentSignatureFileID = 'qKJuVKTH9UPkTlfX') => {
     try {
 
         const doc = new PDFDocument({
@@ -216,7 +216,7 @@ const generateSTFPdf = async (
 
     presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
     presidentAcademicYear = '2568',
-    presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
+    presidentSignatureFileID = 'qKJuVKTH9UPkTlfX') => {
     try {
 
         const doc = new PDFDocument({
@@ -415,7 +415,7 @@ const generateCMSO2024Pdf = async (
 
     presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
     presidentAcademicYear = '2568',
-    presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
+    presidentSignatureFileID = 'qKJuVKTH9UPkTlfX') => {
     try {
 
         const doc = new PDFDocument({
@@ -616,7 +616,7 @@ const generatePCP2025THPdf = async (
 
     presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
     presidentAcademicYear = '2568',
-    presidentSignatureFileID = '8mwGVo1bRMPHoLL3') => {
+    presidentSignatureFileID = 'qKJuVKTH9UPkTlfX') => {
     try {
 
         const doc = new PDFDocument({
