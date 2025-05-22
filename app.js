@@ -24,16 +24,16 @@ app.use(
 )
 const port = process.env.PORT || 8080
 
-const rfsStream = rfs.createStream( 'access.log', {
+const rfsStream = rfs.createStream('access.log', {
   size: process.env.LOG_SIZE || '10M',
   interval: process.env.LOG_INTERVAL || '1d',
   path: logDirectory,
   compress: 'gzip'
-  });
+});
 const logFormat = process.env.LOG_FORMAT || 'combined';
 const logStream = process.env.LOG_FILE === 'true' ? rfsStream : process.stdout;
 app.use(morgan(logFormat, { stream: logStream }));
-  
+
 // IMPORT API V1
 const v1 = require('./v1/main')
 const v2 = require('./v2/main')
