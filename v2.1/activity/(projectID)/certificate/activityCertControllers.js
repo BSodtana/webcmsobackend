@@ -200,7 +200,7 @@ const generateCertForUserCon = async (req, res) => {
 
     } catch (error) {
         console.log('generateCertForUserCon', error)
-        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'generateCertForUserCon'))
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || error || 'generateCertForUserCon'))
 
     }
 }
