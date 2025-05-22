@@ -135,6 +135,7 @@ const getCertDefaultData = async (projectID) => {
             teacherNameSignatureEN: defaultSearch.teacherNameSignatureEN,
             teacherPositionSignatureTH: defaultSearch.teacherPositionSignatureTH,
             teacherPositionSignatureEN: defaultSearch.teacherPositionSignatureEN,
+            projectOwnerSignatureFileID: defaultSearch.projectOwnerSignatureFileID,
             teacherSignatureFileID: defaultSearch.teacherSignatureFileID,
             certPCPCreatedDate: defaultSearch.certPCPCreatedDate,
             certPCPDefaultDesignType: defaultSearch.certPCPDefaultDesignType,
@@ -342,12 +343,14 @@ const getInfoFromCertNo = async (certID) => {
         let STFpositionDetail = {}
         let PCPpositionDetail = {}
         // check if user is stf or pcp
-        if (data.certUserType === 'STF') {
+        if (data.certUserType.includes('STF')) {
             // user is stf -> get position detail
             STFpositionDetail = await getSTFDataFromApplicationID(data.applicationID)
-        } else {
+        } else if (data.certUserType.includes('PCP')) {
             // user is pcp -> get pcp detail
             PCPpositionDetail = await getPCPDataFromApplicationID(data.applicationID)
+        } else {
+            STFpositionDetail = await getSTFDataFromApplicationID(data.applicationID)
         }
 
         // get this this activity cert data
