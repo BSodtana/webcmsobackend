@@ -439,7 +439,7 @@ const generateCMSO2024Pdf = async (
 
         // set default text & bg thing
         doc.font(Regular)
-        doc.image(`${__dirname}/asset/background/CMSO_2024_TH.png`)
+        doc.image(`${__dirname}/asset/background/CMSO_2024_TH_SIGNED.png`)
 
         // date text
         const activityStringDate = formatThaiDate(activityDate)
