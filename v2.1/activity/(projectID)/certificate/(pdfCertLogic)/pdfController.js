@@ -60,11 +60,12 @@ const downloadCertCon = async (req, res) => {
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
-                    advisorNameSignatureFileID = null,
+                    `${allData.certCommonData.teacherSignatureFileID}`,
 
                     presidentFullName = 'พิมพ์ลักษณ์ ชัยจิตติประเสริฐ',
                     presidentAcademicYear = '2567',
-                    presidentSignatureFileID = null
+                    // todo: for dev
+                    presidentSignatureFileID = 'yf14knM7QRVYOa6B'
                 )
 
                 successCodeToResponse('CERTIFICATE PCP 2024', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP 2024')
@@ -124,11 +125,12 @@ const downloadCertCon = async (req, res) => {
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
-                    advisorNameSignatureFileID = null,
+                    `${allData.certCommonData.teacherSignatureFileID}`,
 
                     presidentFullName = 'พิมพ์ลักษณ์ ชัยจิตติประเสริฐ',
                     presidentAcademicYear = '2567',
-                    presidentSignatureFileID = null
+                    // todo: for dev
+                    presidentSignatureFileID = 'yf14knM7QRVYOa6B'
                 )
 
                 successCodeToResponse('CERTIFICATE PCP 2024', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE PCP 2024')
@@ -158,11 +160,12 @@ const downloadCertCon = async (req, res) => {
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
-                    advisorNameSignatureFileID = null,
+                    `${allData.certCommonData.teacherSignatureFileID}`,
 
                     presidentFullName = 'พิมพ์ลักษณ์ ชัยจิตติประเสริฐ',
                     presidentAcademicYear = '2567',
-                    presidentSignatureFileID = null
+                    // todo: for dev
+                    presidentSignatureFileID = 'yf14knM7QRVYOa6B'
                 )
 
                 successCodeToResponse('CERTIFICATE STAFF', 'CERTIFICATE-GENERATE-SUCCESS', allData.userData.studentID, allData.projectData.projectID, 'CERTIFICATE STAFF')
@@ -221,7 +224,7 @@ const downloadCertCon = async (req, res) => {
 
                     `${allData.certCommonData.teacherNameSignatureTH}`,
                     `${allData.certCommonData.teacherPositionSignatureTH}`,
-                    advisorNameSignatureFileID = null,
+                    `${allData.certCommonData.teacherSignatureFileID}`,
 
                     presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
                     presidentAcademicYear = '2568',
