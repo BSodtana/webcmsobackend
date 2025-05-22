@@ -189,11 +189,11 @@ const downloadCertCon = async (req, res) => {
                     allData.certCommonData.certPCPCreatedDate,
 
                     projectOwnerFullName = '',
-                    projectOwnerSignatureFileID = '8mwGVo1bRMPHoLL3',
+                    projectOwnerSignatureFileID = null,
 
                     advisorName = '',
                     advisorTitle = '',
-                    advisorNameSignatureFileID = '8mwGVo1bRMPHoLL3',
+                    advisorNameSignatureFileID = null,
 
                     presidentFullName = 'วิริทธิ์พล ดวงจันทร์',
                     presidentAcademicYear = '2568',
