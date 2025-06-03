@@ -29,12 +29,16 @@ const genStudentVerificationCode = async (req, res) => {
             res.status(400).json(errorCodeToResponse('REGISTER-GENERATE-EMAIL-NOT-ENOUGH-DATA', studentID.toString()))
         } else {
 
+            // check if user is 1st year student -> allowed to not use cmu mail
+            const checkPrelim = registerServices.getPrelimDataFromStudentID(studentID.toString())
+            const isUserFirstYear = (await checkPrelim).currentYear === 1
+
             // check email requirement (RegEx) cmu.ac.th
             // const condition = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
             const condition = /^[A-Za-z0-9._%+-]+@cmu\.ac\.th$/;
             const check = condition.exec(email)
 
-            if (!check) {
+            if (!isUserFirstYear && !check) {
                 // password not pass
                 throw {
                     code: 'REGISTER-EMAIL-NOT-CMU',
@@ -57,7 +61,7 @@ const genStudentVerificationCode = async (req, res) => {
                     }
 
                 } else {
-                    const results = await registerServices.generateVerificationEmail(studentID.toString(), check[0])
+                    const results = await registerServices.generateVerificationEmail(studentID.toString(), email)
                     res.status(200).json(successCodeToResponse(results, 'REGISTER-GENERATE-EMAIL-SUCCESS', studentID.toString()))
 
                 }
