@@ -1,16 +1,27 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
-// /v2.1/manage/
+// middleware
+const isLoggedIn = require("../../../_middleware/isLoggedIn");
+const allowedByUserType = require("../../../_middleware/allowedByUserType");
 
-router.use('/account', require('./account/accountManagerRoutes'))
-// router.use('/project', require('./account/accountManagerRoutes'))
+// controller
+const adminCredentialControllers = require('./adminCredentialControllers')
+
+// /v2.1/manage/account/credential
+
+// router.post('/upload', [isLoggedIn()], fileControllers.uploadFileCon)
+// router.get('/view', [isLoggedIn({ allowedGuestNotLogin: true })], fileControllers.getFileCon)
+
+
+router.get('/search', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], adminCredentialControllers.adminSearchUUIDfromStudentIDController)
+
 
 //---------- default -----------------
 
 router.get('/', (req, res) => {
     res.status(200).json({
-        currentPath: '/v2.1/manage/'
+        currentPath: '/v2.1/manage/account/credential'
     })
 })
 
