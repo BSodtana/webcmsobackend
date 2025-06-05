@@ -10,6 +10,7 @@ const allowedByUserType = require("../../../../_middleware/allowedByUserType");
 const manageCredUUIDControllers = require('./manageCredUUIDControllers')
 
 router.get('/', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], manageCredUUIDControllers.adminGetDataFromUUIDController)
+router.delete('/', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], manageCredUUIDControllers.adminDeleteCredentaialDataFromUUIDController)
 
 
 //---------- default -----------------

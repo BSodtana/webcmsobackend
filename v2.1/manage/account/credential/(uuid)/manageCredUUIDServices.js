@@ -30,7 +30,31 @@ const adminGetDataFromUUID = async (uuid = null) => {
 
 }
 
+const adminDeleteCredentialDataFromUUID = async (uuid = null) => {
+    try {
+        const search = await prisma.usercredentials.delete({
+            where: {
+                uuid: uuid
+            }
+        })
+
+        return {
+            success: true
+        }
+
+    } catch (error) {
+        throw {
+            code: error?.code,
+            desc: error?.desc || { userData: { uuid } }
+        }
+
+    }
+
+
+
+}
 
 module.exports = {
     adminGetDataFromUUID,
+    adminDeleteCredentialDataFromUUID
 }

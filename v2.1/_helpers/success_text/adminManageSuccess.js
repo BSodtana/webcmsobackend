@@ -27,6 +27,13 @@ const adminManageSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "ADMIN-MANAGE-CREDENTIAL-DELETE-DATA-FROM-UUID-SUCCESS": {
+        "code": "ADMIN-MANAGE-CREDENTIAL-DELETE-DATA-FROM-UUID-SUCCESS",
+        "textTH": "แอดมินลบข้อมูลล็อกอินจาก UUID สำเร็จ",
+        "textEN": "Admin delete data from UUID successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 
