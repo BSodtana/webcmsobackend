@@ -40,6 +40,7 @@ const addProjectAnnouncement = async (announcementData) => {
     const count = await prisma.cmsoprojectannouncement.count({ where: { projectID: null } });
     const newNum = count + 1;
     const numFormatPadding = newNum.toString().padStart(4, '0');
+    //TODO: REVIEW annoucementID 
     const announcementID = `GLOBAL-PROJ-A${numFormatPadding}`;
 
 

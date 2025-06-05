@@ -2,17 +2,20 @@
 const express = require('express');
 const router = express.Router();
 const projectGlobalControllers = require('./projectController');
+const isLoggedIn = require('../../_middleware/isLoggedIn');
+const allowedByUserType = require('../../_middleware/allowedByUserType');
+
 // const isLoggedIn = require('../../../middleware/isLoggedIn'); // Adjust path
 
 // Base path: /project/announcement
 
 // 1. get list all non-specific
-router.get('/', /* [isLoggedIn], */ projectGlobalControllers.listGlobalAnnouncementsController);
+router.get('/',[isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], projectGlobalControllers.listGlobalAnnouncementsController);
 
 // 2. add new
-router.post('/', /* [isLoggedIn], */ projectGlobalControllers.addGlobalAnnouncementController);
+router.post('/', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], projectGlobalControllers.addGlobalAnnouncementController);
 
 // 3. edit announcement
-router.put('/:announcementId', /* [isLoggedIn], */ projectGlobalControllers.editGlobalAnnouncementController);
+router.put('/:announcementId', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], projectGlobalControllers.editGlobalAnnouncementController);
 
 module.exports = router;
