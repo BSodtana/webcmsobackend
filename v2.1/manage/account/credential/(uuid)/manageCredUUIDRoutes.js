@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
-// /v2.1/manage/account/credential
 
 // middleware
 const isLoggedIn = require("../../../_middleware/isLoggedIn");
@@ -9,8 +8,13 @@ const allowedByUserType = require("../../../_middleware/allowedByUserType");
 // controller
 const adminCredentialControllers = require('./adminCredentialControllers')
 
+// /v2.1/manage/account/credential
+
+// router.post('/upload', [isLoggedIn()], fileControllers.uploadFileCon)
+// router.get('/view', [isLoggedIn({ allowedGuestNotLogin: true })], fileControllers.getFileCon)
+
+
 router.get('/search', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], adminCredentialControllers.adminSearchUUIDfromStudentIDController)
-router.post('/new', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], adminCredentialControllers.adminSetUserEmailPasswordController)
 
 
 //---------- default -----------------

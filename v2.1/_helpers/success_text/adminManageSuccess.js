@@ -13,6 +13,13 @@ const adminManageSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "ADMIN-MANAGE-CREDENTIAL-CREATE-NEW-CRED-SUCCESS": {
+        "code": "ADMIN-MANAGE-CREDENTIAL-CREATE-NEW-CRED-SUCCESS",
+        "textTH": "แอดมินสมัครบัญชีใหม่สำเร็จ",
+        "textEN": "Admin created new account successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 
