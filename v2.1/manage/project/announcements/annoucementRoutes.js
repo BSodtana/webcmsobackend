@@ -1,7 +1,7 @@
 // path: e.g., src/api/project/projectGlobalRoutes.js
 const express = require('express');
 const router = express.Router();
-const projectGlobalControllers = require('./projectController');
+const projectGlobalControllers = require('./annoucementController');
 const isLoggedIn = require('../../../_middleware/isLoggedIn');
 const allowedByUserType = require('../../../_middleware/allowedByUserType');
 

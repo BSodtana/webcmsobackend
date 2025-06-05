@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 
 // /v2.1/manage/project
 
-router.use('/annoucements', require('./announcements/projectRoutes'))
+router.use('/annoucements', require('./announcements/annoucementRoutes'))
 
 //---------- default -----------------
 

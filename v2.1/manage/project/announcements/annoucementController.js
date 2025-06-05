@@ -1,7 +1,7 @@
 // path: e.g., src/api/project/projectGlobalControllers.js
 const {listProjectAnnouncements,
     addProjectAnnouncement,
-    editProjectAnnouncement} = require('./projectServices');
+    editProjectAnnouncement} = require('./annoucementServices');
 
 const listGlobalAnnouncementsController = async (req, res) => {
     try {
