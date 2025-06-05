@@ -55,13 +55,10 @@ const createStudent = async (studentData) => {
     const {
         studentID, titleTH, firstNameTH, lastNameTH, nickNameTH,
         titleEN, firstNameEN, lastNameEN, currentYear, admissionCategory,
-        phoneNumber, lineID, facebook, instagram, medicalCondition, allergy, specialNeed,
-        email,     // For usercredentials table
-        password,  // Plain text password, MUST be hashed before storing
-        role       // For usercredentials table (e.g., "USER")
+        phoneNumber, lineID, facebook, instagram, medicalCondition, allergy, specialNeed
     } = studentData;
 
-    if (!studentID || !firstNameTH || !lastNameTH || !email || !password) {
+    if (!studentID || !firstNameTH || !lastNameTH) {
         console.error('[createStudent Validation Fail] Missing fields:', { studentID, firstNameTH, lastNameTH, email_exists: !!email, password_exists: !!password });
         throw { code: 'VALIDATION_ERROR', desc: 'Service: Missing required fields (studentID, firstNameTH, lastNameTH, email, password).' };
     }
@@ -82,24 +79,8 @@ const createStudent = async (studentData) => {
             },
         });
 
-        // In your schema, usercredentials has studentID as @id and uuid as @unique.
-        // Let's assume uuid should also be unique and related to studentID.
-        // For simplicity, generating a basic uuid based on studentID. Consider a proper UUID library.
-        const generatedUuid = `${studentID}-${Date.now()}`;
 
-        await tx.usercredentials.create({ // Model name is lowercase 'usercredentials'
-            data: {
-                studentID: newUser.studentID,        // This is the @id field in usercredentials
-                uuid: generatedUuid,                 // This is a @unique field
-                email: email,
-                hashPassword: password,              // STORE THE HASHED PASSWORD
-                role: role ? role.toUpperCase() : 'USER', // Ensure role matches enum, e.g., usercredentials_role.USER
-                emailVerified: 0
-            }
-        });
-        // Return only relevant user data, not sensitive credential info
-        const { hashPassword, ...safeUserCredentials } = newUser.usercredentials || {};
-        return { ...newUser, usercredentials: safeUserCredentials };
+        return newUser;
     });
 };
 
