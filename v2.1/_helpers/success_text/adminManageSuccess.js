@@ -20,6 +20,13 @@ const adminManageSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "ADMIN-MANAGE-CREDENTIAL-GET-DATA-FROM-UUID-SUCCESS": {
+        "code": "ADMIN-MANAGE-CREDENTIAL-GET-DATA-FROM-UUID-SUCCESS",
+        "textTH": "แอดมินรับข้อมูลล็อกอินจาก UUID สำเร็จ",
+        "textEN": "Admin retreive data from UUID successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 

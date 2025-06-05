@@ -12,6 +12,8 @@ const adminCredentialControllers = require('./adminCredentialControllers')
 router.get('/search', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], adminCredentialControllers.adminSearchUUIDfromStudentIDController)
 router.post('/new', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], adminCredentialControllers.adminSetUserEmailPasswordController)
 
+router.use('/:uuid', require('./(uuid)/manageCredUUIDRoutes'))
+
 
 //---------- default -----------------
 

@@ -1,28 +1,23 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
+// /v2.1/manage/account/credential/:uuid
 
 // middleware
-const isLoggedIn = require("../../../_middleware/isLoggedIn");
-const allowedByUserType = require("../../../_middleware/allowedByUserType");
+const isLoggedIn = require("../../../../_middleware/isLoggedIn");
+const allowedByUserType = require("../../../../_middleware/allowedByUserType");
 
 // controller
-const adminCredentialControllers = require('./adminCredentialControllers')
+const manageCredUUIDControllers = require('./manageCredUUIDControllers')
 
-// /v2.1/manage/account/credential
-
-// router.post('/upload', [isLoggedIn()], fileControllers.uploadFileCon)
-// router.get('/view', [isLoggedIn({ allowedGuestNotLogin: true })], fileControllers.getFileCon)
-
-
-router.get('/search', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], adminCredentialControllers.adminSearchUUIDfromStudentIDController)
+router.get('/', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], manageCredUUIDControllers.adminGetDataFromUUIDController)
 
 
 //---------- default -----------------
 
-router.get('/', (req, res) => {
-    res.status(200).json({
-        currentPath: '/v2.1/manage/account/credential'
-    })
-})
+// router.get('/', (req, res) => {
+//     res.status(200).json({
+//         currentPath: `/v2.1/manage/account/credential/${req.params?.uuid || 'UNDEFINED'}`
+//     })
+// })
 
 module.exports = router

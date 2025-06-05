@@ -1,11 +1,11 @@
 require('dotenv').config()
-const prisma = require('../../../prisma');
+const prisma = require('../../../../prisma');
 
-const adminSearchUUIDfromStudentID = async (studentID = null) => {
+const adminGetDataFromUUID = async (uuid = null) => {
 
     const search = await prisma.usercredentials.findUniqueOrThrow({
         where: {
-            studentID: studentID
+            uuid: uuid
         },
         select: {
             uuid: true,
@@ -32,5 +32,5 @@ const adminSearchUUIDfromStudentID = async (studentID = null) => {
 
 
 module.exports = {
-    adminSearchUUIDfromStudentID,
+    adminGetDataFromUUID,
 }
