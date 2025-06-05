@@ -4,6 +4,7 @@ const router = express.Router({ mergeParams: true });
 // /v2.1/manage/account
 
 router.use('/credential', require('./credential/adminCredentialRoutes'))
+router.use('/users', require('./users/studentRoutes'))
 
 //---------- default -----------------
 

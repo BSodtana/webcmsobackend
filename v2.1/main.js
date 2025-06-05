@@ -10,8 +10,6 @@ const organization = require('./organization/organizationRoutes')
 const activity = require('./activity/activityMainRoutes')
 const file = require('./file/fileRoutes')
 const adminManage = require('./manage/manageRoutes')
-const studentManage = require('./manage/account/users/studentRoutes')
-const projectManage = require('./manage/project/projectRoutes')
 
 router.use('/account', account)
 router.use('/project', project)
@@ -20,8 +18,6 @@ router.use('/organization', organization)
 router.use('/activity', activity)
 router.use('/file', file)
 router.use('/manage', adminManage)
-router.use('/manage/student', studentManage)
-router.use('/manage/project', projectManage)
 
 
 router.get('/', (req, res) => {
