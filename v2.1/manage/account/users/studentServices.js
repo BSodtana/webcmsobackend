@@ -7,24 +7,11 @@ const ITEMS_PER_PAGE = 50;
 /**
  * @desc Get a paginated list of students
  */
-const listStudents = async (filters = {}, page = 1) => {
-    const { year, studentID } = filters;
-    const skip = (page - 1) * ITEMS_PER_PAGE;
-
-    let whereClause = {};
-    if (year) {
-        whereClause.currentYear = parseInt(year);
-    }
-    if (studentID) {
-        whereClause.studentID = studentID;
-    }
-
+const listStudents = async () => {
+   
     return prisma.users.findMany({
-        where: whereClause,
-        skip: skip,
-        take: ITEMS_PER_PAGE,
         orderBy: {
-            lastNameTH: 'asc',
+            studentID: 'asc',
         },
         select: {
             studentID: true,

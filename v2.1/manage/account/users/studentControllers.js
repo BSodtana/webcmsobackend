@@ -6,13 +6,9 @@ const studentServices = require('./studentServices'); // Ensure this path is cor
 
 const listStudentsController = async (req, res) => {
     try {
-        const { year, studentID, page = 1 } = req.query;
-        const filters = {};
-        if (year) filters.year = year;
-        if (studentID) filters.studentID = studentID;
 
-        console.log('Controller: listStudents with filters:', filters, 'page:', page);
-        const students = await studentServices.listStudents(filters, parseInt(page));
+        console.log('Controller: listStudents with filters:');
+        const students = await studentServices.listStudents();
         // Direct JSON response for success
         res.status(200).json({
             success: true,
