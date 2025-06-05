@@ -34,6 +34,13 @@ const adminManageSuccess = {
         "shouldContactAdmin": false,
         "shouldTryAgain": false,
     },
+    "ADMIN-MANAGE-USERS-LIST-SEARCH-STUDENT-SUCCESS": {
+        "code": "ADMIN-MANAGE-USERS-LIST-SEARCH-STUDENT-SUCCESS",
+        "textTH": "แอดมินค้นหาข้อมูลนักศึกษาสำเร็จ",
+        "textEN": "Admin search users data successfully",
+        "shouldContactAdmin": false,
+        "shouldTryAgain": false,
+    },
 
 }
 

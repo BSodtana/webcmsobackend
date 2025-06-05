@@ -2,14 +2,30 @@
 require('dotenv').config();
 const prisma = require('../../../prisma');
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 25;
 
 /**
  * @desc Get a paginated list of students
  */
-const listStudents = async () => {
-   
-    return prisma.users.findMany({
+const listStudents = async (filters = {}, page = 1) => {
+
+    const { year, studentID } = filters;
+    const skip = (page - 1) * ITEMS_PER_PAGE;
+
+    let whereClause = {};
+    if (year) {
+        whereClause.currentYear = parseInt(year);
+    }
+    if (studentID) {
+        whereClause.studentID = {
+            contains: studentID
+        };
+    }
+
+    return await prisma.users.findMany({
+        where: whereClause,
+        skip: skip,
+        take: ITEMS_PER_PAGE,
         orderBy: {
             studentID: 'asc',
         },
@@ -20,10 +36,12 @@ const listStudents = async () => {
             lastNameTH: true,
             nickNameTH: true,
             currentYear: true,
-            usercredentials: { // Matches relation name in your 'users' model
+            usercredentials: {
                 select: {
+                    uuid: true,
                     email: true,
                     role: true,
+                    emailVerified: true
                 }
             }
         }
@@ -142,7 +160,7 @@ const updateStudent = async (studentIDParam, updateData) => {
                 },
             });
         } else {
-            updatedUserFromDb = await tx.users.findUnique({ where: {studentID: studentIDParam }});
+            updatedUserFromDb = await tx.users.findUnique({ where: { studentID: studentIDParam } });
         }
 
         if (email || role) {
@@ -151,7 +169,7 @@ const updateStudent = async (studentIDParam, updateData) => {
             if (role) credentialsUpdateData.role = role.toUpperCase(); // Ensure matches enum
 
             if (Object.keys(credentialsUpdateData).length > 0) {
-                 await tx.usercredentials.update({
+                await tx.usercredentials.update({
                     where: { studentID: studentIDParam }, // studentID is the @id in usercredentials
                     data: credentialsUpdateData,
                 });
@@ -161,8 +179,8 @@ const updateStudent = async (studentIDParam, updateData) => {
         return tx.users.findUnique({
             where: { studentID: studentIDParam },
             select: { // Select desired fields for the response
-                studentID: true, firstNameTH: true, lastNameTH: true, currentYear:true,
-                usercredentials: { select: { email:true, role:true }}
+                studentID: true, firstNameTH: true, lastNameTH: true, currentYear: true,
+                usercredentials: { select: { email: true, role: true } }
             }
         });
     });

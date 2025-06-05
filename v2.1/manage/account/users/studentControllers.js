@@ -1,4 +1,6 @@
 // src/api/students/studentControllers.js
+const { errorCodeToResponse } = require('../../../_helpers/errorCodeToResponse');
+const { successCodeToResponse } = require('../../../_helpers/successCodeToResponse');
 const studentServices = require('./studentServices'); // Ensure this path is correct
 
 // Removed: const { errorCodeToResponse } = require('../../../_helpers/errorCodeToResponse');
@@ -6,27 +8,21 @@ const studentServices = require('./studentServices'); // Ensure this path is cor
 
 const listStudentsController = async (req, res) => {
     try {
+        const { uuid: adminUUID, studentID: adminID } = await req?.userData
 
-        console.log('Controller: listStudents with filters:');
-        const students = await studentServices.listStudents();
-        // Direct JSON response for success
-        res.status(200).json({
-            success: true,
-            code: 'LIST_STUDENTS_SUCCESS',
-            message: 'Successfully retrieved student list.',
-            data: students
-        });
+        const { year, studentID, page = 1 } = req.query;
+        const filters = {};
+        if (year) filters.year = year;
+        if (studentID) filters.studentID = studentID;
+
+        const students = await studentServices.listStudents(filters, parseInt(page || 1));
+        res.status(200).json(successCodeToResponse(students, 'ADMIN-MANAGE-USERS-LIST-SEARCH-STUDENT-SUCCESS', `admin-${adminUUID}`, `Year ${year} - StdID ${studentID} - Page ${page}`))
+
+
     } catch (error) {
-        console.error('listStudentsController Error:', error);
-        // Direct JSON response for error
-        res.status(500).json({
-            success: false,
-            code: error.code || 'INTERNAL_ERROR',
-            error: {
-                message: error.message || 'Failed to list students.',
-                description: error.desc 
-            }
-        });
+        console.log('listStudentsController', error)
+        res.status(500).json(errorCodeToResponse(error?.code || "INTERNAL-ERROR", error?.desc || 'listStudentsController'))
+
     }
 };
 
@@ -108,8 +104,8 @@ const updateStudentController = async (req, res) => {
         } else if (error.code === 'VALIDATION_ERROR') {
             statusCode = 400;
         } else if (error.code === 'P2002') {
-             statusCode = 409;
-             errorMessage = `Update failed due to unique constraint violation (e.g., email already exists). Details: ${error.message}`;
+            statusCode = 409;
+            errorMessage = `Update failed due to unique constraint violation (e.g., email already exists). Details: ${error.message}`;
         }
         res.status(statusCode).json({
             success: false,
@@ -203,7 +199,7 @@ const assignStudentToOrgController = async (req, res) => {
         if (error.code === 'STUDENT_NOT_FOUND' || error.code === 'ORG_NOT_FOUND') {
             statusCode = 404;
         } else if (error.code === 'P2002') {
-            statusCode = 409; 
+            statusCode = 409;
             errorMessage = `Student ${req.params.studentID} is already affiliated with organization ${req.body.orgID} in that role or similar unique constraint violation.`;
         }
         res.status(statusCode).json({
@@ -219,19 +215,19 @@ const assignStudentToOrgController = async (req, res) => {
 
 const removeStudentAffiliationController = async (req, res) => {
     try {
-        const { studentID, orgID, affiliationID } = req.params; 
+        const { studentID, orgID, affiliationID } = req.params;
         console.log('Controller: removeStudentFromOrg studentID:', studentID, 'orgID:', orgID, 'affiliationID:', affiliationID);
-        
+
         let result;
         if (affiliationID) { // If a specific affiliationID is provided (e.g., from a route like /affiliate/:affiliationID)
-             result = await studentServices.removeStudentFromOrg(null, null, affiliationID);
+            result = await studentServices.removeStudentFromOrg(null, null, affiliationID);
         } else if (studentID && orgID) { // If studentID and orgID are provided (e.g., from /:studentID/affiliate/:orgID)
             result = await studentServices.removeStudentFromOrg(studentID, orgID, null);
         } else {
             return res.status(400).json({
                 success: false,
                 code: 'MISSING_PARAMETERS',
-                error: { message: 'Sufficient identifiers (affiliationID or both studentID & orgID) required.'}
+                error: { message: 'Sufficient identifiers (affiliationID or both studentID & orgID) required.' }
             });
         }
         res.status(200).json({
