@@ -15,8 +15,10 @@ const listGlobalAnnouncementsController = async (req, res) => {
 
 const addGlobalAnnouncementController = async (req, res) => {
     try {
-        const studentID = req.body.creatorStudentID; 
-        
+        const studentID = req.userData.studentID
+        if (!studentID) {
+            return res.status(401).json({ success: false, code: 'UNAUTHENTICATED', error: { message: 'User not authenticated.' }});
+        }
         const announcementData = { ...req.body, studentID };
         const newAnnouncement = await addProjectAnnouncement(announcementData);
         res.status(201).json({ success: true, message: "Global project announcement created.", data: newAnnouncement });
@@ -30,8 +32,10 @@ const addGlobalAnnouncementController = async (req, res) => {
 const editGlobalAnnouncementController = async (req, res) => {
     try {
         const { announcementId } = req.params;
-        // const { studentID: editorStudentID } = req.userData; // studentID of editor
-        const editorStudentID = req.body.editorStudentID || "640710039"; // Placeholder
+        const editorStudentID = req.userData.studentID; 
+        if (!editorStudentID) {
+            return res.status(401).json({ success: false, code: 'UNAUTHENTICATED', error: { message: 'User not authenticated.' }});
+        }   
 
         const updatedAnnouncement = await editProjectAnnouncement(announcementId, req.body, editorStudentID);
         res.status(200).json({ success: true, message: "Global project announcement updated.", data: updatedAnnouncement });
