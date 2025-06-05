@@ -4,7 +4,7 @@ const router = express.Router();
 // /v2.1/manage/
 
 router.use('/account', require('./account/accountManagerRoutes'))
-// router.use('/project', require('./account/accountManagerRoutes'))
+router.use('/project', require('./project/projectManagerRoutes'))
 
 //---------- default -----------------
 

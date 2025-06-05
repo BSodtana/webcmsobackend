@@ -1,15 +1,55 @@
 // path: e.g., src/api/project/projectGlobalServices.js
 require('dotenv').config();
-const prisma = require('../../prisma'); // Adjust path to your Prisma client
+const prisma = require('../../../prisma'); // Adjust path to your Prisma client
 
 /**
  * @desc Get list of all non-specific (global) project announcements
  */
-const listProjectAnnouncements = async () => {
+const listProjectAnnouncements = async (filters = {}) => {
+    const { isPublic, isPinned, studentID } = filters;
+
+    const whereClause = {
+        projectID: null, // Key filter for global announcements
+    };
+
+    if (isPublic !== undefined) {
+
+        if (typeof isPublic === 'string') {
+        
+            if (isPublic.toLowerCase() === 'true') {
+                whereClause.isPublic = 1;
+            } else if (isPublic.toLowerCase() === 'false') {
+                whereClause.isPublic = 0;
+            }
+           
+        } else if (typeof isPublic === 'boolean') {
+             whereClause.isPublic = isPublic ? 1 : 0; // Or just isPublic if schema type is Boolean
+        } else if (typeof isPublic === 'number'){
+            whereClause.isPublic = isPublic;
+        }
+    }
+
+    if (isPinned !== undefined) {
+        if (typeof isPinned === 'string') {
+            if (isPinned.toLowerCase() === 'true') {
+                whereClause.isAnnouncementPinned = 1;
+            } else if (isPinned.toLowerCase() === 'false') {
+                whereClause.isAnnouncementPinned = 0;
+            }
+            // If schema is Boolean: whereClause.isAnnouncementPinned = (isPinned.toLowerCase() === 'true');
+        } else if (typeof isPinned === 'boolean') {
+            whereClause.isAnnouncementPinned = isPinned ? 1 : 0; // Or just isPinned if schema type is Boolean
+        } else if (typeof isPinned === 'number'){
+            whereClause.isAnnouncementPinned = isPinned;
+        }
+    }
+
+    if (studentID) {
+        whereClause.studentID = studentID;
+    }
+
     return prisma.cmsoprojectannouncement.findMany({
-        where: {
-            projectID: null // Key filter for global announcements
-        },
+        where: whereClause,
         orderBy: {
             updatedDateTime: 'desc'
         },
@@ -24,7 +64,6 @@ const listProjectAnnouncements = async () => {
         }
     });
 };
-
 /**
  * @desc Add a new global project announcement
  * @param {object} announcementData - { studentID (creator), announcementTitle, announcementBody, etc. }

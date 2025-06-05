@@ -5,14 +5,29 @@ const {listProjectAnnouncements,
 
 const listGlobalAnnouncementsController = async (req, res) => {
     try {
-        const announcements = await listProjectAnnouncements();
+        // Extract filter parameters from query string
+        const { isPublic, isPinned, studentID } = req.query;
+
+        const filters = {};
+        if (isPublic !== undefined) filters.isPublic = isPublic;
+        if (isPinned !== undefined) filters.isPinned = isPinned;
+        if (studentID) filters.studentID = studentID;
+
+        const announcements = await listProjectAnnouncements(filters);
         res.status(200).json({ success: true, data: announcements });
     } catch (error) {
         console.error('listGlobalAnnouncementsController Error:', error);
-        res.status(500).json({ success: false, code: error.code || 'INTERNAL_ERROR', error: { message: error.message || 'Failed to list global project announcements.'}});
+        // It's good practice to provide a more specific error code if possible
+        // For now, using the existing structure
+        res.status(500).json({
+            success: false,
+            code: error.code || 'INTERNAL_ERROR',
+            error: {
+                message: error.message || 'Failed to list global project announcements.'
+            }
+        });
     }
 };
-
 const addGlobalAnnouncementController = async (req, res) => {
     try {
         const studentID = req.userData.studentID
