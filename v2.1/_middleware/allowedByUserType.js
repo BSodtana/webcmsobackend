@@ -19,7 +19,7 @@ module.exports = function (options = {
                     res.status(400).json(errorCodeToResponse("ACCESS-DENIED-ALL", req.userData))
                 } else if (options.userType.includes('all')) {
                     next()
-                } else if (options.userType.includes(data?.role)) {
+                } else if (options.userType.includes(data?.data.role)) {
                     next()
                 } else {
                     res.status(400).json(errorCodeToResponse("ACCESS-DENIED-ROLE", req.userData))
