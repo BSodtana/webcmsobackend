@@ -72,7 +72,7 @@ const createStudent = async (studentData) => {
                 studentID,
                 titleTH, firstNameTH, lastNameTH, nickNameTH,
                 titleEN, firstNameEN, lastNameEN,
-                currentYear: currentYear ? parseInt(currentYear) : null,
+                currentYear: currentYear ? parseInt(currentYear) : 1,
                 admissionCategory, phoneNumber, lineID, facebook, instagram,
                 medicalCondition, allergy, specialNeed,
                 // createdDateTime and updatedDateTime have @default(now())
@@ -173,7 +173,7 @@ const updateStudent = async (studentIDParam, updateData) => {
 const deleteStudent = async (studentIDParam) => {
     // onDelete: Cascade in usercredentials model for 'users' relation will handle dependent record
     // and in useraffiliation for 'users' relation
-    return prisma.usercredentials.delete({
+    return prisma.users.delete({
         where: { studentID: studentIDParam },
     });
 };
