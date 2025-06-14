@@ -17,11 +17,11 @@ router.post('/new', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], 
 
 // ./:studentID
 // GET: get student personal data
-router.get('/:studentID', /* [isLoggedIn], */ studentControllers.getStudentController);
+router.get('/:studentID', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], studentControllers.getStudentController);
 // PUT: edit student personal data
-router.put('/:studentID', /* [isLoggedIn], */ studentControllers.updateStudentController);
+router.put('/:studentID', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], studentControllers.updateStudentController);
 // DELETE:delete student data
-router.delete('/:studentID', /* [isLoggedIn], */ studentControllers.deleteStudentController);
+router.delete('/:studentID', [isLoggedIn(), allowedByUserType({ userType: ['ADMIN'] })], studentControllers.deleteStudentController);
 
 // ./:studentID/affiliate
 // GET: get user own org affiliations
