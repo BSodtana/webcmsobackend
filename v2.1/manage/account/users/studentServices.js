@@ -59,7 +59,7 @@ const createStudent = async (studentData) => {
     } = studentData;
 
     if (!studentID || !firstNameTH || !lastNameTH) {
-        console.error('[createStudent Validation Fail] Missing fields:', { studentID, firstNameTH, lastNameTH, email_exists: !!email, password_exists: !!password });
+        console.error('[createStudent Validation Fail] Missing fields:', { studentID, firstNameTH, lastNameTH});
         throw { code: 'VALIDATION_ERROR', desc: 'Service: Missing required fields (studentID, firstNameTH, lastNameTH, email, password).' };
     }
 
@@ -173,7 +173,7 @@ const updateStudent = async (studentIDParam, updateData) => {
 const deleteStudent = async (studentIDParam) => {
     // onDelete: Cascade in usercredentials model for 'users' relation will handle dependent record
     // and in useraffiliation for 'users' relation
-    return prisma.users.delete({
+    return prisma.usercredentials.delete({
         where: { studentID: studentIDParam },
     });
 };
