@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// /v2.1/account/
+// /v2.1/account/auth/cmu/callback/
 
 // for v2
 const login = require('./login/loginRoutes')
@@ -9,6 +9,7 @@ const register = require('./register/registerRoutes')
 const profile = require('./profile/profileRoutes')
 const resetPassword = require('./reset-password')
 const affiliate = require('./affiliate')
+const cmuRoute = require('./cmu/index')  
 
 router.use('/login', login)
 router.use('/logout', logout)
@@ -19,7 +20,7 @@ router.use('/affiliate', affiliate)
 
 // for v2.1
 router.use('/credential', require('./credential/credentialRoutes'))
-
+router.use('/auth/cmu/callback/', cmuRoute)
 
 //---------- default -----------------
 
